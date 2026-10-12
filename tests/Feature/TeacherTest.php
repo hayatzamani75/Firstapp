@@ -29,6 +29,8 @@ class TeacherTest extends TestCase
                 'lastname' => 'Doe',
                 'position' => 'Math Teacher',
                 'email' => 'john.doe@example.com',
+                'phone_number_1' => '0123456789',
+                'phone_number_2' => '12345678901234',
                 'address' => '12 School Street',
             ])
             ->assertRedirect('/teacher');
@@ -39,8 +41,26 @@ class TeacherTest extends TestCase
             'lastname' => 'Doe',
             'position' => 'Math Teacher',
             'email' => 'john.doe@example.com',
+            'phone_number_1' => '0123456789',
+            'phone_number_2' => '12345678901234',
             'address' => '12 School Street',
         ]);
+    }
+
+    public function test_teacher_phone_numbers_must_contain_10_to_14_digits(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->post('/teacher', [
+                'name' => 'John',
+                'lastname' => 'Doe',
+                'position' => 'Math Teacher',
+                'email' => 'john.doe@example.com',
+                'phone_number_1' => '123456789',
+                'phone_number_2' => '123456789012345',
+            ])
+            ->assertSessionHasErrors(['phone_number_1', 'phone_number_2']);
     }
 
     public function test_teacher_email_must_be_unique(): void
@@ -78,12 +98,16 @@ class TeacherTest extends TestCase
             'lastname' => 'Doe',
             'position' => 'Senior Math Teacher',
             'email' => 'john.doe@example.com',
+            'phone_number_1' => '0123456789',
+            'phone_number_2' => '12345678901234',
         ])->assertRedirect('/teacher');
 
         $this->assertDatabaseHas('teachers', [
             'id' => $teacher->id,
             'position' => 'Senior Math Teacher',
             'email' => 'john.doe@example.com',
+            'phone_number_1' => '0123456789',
+            'phone_number_2' => '12345678901234',
         ]);
     }
 }

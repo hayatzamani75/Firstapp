@@ -25,6 +25,8 @@ class UpdateTeacherRequest extends FormRequest
                 'max:255',
                 Rule::unique('teachers', 'email')->ignore($this->route('teacher')),
             ],
+            'phone_number_1' => ['nullable', 'string', 'regex:/\A[0-9]{10,14}\z/'],
+            'phone_number_2' => ['nullable', 'string', 'regex:/\A[0-9]{10,14}\z/'],
             'address' => ['nullable', 'string', 'max:255'],
         ];
     }

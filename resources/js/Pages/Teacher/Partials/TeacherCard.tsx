@@ -23,16 +23,22 @@ const TeacherCard = ({ teachers }: IProps) => {
                         <TableHead className="w-[38%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[26%] lg:w-[22%]">
                             Teacher
                         </TableHead>
-                        <TableHead className="hidden px-3 py-3 text-[11px] font-semibold uppercase text-white sm:table-cell sm:w-[18%] lg:w-[16%]">
+                        <TableHead className="hidden px-3 py-3 text-[11px] font-semibold uppercase text-white md:table-cell md:w-[14%] lg:w-[12%]">
                             Position
                         </TableHead>
-                        <TableHead className="w-[38%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[30%] lg:w-[26%]">
+                        <TableHead className="w-[38%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[35%] md:w-[22%] lg:w-[18%] xl:w-[18%]">
                             Email
                         </TableHead>
-                        <TableHead className="hidden px-3 py-3 text-[11px] font-semibold uppercase text-white lg:table-cell lg:w-[22%]">
+                        <TableHead className="hidden px-3 py-3 text-[11px] font-semibold uppercase text-white md:table-cell md:w-[15%] lg:w-[14%] xl:w-[12%]">
+                            Phone 1
+                        </TableHead>
+                        <TableHead className="hidden px-3 py-3 text-[11px] font-semibold uppercase text-white lg:table-cell lg:w-[14%] xl:w-[12%]">
+                            Phone 2
+                        </TableHead>
+                        <TableHead className="hidden px-3 py-3 text-[11px] font-semibold uppercase text-white xl:table-cell xl:w-[20%]">
                             Address
                         </TableHead>
-                        <TableHead className="w-[24%] px-2 py-3 text-right text-[11px] font-semibold uppercase text-white sm:w-[26%] lg:w-[14%]">
+                        <TableHead className="w-[24%] px-2 py-3 text-right text-[11px] font-semibold uppercase text-white sm:w-[39%] md:w-[25%] lg:w-[28%] xl:w-[13%]">
                             Actions
                         </TableHead>
                     </TableRow>
@@ -60,8 +66,14 @@ const TeacherCard = ({ teachers }: IProps) => {
                                 <TableCell className="break-all px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300">
                                     {teacher.email}
                                 </TableCell>
+                                <TableCell className="hidden px-3 py-3 align-top text-sm tabular-nums text-slate-600 dark:text-slate-300 md:table-cell">
+                                    {teacher.phone_number_1 || 'Not provided'}
+                                </TableCell>
+                                <TableCell className="hidden px-3 py-3 align-top text-sm tabular-nums text-slate-600 dark:text-slate-300 lg:table-cell">
+                                    {teacher.phone_number_2 || 'Not provided'}
+                                </TableCell>
                                 <TableCell
-                                    className="hidden px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300 lg:table-cell"
+                                    className="hidden px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300 xl:table-cell"
                                     title={teacher.address || undefined}
                                 >
                                     <span className="block truncate">
@@ -79,7 +91,7 @@ const TeacherCard = ({ teachers }: IProps) => {
                     ) : (
                         <TableRow className="border-0 hover:bg-transparent">
                             <TableCell
-                                colSpan={5}
+                                colSpan={7}
                                 className="px-4 py-12 text-center text-sm text-slate-500 dark:text-slate-400"
                             >
                                 No teachers found.

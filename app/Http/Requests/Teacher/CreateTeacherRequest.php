@@ -19,6 +19,8 @@ class CreateTeacherRequest extends FormRequest
             'lastname' => ['required', 'string', 'max:255'],
             'position' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:teachers,email'],
+            'phone_number_1' => ['nullable', 'string', 'regex:/\A[0-9]{10,14}\z/'],
+            'phone_number_2' => ['nullable', 'string', 'regex:/\A[0-9]{10,14}\z/'],
             'address' => ['nullable', 'string', 'max:255'],
         ];
     }

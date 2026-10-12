@@ -24,12 +24,16 @@ export function EditTeacherDialog({ teacher }: IProps) {
         lastname: string;
         position: string;
         email: string;
+        phone_number_1: string;
+        phone_number_2: string;
         address: string | null;
     }>({
         name: teacher.name || '',
         lastname: teacher.lastname || '',
         position: teacher.position || '',
         email: teacher.email || '',
+        phone_number_1: teacher.phone_number_1 || '',
+        phone_number_2: teacher.phone_number_2 || '',
         address: teacher.address || null,
     });
 
@@ -149,6 +153,48 @@ export function EditTeacherDialog({ teacher }: IProps) {
                         />
                         <span className="text-sm text-red-600 dark:text-red-400">
                             {form.errors.address}
+                        </span>
+                    </div>
+
+                    <div>
+                        <label htmlFor="edit-teacher-phone-number-1" className="mb-2 block text-sm font-medium">
+                            Phone Number 1:
+                        </label>
+                        <Input
+                            onChange={(e) => form.setData('phone_number_1', e.target.value)}
+                            placeholder="10–14 digits"
+                            name="phone_number_1"
+                            id="edit-teacher-phone-number-1"
+                            value={form.data.phone_number_1}
+                            type="tel"
+                            inputMode="numeric"
+                            maxLength={14}
+                            pattern="[0-9]{10,14}"
+                            className="bg-gray-50 focus:border-none focus:outline-none"
+                        />
+                        <span className="text-sm text-red-600 dark:text-red-400">
+                            {form.errors.phone_number_1}
+                        </span>
+                    </div>
+
+                    <div>
+                        <label htmlFor="edit-teacher-phone-number-2" className="mb-2 block text-sm font-medium">
+                            Phone Number 2:
+                        </label>
+                        <Input
+                            onChange={(e) => form.setData('phone_number_2', e.target.value)}
+                            placeholder="10–14 digits"
+                            name="phone_number_2"
+                            id="edit-teacher-phone-number-2"
+                            value={form.data.phone_number_2}
+                            type="tel"
+                            inputMode="numeric"
+                            maxLength={14}
+                            pattern="[0-9]{10,14}"
+                            className="bg-gray-50 focus:border-none focus:outline-none"
+                        />
+                        <span className="text-sm text-red-600 dark:text-red-400">
+                            {form.errors.phone_number_2}
                         </span>
                     </div>
 

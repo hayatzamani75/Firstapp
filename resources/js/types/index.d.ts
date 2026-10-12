@@ -46,6 +46,8 @@ export interface Teacher {
     lastname: string;
     position: string;
     email: string;
+    phone_number_1?: string | null;
+    phone_number_2?: string | null;
     address: string;
 }
 

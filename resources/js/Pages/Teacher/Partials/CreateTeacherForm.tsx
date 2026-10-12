@@ -21,12 +21,16 @@ export function CreateTeacherForm() {
         lastname: string;
         position: string;
         email: string;
+        phone_number_1: string;
+        phone_number_2: string;
         address: string | null;
     }>({
         name: '',
         lastname: '',
         position: '',
         email: '',
+        phone_number_1: '',
+        phone_number_2: '',
         address: null,
     });
 
@@ -148,6 +152,48 @@ export function CreateTeacherForm() {
                             />
                             <span className="text-sm text-red-600 dark:text-red-400">
                                 {form.errors.address}
+                            </span>
+                        </div>
+
+                        <div>
+                            <label htmlFor="create-teacher-phone-number-1" className="mb-2 block text-sm font-medium text-slate-800">
+                                Phone Number 1:
+                            </label>
+                            <Input
+                                onChange={(e) => form.setData('phone_number_1', e.target.value)}
+                                placeholder="10–14 digits"
+                                name="phone_number_1"
+                                id="create-teacher-phone-number-1"
+                                value={form.data.phone_number_1}
+                                type="tel"
+                                inputMode="numeric"
+                                maxLength={14}
+                                pattern="[0-9]{10,14}"
+                                className="border-blue-200 bg-white focus-visible:ring-blue-500"
+                            />
+                            <span className="text-sm text-red-600 dark:text-red-400">
+                                {form.errors.phone_number_1}
+                            </span>
+                        </div>
+
+                        <div>
+                            <label htmlFor="create-teacher-phone-number-2" className="mb-2 block text-sm font-medium text-slate-800">
+                                Phone Number 2:
+                            </label>
+                            <Input
+                                onChange={(e) => form.setData('phone_number_2', e.target.value)}
+                                placeholder="10–14 digits"
+                                name="phone_number_2"
+                                id="create-teacher-phone-number-2"
+                                value={form.data.phone_number_2}
+                                type="tel"
+                                inputMode="numeric"
+                                maxLength={14}
+                                pattern="[0-9]{10,14}"
+                                className="border-blue-200 bg-white focus-visible:ring-blue-500"
+                            />
+                            <span className="text-sm text-red-600 dark:text-red-400">
+                                {form.errors.phone_number_2}
                             </span>
                         </div>
 

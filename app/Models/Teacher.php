@@ -10,7 +10,16 @@ class Teacher extends Model
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = ['name', 'lastname', 'position', 'email', 'address', 'user_id'];
+    protected $fillable = [
+        'name',
+        'lastname',
+        'position',
+        'email',
+        'phone_number_1',
+        'phone_number_2',
+        'address',
+        'user_id',
+    ];
 
     protected $attributes = [
         'address' => null,
