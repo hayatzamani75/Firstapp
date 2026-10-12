@@ -32,3 +32,10 @@ export interface Book {
     title: string;
     description: string;
 }
+
+export interface Company {
+    id: number;
+    name: string;
+    type: string;
+    address: string;
+}
