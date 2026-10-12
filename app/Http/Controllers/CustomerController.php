@@ -13,7 +13,10 @@ class CustomerController extends Controller
 {
     public function view(): Response
     {
-        $customers = Customer::where('user_id', Auth::id())->orderBy('id', 'desc')->paginate(12);
+        $customers = Customer::where('user_id', Auth::id())
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->paginate(12);
 
         return Inertia::render('Customer/View', [
             'customers' => $customers,
