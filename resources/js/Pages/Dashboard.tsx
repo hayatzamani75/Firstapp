@@ -12,7 +12,7 @@ export default function Dashboard() {
         >
             <Head title="Dashboard" />
 
-            <div className="py-12">
+            <div className="min-h-[calc(100vh-4rem)] bg-green-100 py-12 dark:bg-green-950">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
