@@ -5,21 +5,33 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Customer\CreateCustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Models\Customer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CustomerController extends Controller
 {
-    public function view(): Response
+    public function view(Request $request): Response
     {
+        $validated = $request->validate([
+            'sort' => ['sometimes', 'string', Rule::in(['id'])],
+            'direction' => ['sometimes', 'string', Rule::in(['asc', 'desc'])],
+        ]);
+
+        $sort = $validated['sort'] ?? 'id';
+        $direction = $validated['direction'] ?? 'desc';
+
         $customers = Customer::where('user_id', Auth::id())
-            ->orderByDesc('created_at')
-            ->orderByDesc('id')
-            ->paginate(12);
+            ->orderBy($sort, $direction)
+            ->paginate(12)
+            ->appends(['sort' => $sort, 'direction' => $direction]);
 
         return Inertia::render('Customer/View', [
             'customers' => $customers,
+            'sort' => $sort,
+            'direction' => $direction,
         ]);
     }
 

@@ -23,10 +23,12 @@ type Paginator<T> = {
 
 type ViewPageProps = PageProps<{
     customers: Paginator<Customer>;
+    sort: 'id';
+    direction: 'asc' | 'desc';
 }>;
 
 export default function View() {
-    const { customers } = usePage<ViewPageProps>().props;
+    const { customers, sort, direction } = usePage<ViewPageProps>().props;
 
     return (
         <AuthenticatedLayout
@@ -57,7 +59,11 @@ export default function View() {
                             </span>
                         </div>
                         <div className="p-3 sm:p-4">
-                            <CustomerCard customers={customers.data} />
+                            <CustomerCard
+                                customers={customers.data}
+                                sort={sort}
+                                direction={direction}
+                            />
                             <Pagination links={customers.links} />
                         </div>
                     </section>

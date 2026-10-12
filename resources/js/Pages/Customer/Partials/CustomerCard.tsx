@@ -1,4 +1,6 @@
 import { Customer } from '@/types';
+import { router } from '@inertiajs/react';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 import {
     Table,
     TableBody,
@@ -12,27 +14,60 @@ import { EditCustomerDialog } from './EditCustomerDialog';
 
 interface IProps {
     customers: Customer[];
+    sort: 'id';
+    direction: 'asc' | 'desc';
 }
 
-const CustomerCard = ({ customers }: IProps) => {
+const CustomerCard = ({ customers, sort, direction }: IProps) => {
+    function toggleIdSort() {
+        router.get(
+            route('customer.view'),
+            {
+                sort,
+                direction: direction === 'asc' ? 'desc' : 'asc',
+            },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+            },
+        );
+    }
+
     return (
         <div className="overflow-hidden rounded-lg border border-blue-200 dark:border-slate-700">
             <Table className="table-fixed text-left">
                 <TableHeader className="bg-blue-700 dark:bg-blue-900">
                     <TableRow className="border-0 hover:bg-transparent">
-                        <TableHead className="w-[32%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[26%] lg:w-[21%]">
+                        <TableHead className="w-[14%] px-2 py-3 text-[11px] font-semibold uppercase text-white sm:w-[12%] md:w-[8%] xl:w-[7%]">
+                            <button
+                                type="button"
+                                onClick={toggleIdSort}
+                                aria-label={`Sort by ID ${direction === 'asc' ? 'descending' : 'ascending'}`}
+                                title={`Sort by ID ${direction === 'asc' ? 'descending' : 'ascending'}`}
+                                className="inline-flex items-center gap-1 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                            >
+                                ID
+                                {direction === 'asc' ? (
+                                    <ArrowUp aria-hidden="true" size={14} />
+                                ) : (
+                                    <ArrowDown aria-hidden="true" size={14} />
+                                )}
+                            </button>
+                        </TableHead>
+                        <TableHead className="w-[28%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[26%] md:w-[20%] xl:w-[18%]">
                             Customer
                         </TableHead>
-                        <TableHead className="w-[38%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[30%] lg:w-[27%]">
+                        <TableHead className="w-[35%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[38%] md:w-[28%] xl:w-[25%]">
                             Email
                         </TableHead>
-                        <TableHead className="hidden px-3 py-3 text-[11px] font-semibold uppercase text-white sm:table-cell sm:w-[16%] lg:w-[15%]">
+                        <TableHead className="hidden px-3 py-3 text-[11px] font-semibold uppercase text-white md:table-cell md:w-[18%] xl:w-[13%]">
                             Phone
                         </TableHead>
-                        <TableHead className="hidden px-3 py-3 text-[11px] font-semibold uppercase text-white lg:table-cell lg:w-[23%]">
+                        <TableHead className="hidden px-3 py-3 text-[11px] font-semibold uppercase text-white xl:table-cell xl:w-[21%]">
                             Address
                         </TableHead>
-                        <TableHead className="w-[30%] px-3 py-3 text-right text-[11px] font-semibold uppercase text-white sm:w-[28%] lg:w-[14%]">
+                        <TableHead className="w-[23%] px-2 py-3 text-right text-[11px] font-semibold uppercase text-white sm:w-[24%] md:w-[26%] xl:w-[16%]">
                             Actions
                         </TableHead>
                     </TableRow>
@@ -44,22 +79,22 @@ const CustomerCard = ({ customers }: IProps) => {
                                 key={customer.id}
                                 className="border-blue-100 odd:bg-white even:bg-blue-50/70 hover:bg-blue-100/80 dark:border-slate-800 dark:odd:bg-slate-900 dark:even:bg-blue-950/40 dark:hover:bg-blue-900/40"
                             >
+                                <TableCell className="px-2 py-3 align-top text-sm tabular-nums text-slate-600 dark:text-slate-300">
+                                    {customer.id}
+                                </TableCell>
                                 <TableCell className="px-3 py-3 align-top">
                                     <div className="break-words font-semibold text-slate-900 dark:text-slate-100">
                                         {customer.name} {customer.lastname}
-                                    </div>
-                                    <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                        ID {customer.id}
                                     </div>
                                 </TableCell>
                                 <TableCell className="break-all px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300">
                                     {customer.email}
                                 </TableCell>
-                                <TableCell className="hidden px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300 sm:table-cell">
+                                <TableCell className="hidden px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300 md:table-cell">
                                     {customer.phone || 'Not provided'}
                                 </TableCell>
                                 <TableCell
-                                    className="hidden px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300 lg:table-cell"
+                                    className="hidden px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300 xl:table-cell"
                                     title={customer.address || undefined}
                                 >
                                     <span className="block truncate">
@@ -77,7 +112,7 @@ const CustomerCard = ({ customers }: IProps) => {
                     ) : (
                         <TableRow className="border-0 hover:bg-transparent">
                             <TableCell
-                                colSpan={5}
+                                colSpan={6}
                                 className="px-4 py-12 text-center text-sm text-slate-500 dark:text-slate-400"
                             >
                                 No customers found.
