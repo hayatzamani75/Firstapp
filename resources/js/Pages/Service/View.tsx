@@ -44,18 +44,23 @@ export default function View() {
                         <CreateServiceForm />
                     </div>
 
-                    <div className="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
-                        <h1 className="py-5 text-center text-2xl font-bold">
-                            My Services
-                        </h1>
-                        <h2 className="py-2 pl-2 text-start text-[12px] font-medium text-gray-700 dark:text-gray-300">
-                            Showing {services.from} - {services.to} of {services.total} results
-                        </h2>
-                        <div className="p-2 text-gray-900 dark:text-gray-100">
+                    <section className="overflow-hidden rounded-xl border border-gray-300 bg-gray-50 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                        <header className="flex flex-col gap-3 bg-gray-800 px-5 py-4 text-white dark:bg-gray-950 sm:flex-row sm:items-center sm:justify-between">
+                            <h1 className="text-lg font-semibold">Services</h1>
+                            <span className="inline-flex w-fit items-center rounded-md bg-white/15 px-3 py-1.5 text-sm font-medium">
+                                {services.total} total
+                            </span>
+                        </header>
+                        <div className="flex flex-col gap-1 border-b border-gray-200 bg-gray-100 px-4 py-3 text-sm text-gray-600 dark:border-gray-800 dark:bg-gray-800 dark:text-gray-300 sm:flex-row sm:items-center sm:justify-between">
+                            <span>
+                                Showing {services.from ?? 0}–{services.to ?? 0} of {services.total} services
+                            </span>
+                        </div>
+                        <div className="p-3 sm:p-4">
                             <ServiceCard services={services.data} />
                             <Pagination links={services.links} />
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </AuthenticatedLayout>
