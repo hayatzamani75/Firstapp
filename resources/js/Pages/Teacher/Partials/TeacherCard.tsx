@@ -1,4 +1,12 @@
 import { Teacher } from '@/types';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/Components/ui/table';
 import { DeleteTeacherDialog } from './DeleteTeacherDialog';
 import { EditTeacherDialog } from './EditTeacherDialog';
 
@@ -8,47 +16,79 @@ interface IProps {
 
 const TeacherCard = ({ teachers }: IProps) => {
     return (
-        <>
-            {teachers.length > 0 ? (
-                <div className="space-y-3">
-                    {teachers.map((teacher) => (
-                        <div
-                            key={teacher.id}
-                            className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-900"
-                        >
-                            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                                <div className="min-w-0 flex-1">
-                                    <div className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-600 dark:text-sky-400">
-                                        Teacher
-                                    </div>
-                                    <h3 className="mt-1 text-xl font-semibold text-slate-900 dark:text-slate-100">
+        <div className="overflow-hidden rounded-lg border border-blue-200 dark:border-slate-700">
+            <Table className="table-fixed text-left">
+                <TableHeader className="bg-blue-700 dark:bg-blue-900">
+                    <TableRow className="border-0 hover:bg-transparent">
+                        <TableHead className="w-[38%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[26%] lg:w-[22%]">
+                            Teacher
+                        </TableHead>
+                        <TableHead className="hidden px-3 py-3 text-[11px] font-semibold uppercase text-white sm:table-cell sm:w-[18%] lg:w-[16%]">
+                            Position
+                        </TableHead>
+                        <TableHead className="w-[38%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[30%] lg:w-[26%]">
+                            Email
+                        </TableHead>
+                        <TableHead className="hidden px-3 py-3 text-[11px] font-semibold uppercase text-white lg:table-cell lg:w-[22%]">
+                            Address
+                        </TableHead>
+                        <TableHead className="w-[24%] px-2 py-3 text-right text-[11px] font-semibold uppercase text-white sm:w-[26%] lg:w-[14%]">
+                            Actions
+                        </TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {teachers.length > 0 ? (
+                        teachers.map((teacher) => (
+                            <TableRow
+                                key={teacher.id}
+                                className="border-blue-100 odd:bg-white even:bg-blue-50/70 hover:bg-blue-100/80 dark:border-slate-800 dark:odd:bg-slate-900 dark:even:bg-blue-950/40 dark:hover:bg-blue-900/40"
+                            >
+                                <TableCell className="px-3 py-3 align-top">
+                                    <div className="break-words font-semibold text-slate-900 dark:text-slate-100">
                                         {teacher.name} {teacher.lastname}
-                                    </h3>
-                                    <p className="mt-1 text-sm font-medium text-slate-700 dark:text-slate-300">
+                                    </div>
+                                    <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                        ID {teacher.id}
+                                    </div>
+                                </TableCell>
+                                <TableCell className="hidden px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300 sm:table-cell">
+                                    <span className="block break-words">
                                         {teacher.position}
-                                    </p>
-                                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                                        {teacher.email}
-                                    </p>
-                                    <p className="mt-2 whitespace-pre-wrap text-sm text-slate-600 dark:text-slate-300">
-                                        {teacher.address || 'No address added yet.'}
-                                    </p>
-                                </div>
-
-                                <div className="flex shrink-0 items-center gap-2">
-                                    <EditTeacherDialog teacher={teacher} />
-                                    <DeleteTeacherDialog teacher={teacher} />
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            ) : (
-                <span className="block py-6 text-center text-sm text-slate-500 dark:text-slate-400">
-                    No teachers found.
-                </span>
-            )}
-        </>
+                                    </span>
+                                </TableCell>
+                                <TableCell className="break-all px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300">
+                                    {teacher.email}
+                                </TableCell>
+                                <TableCell
+                                    className="hidden px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300 lg:table-cell"
+                                    title={teacher.address || undefined}
+                                >
+                                    <span className="block truncate">
+                                        {teacher.address || 'Not provided'}
+                                    </span>
+                                </TableCell>
+                                <TableCell className="px-2 py-3 align-top">
+                                    <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
+                                        <EditTeacherDialog teacher={teacher} />
+                                        <DeleteTeacherDialog teacher={teacher} />
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow className="border-0 hover:bg-transparent">
+                            <TableCell
+                                colSpan={5}
+                                className="px-4 py-12 text-center text-sm text-slate-500 dark:text-slate-400"
+                            >
+                                No teachers found.
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+        </div>
     );
 };
 
