@@ -53,17 +53,17 @@ export function CreateTeacherForm() {
                         Create New Teacher
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[500px]">
-                    <DialogHeader>
-                        <DialogTitle>Create a new teacher</DialogTitle>
-                        <DialogDescription>
+                <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] overflow-y-auto rounded-xl border-blue-100 bg-[#EFF6FF] p-0 sm:max-w-lg [&>button]:text-blue-100 [&>button]:hover:text-white">
+                    <DialogHeader className="rounded-t-xl bg-blue-700 px-6 py-5 pr-14 text-left text-white">
+                        <DialogTitle className="text-white">Create a new teacher</DialogTitle>
+                        <DialogDescription className="text-blue-100">
                             Add the teacher details below.
                         </DialogDescription>
                     </DialogHeader>
 
-                    <form onSubmit={handleSubmit} method="POST" className="space-y-6">
+                    <form onSubmit={handleSubmit} method="POST" className="space-y-4 px-6 py-5">
                         <div>
-                            <label htmlFor="create-teacher-name" className="mb-2 block text-sm font-medium">
+                            <label htmlFor="create-teacher-name" className="mb-2 block text-sm font-medium text-slate-800">
                                 Name:
                             </label>
                             <Input
@@ -73,7 +73,7 @@ export function CreateTeacherForm() {
                                 id="create-teacher-name"
                                 value={form.data.name || ''}
                                 type="text"
-                                className="bg-gray-50 focus:border-none focus:outline-none"
+                                className="border-blue-200 bg-white focus-visible:ring-blue-500"
                             />
                             <span className="text-sm text-red-600 dark:text-red-400">
                                 {form.errors.name}
@@ -81,7 +81,7 @@ export function CreateTeacherForm() {
                         </div>
 
                         <div>
-                            <label htmlFor="create-teacher-lastname" className="mb-2 block text-sm font-medium">
+                            <label htmlFor="create-teacher-lastname" className="mb-2 block text-sm font-medium text-slate-800">
                                 Lastname:
                             </label>
                             <Input
@@ -91,7 +91,7 @@ export function CreateTeacherForm() {
                                 id="create-teacher-lastname"
                                 value={form.data.lastname || ''}
                                 type="text"
-                                className="bg-gray-50 focus:border-none focus:outline-none"
+                                className="border-blue-200 bg-white focus-visible:ring-blue-500"
                             />
                             <span className="text-sm text-red-600 dark:text-red-400">
                                 {form.errors.lastname}
@@ -99,7 +99,7 @@ export function CreateTeacherForm() {
                         </div>
 
                         <div>
-                            <label htmlFor="create-teacher-position" className="mb-2 block text-sm font-medium">
+                            <label htmlFor="create-teacher-position" className="mb-2 block text-sm font-medium text-slate-800">
                                 Position:
                             </label>
                             <Input
@@ -109,7 +109,7 @@ export function CreateTeacherForm() {
                                 id="create-teacher-position"
                                 value={form.data.position || ''}
                                 type="text"
-                                className="bg-gray-50 focus:border-none focus:outline-none"
+                                className="border-blue-200 bg-white focus-visible:ring-blue-500"
                             />
                             <span className="text-sm text-red-600 dark:text-red-400">
                                 {form.errors.position}
@@ -117,7 +117,7 @@ export function CreateTeacherForm() {
                         </div>
 
                         <div>
-                            <label htmlFor="create-teacher-email" className="mb-2 block text-sm font-medium">
+                            <label htmlFor="create-teacher-email" className="mb-2 block text-sm font-medium text-slate-800">
                                 Email:
                             </label>
                             <Input
@@ -127,7 +127,7 @@ export function CreateTeacherForm() {
                                 id="create-teacher-email"
                                 value={form.data.email}
                                 type="email"
-                                className="bg-gray-50 focus:border-none focus:outline-none"
+                                className="border-blue-200 bg-white focus-visible:ring-blue-500"
                             />
                             <span className="text-sm text-red-600 dark:text-red-400">
                                 {form.errors.email}
@@ -135,7 +135,7 @@ export function CreateTeacherForm() {
                         </div>
 
                         <div>
-                            <label htmlFor="create-teacher-address" className="mb-2 block text-sm font-medium">
+                            <label htmlFor="create-teacher-address" className="mb-2 block text-sm font-medium text-slate-800">
                                 Address:
                             </label>
                             <Textarea
@@ -144,18 +144,18 @@ export function CreateTeacherForm() {
                                 value={form.data.address || ''}
                                 placeholder="Teacher address"
                                 id="create-teacher-address"
-                                className="bg-gray-50 focus:border-none focus:outline-none"
+                                className="border-blue-200 bg-white focus-visible:ring-blue-500"
                             />
                             <span className="text-sm text-red-600 dark:text-red-400">
                                 {form.errors.address}
                             </span>
                         </div>
 
-                        <DialogFooter>
-                            <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+                        <DialogFooter className="gap-3 border-t border-blue-100 bg-white/70 px-6 py-4 sm:flex-row">
+                            <Button type="button" variant="outline" onClick={() => setIsOpen(false)} className="border-blue-200 text-blue-700 hover:bg-blue-50">
                                 Cancel
                             </Button>
-                            <Button disabled={form.processing} type="submit" className="bg-blue-600 hover:bg-blue-700">
+                            <Button disabled={form.processing} type="submit" className="bg-blue-700 text-white hover:bg-blue-800">
                                 Create
                             </Button>
                         </DialogFooter>
