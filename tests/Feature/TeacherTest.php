@@ -20,7 +20,7 @@ class TeacherTest extends TestCase
             ->assertOk();
     }
 
-    public function test_teachers_are_listed_by_id_descending(): void
+    public function test_teachers_are_listed_by_id_ascending(): void
     {
         $user = User::factory()->create();
         $olderTeacher = \App\Models\Teacher::create([
@@ -42,8 +42,8 @@ class TeacherTest extends TestCase
             ->get('/teacher')
             ->assertInertia(fn (Assert $page) => $page
                 ->component('Teacher/View')
-                ->where('teachers.data.0.id', $newerTeacher->id)
-                ->where('teachers.data.1.id', $olderTeacher->id));
+                ->where('teachers.data.0.id', $olderTeacher->id)
+                ->where('teachers.data.1.id', $newerTeacher->id));
     }
 
     public function test_authenticated_user_can_create_a_teacher(): void
