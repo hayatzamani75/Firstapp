@@ -38,7 +38,20 @@ export default function Authenticated({
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
                             <div className="relative ms-3">
-                                <Link href={'/note'} className='text-gray-500 text-sm font-medium hover:text-black'>My Notes</Link>
+                                <Link
+                                    href={'/note'}
+                                    className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
+                                >
+                                    My Notes
+                                </Link>
+                            </div>
+                            <div className="relative ms-3">
+                                <Link
+                                    href={'/book'}
+                                    className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
+                                >
+                                    Books
+                                </Link>
                             </div>
                             <div className="relative ms-3">
                                 <Dropdown>
@@ -139,6 +152,18 @@ export default function Authenticated({
                             active={route().current('dashboard')}
                         >
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('note.view')}
+                            active={route().current('note.view')}
+                        >
+                            My Notes
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('book.view')}
+                            active={route().current('book.view')}
+                        >
+                            Books
                         </ResponsiveNavLink>
                     </div>
 

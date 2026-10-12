@@ -25,3 +25,10 @@ export interface Note {
     title: string;
     description: string;
 }
+
+export interface Book {
+    id: number;
+    name: string;
+    title: string;
+    description: string;
+}
