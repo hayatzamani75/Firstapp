@@ -4,7 +4,7 @@ import { Head } from '@inertiajs/react';
 export default function Dashboard() {
     return (
         <AuthenticatedLayout
-            headerClassName="bg-green-100 dark:bg-green-950"
+            headerClassName="bg-orange-100 dark:bg-orange-950"
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                     Dashboard
@@ -13,7 +13,7 @@ export default function Dashboard() {
         >
             <Head title="Dashboard" />
 
-            <div className="min-h-[calc(100vh-4rem)] bg-green-100 py-12 dark:bg-green-950">
+            <div className="min-h-[calc(100vh-4rem)] bg-orange-100 py-12 dark:bg-orange-950">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
