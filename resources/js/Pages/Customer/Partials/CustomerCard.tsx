@@ -1,4 +1,12 @@
 import { Customer } from '@/types';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/Components/ui/table';
 import { DeleteCustomerDialog } from './DeleteCustomerDialog';
 import { EditCustomerDialog } from './EditCustomerDialog';
 
@@ -8,49 +16,77 @@ interface IProps {
 
 const CustomerCard = ({ customers }: IProps) => {
     return (
-        <>
-            {customers.length > 0 ? (
-                <div className="space-y-3">
-                    {customers.map((customer) => (
-                        <div
-                            key={customer.id}
-                            className="rounded-lg border border-blue-200 bg-blue-50 p-4 shadow-sm transition-colors dark:border-blue-800 dark:bg-blue-950"
-                        >
-                            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                                <div className="min-w-0 flex-1">
-                                    <div className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">
-                                        Customer
-                                    </div>
-                                    <h3 className="mt-1 text-xl font-semibold text-slate-900 dark:text-slate-100">
+        <div className="overflow-hidden rounded-lg border border-blue-200 dark:border-slate-700">
+            <Table className="table-fixed text-left">
+                <TableHeader className="bg-blue-700 dark:bg-blue-900">
+                    <TableRow className="border-0 hover:bg-transparent">
+                        <TableHead className="w-[32%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[26%] lg:w-[21%]">
+                            Customer
+                        </TableHead>
+                        <TableHead className="w-[38%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[30%] lg:w-[27%]">
+                            Email
+                        </TableHead>
+                        <TableHead className="hidden px-3 py-3 text-[11px] font-semibold uppercase text-white sm:table-cell sm:w-[16%] lg:w-[15%]">
+                            Phone
+                        </TableHead>
+                        <TableHead className="hidden px-3 py-3 text-[11px] font-semibold uppercase text-white lg:table-cell lg:w-[23%]">
+                            Address
+                        </TableHead>
+                        <TableHead className="w-[30%] px-3 py-3 text-right text-[11px] font-semibold uppercase text-white sm:w-[28%] lg:w-[14%]">
+                            Actions
+                        </TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {customers.length > 0 ? (
+                        customers.map((customer) => (
+                            <TableRow
+                                key={customer.id}
+                                className="border-blue-100 odd:bg-white even:bg-blue-50/70 hover:bg-blue-100/80 dark:border-slate-800 dark:odd:bg-slate-900 dark:even:bg-blue-950/40 dark:hover:bg-blue-900/40"
+                            >
+                                <TableCell className="px-3 py-3 align-top">
+                                    <div className="break-words font-semibold text-slate-900 dark:text-slate-100">
                                         {customer.name} {customer.lastname}
-                                    </h3>
-                                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                                        {customer.email}
-                                    </p>
-                                    {customer.phone && (
-                                        <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-                                            {customer.phone}
-                                        </p>
-                                    )}
-                                    <p className="mt-2 whitespace-pre-wrap text-sm text-slate-600 dark:text-slate-300">
-                                        {customer.address || 'No address added yet.'}
-                                    </p>
-                                </div>
-
-                                <div className="flex shrink-0 items-center gap-2">
-                                    <EditCustomerDialog customer={customer} />
-                                    <DeleteCustomerDialog customer={customer} />
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            ) : (
-                <span className="block py-6 text-center text-sm text-slate-500 dark:text-slate-400">
-                    No customers found.
-                </span>
-            )}
-        </>
+                                    </div>
+                                    <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                                        ID {customer.id}
+                                    </div>
+                                </TableCell>
+                                <TableCell className="break-all px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300">
+                                    {customer.email}
+                                </TableCell>
+                                <TableCell className="hidden px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300 sm:table-cell">
+                                    {customer.phone || 'Not provided'}
+                                </TableCell>
+                                <TableCell
+                                    className="hidden px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300 lg:table-cell"
+                                    title={customer.address || undefined}
+                                >
+                                    <span className="block truncate">
+                                        {customer.address || 'Not provided'}
+                                    </span>
+                                </TableCell>
+                                <TableCell className="px-2 py-3 align-top">
+                                    <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
+                                        <EditCustomerDialog customer={customer} />
+                                        <DeleteCustomerDialog customer={customer} />
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow className="border-0 hover:bg-transparent">
+                            <TableCell
+                                colSpan={5}
+                                className="px-4 py-12 text-center text-sm text-slate-500 dark:text-slate-400"
+                            >
+                                No customers found.
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+        </div>
     );
 };
 
