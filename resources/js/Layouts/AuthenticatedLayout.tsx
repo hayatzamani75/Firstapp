@@ -70,6 +70,14 @@ export default function Authenticated({
                                 </Link>
                             </div>
                             <div className="relative ms-3">
+                                <Link
+                                    href={'/customer'}
+                                    className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
+                                >
+                                    Customers
+                                </Link>
+                            </div>
+                            <div className="relative ms-3">
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md">
@@ -192,6 +200,12 @@ export default function Authenticated({
                             active={route().current('teacher.view')}
                         >
                             Teachers
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('customer.view')}
+                            active={route().current('customer.view')}
+                        >
+                            Customers
                         </ResponsiveNavLink>
                     </div>
 

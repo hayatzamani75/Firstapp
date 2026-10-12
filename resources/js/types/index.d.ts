@@ -47,3 +47,10 @@ export interface Teacher {
     position: string;
     address: string;
 }
+
+export interface Customer {
+    id: number;
+    name: string;
+    lastname: string;
+    address: string;
+}
