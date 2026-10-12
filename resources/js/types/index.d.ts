@@ -39,3 +39,11 @@ export interface Company {
     type: string;
     address: string;
 }
+
+export interface Teacher {
+    id: number;
+    name: string;
+    lastname: string;
+    position: string;
+    address: string;
+}
