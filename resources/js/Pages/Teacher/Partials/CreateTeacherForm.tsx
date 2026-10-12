@@ -20,11 +20,13 @@ export function CreateTeacherForm() {
         name: string;
         lastname: string;
         position: string;
+        email: string;
         address: string | null;
     }>({
         name: '',
         lastname: '',
         position: '',
+        email: '',
         address: null,
     });
 
@@ -111,6 +113,24 @@ export function CreateTeacherForm() {
                             />
                             <span className="text-sm text-red-600 dark:text-red-400">
                                 {form.errors.position}
+                            </span>
+                        </div>
+
+                        <div>
+                            <label htmlFor="create-teacher-email" className="mb-2 block text-sm font-medium">
+                                Email:
+                            </label>
+                            <Input
+                                onChange={(e) => form.setData('email', e.target.value)}
+                                placeholder="teacher@example.com"
+                                name="email"
+                                id="create-teacher-email"
+                                value={form.data.email}
+                                type="email"
+                                className="bg-gray-50 focus:border-none focus:outline-none"
+                            />
+                            <span className="text-sm text-red-600 dark:text-red-400">
+                                {form.errors.email}
                             </span>
                         </div>
 

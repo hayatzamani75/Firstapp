@@ -23,11 +23,13 @@ export function EditTeacherDialog({ teacher }: IProps) {
         name: string;
         lastname: string;
         position: string;
+        email: string;
         address: string | null;
     }>({
         name: teacher.name || '',
         lastname: teacher.lastname || '',
         position: teacher.position || '',
+        email: teacher.email || '',
         address: teacher.address || null,
     });
 
@@ -112,6 +114,24 @@ export function EditTeacherDialog({ teacher }: IProps) {
                         />
                         <span className="text-sm text-red-600 dark:text-red-400">
                             {form.errors.position}
+                        </span>
+                    </div>
+
+                    <div>
+                        <label htmlFor="edit-teacher-email" className="mb-2 block text-sm font-medium">
+                            Email:
+                        </label>
+                        <Input
+                            onChange={(e) => form.setData('email', e.target.value)}
+                            placeholder="teacher@example.com"
+                            name="email"
+                            id="edit-teacher-email"
+                            value={form.data.email}
+                            type="email"
+                            className="bg-gray-50 focus:border-none focus:outline-none"
+                        />
+                        <span className="text-sm text-red-600 dark:text-red-400">
+                            {form.errors.email}
                         </span>
                     </div>
 

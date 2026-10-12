@@ -45,6 +45,7 @@ export interface Teacher {
     name: string;
     lastname: string;
     position: string;
+    email: string;
     address: string;
 }
 

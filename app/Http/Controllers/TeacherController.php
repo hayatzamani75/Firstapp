@@ -26,6 +26,7 @@ class TeacherController extends Controller
             'name' => $request->name,
             'lastname' => $request->lastname,
             'position' => $request->position,
+            'email' => $request->email,
             'address' => $request->address,
             'user_id' => Auth::id(),
         ]);

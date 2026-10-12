@@ -27,6 +27,9 @@ const TeacherCard = ({ teachers }: IProps) => {
                                     <p className="mt-1 text-sm font-medium text-slate-700 dark:text-slate-300">
                                         {teacher.position}
                                     </p>
+                                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                                        {teacher.email}
+                                    </p>
                                     <p className="mt-2 whitespace-pre-wrap text-sm text-slate-600 dark:text-slate-300">
                                         {teacher.address || 'No address added yet.'}
                                     </p>
