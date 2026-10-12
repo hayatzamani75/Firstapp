@@ -23,17 +23,20 @@ export function EditCustomerDialog({ customer }: IProps) {
         name: string;
         lastname: string;
         email: string;
+        phone: string;
         address: string | null;
     }>({
         name: customer.name || '',
         lastname: customer.lastname || '',
         email: customer.email || '',
+        phone: customer.phone || '',
         address: customer.address || null,
     });
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         if (form.data.address === '') form.setData('address', null);
+        if (form.data.phone === '') form.setData('phone', '');
         form.put(route('customer.update', customer.id), {
             preserveState: false,
             onSuccess: (res) => {
@@ -112,6 +115,24 @@ export function EditCustomerDialog({ customer }: IProps) {
                         />
                         <span className="text-sm text-red-600 dark:text-red-400">
                             {form.errors.email}
+                        </span>
+                    </div>
+
+                    <div>
+                        <label htmlFor="edit-customer-phone" className="mb-2 block text-sm font-medium">
+                            Phone Number:
+                        </label>
+                        <Input
+                            onChange={(e) => form.setData('phone', e.target.value)}
+                            placeholder="(555) 123-4567"
+                            name="phone"
+                            id="edit-customer-phone"
+                            value={form.data.phone}
+                            type="tel"
+                            className="bg-gray-50 focus:border-none focus:outline-none"
+                        />
+                        <span className="text-sm text-red-600 dark:text-red-400">
+                            {form.errors.phone}
                         </span>
                     </div>
 

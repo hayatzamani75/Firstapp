@@ -27,6 +27,11 @@ const CustomerCard = ({ customers }: IProps) => {
                                     <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
                                         {customer.email}
                                     </p>
+                                    {customer.phone && (
+                                        <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                                            {customer.phone}
+                                        </p>
+                                    )}
                                     <p className="mt-2 whitespace-pre-wrap text-sm text-slate-600 dark:text-slate-300">
                                         {customer.address || 'No address added yet.'}
                                     </p>

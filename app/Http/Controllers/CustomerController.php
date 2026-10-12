@@ -26,6 +26,7 @@ class CustomerController extends Controller
             'name' => $request->name,
             'lastname' => $request->lastname,
             'email' => $request->email,
+            'phone' => $request->phone,
             'address' => $request->address,
             'user_id' => Auth::id(),
         ]);
