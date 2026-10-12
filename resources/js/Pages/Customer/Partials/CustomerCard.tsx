@@ -14,7 +14,7 @@ const CustomerCard = ({ customers }: IProps) => {
                     {customers.map((customer) => (
                         <div
                             key={customer.id}
-                            className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-900"
+                            className="rounded-lg border border-blue-200 bg-blue-50 p-4 shadow-sm transition-colors dark:border-blue-800 dark:bg-blue-950"
                         >
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                                 <div className="min-w-0 flex-1">
