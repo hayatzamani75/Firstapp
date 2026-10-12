@@ -50,19 +50,19 @@ export function EditCompanyDialog({ company }: IProps) {
                     Edit
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
-                <DialogHeader>
-                    <DialogTitle>Edit company</DialogTitle>
-                    <DialogDescription>
+            <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] overflow-y-auto rounded-xl border-blue-100 bg-[#EFF6FF] p-0 sm:max-w-lg [&>button]:text-blue-100 [&>button]:hover:text-white">
+                <DialogHeader className="rounded-t-xl bg-blue-700 px-6 py-5 pr-14 text-left text-white">
+                    <DialogTitle className="text-white">Edit company</DialogTitle>
+                    <DialogDescription className="text-blue-100">
                         Update the details for this company.
                     </DialogDescription>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit} method="POST" className="space-y-6">
+                <form onSubmit={handleSubmit} method="POST" className="space-y-4 px-6 py-5">
                     <div>
                         <label
                             htmlFor="edit-company-name"
-                            className="mb-2 block text-sm font-medium"
+                            className="mb-2 block text-sm font-medium text-slate-800"
                         >
                             Name:
                         </label>
@@ -73,7 +73,7 @@ export function EditCompanyDialog({ company }: IProps) {
                             id="edit-company-name"
                             value={form.data.name || ''}
                             type="text"
-                            className="bg-gray-50 focus:border-none focus:outline-none"
+                            className="border-blue-200 bg-white focus-visible:ring-blue-500"
                         />
                         <span className="text-sm text-red-600 dark:text-red-400">
                             {form.errors.name}
@@ -83,7 +83,7 @@ export function EditCompanyDialog({ company }: IProps) {
                     <div>
                         <label
                             htmlFor="edit-company-type"
-                            className="mb-2 block text-sm font-medium"
+                            className="mb-2 block text-sm font-medium text-slate-800"
                         >
                             Type:
                         </label>
@@ -94,7 +94,7 @@ export function EditCompanyDialog({ company }: IProps) {
                             id="edit-company-type"
                             value={form.data.type || ''}
                             type="text"
-                            className="bg-gray-50 focus:border-none focus:outline-none"
+                            className="border-blue-200 bg-white focus-visible:ring-blue-500"
                         />
                         <span className="text-sm text-red-600 dark:text-red-400">
                             {form.errors.type}
@@ -104,7 +104,7 @@ export function EditCompanyDialog({ company }: IProps) {
                     <div>
                         <label
                             htmlFor="edit-company-address"
-                            className="mb-2 block text-sm font-medium"
+                            className="mb-2 block text-sm font-medium text-slate-800"
                         >
                             Address:
                         </label>
@@ -114,15 +114,15 @@ export function EditCompanyDialog({ company }: IProps) {
                             id="edit-company-address"
                             value={form.data.address || ''}
                             placeholder="Company address"
-                            className="bg-gray-50 focus:border-none focus:outline-none"
+                            className="border-blue-200 bg-white focus-visible:ring-blue-500"
                         />
                         <span className="text-sm text-red-600 dark:text-red-400">
                             {form.errors.address}
                         </span>
                     </div>
 
-                    <DialogFooter>
-                        <Button disabled={form.processing} type="submit">
+                    <DialogFooter className="gap-3 border-t border-blue-100 bg-white/70 px-6 py-4 sm:flex-row">
+                        <Button disabled={form.processing} type="submit" className="bg-blue-700 text-white hover:bg-blue-800">
                             Save changes
                         </Button>
                     </DialogFooter>
