@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class TeacherTest extends TestCase
@@ -17,6 +18,32 @@ class TeacherTest extends TestCase
         $this->actingAs($user)
             ->get('/teacher')
             ->assertOk();
+    }
+
+    public function test_teachers_are_listed_by_id_descending(): void
+    {
+        $user = User::factory()->create();
+        $olderTeacher = \App\Models\Teacher::create([
+            'user_id' => $user->id,
+            'name' => 'Older',
+            'lastname' => 'Teacher',
+            'position' => 'Math Teacher',
+            'email' => 'older.teacher@example.com',
+        ]);
+        $newerTeacher = \App\Models\Teacher::create([
+            'user_id' => $user->id,
+            'name' => 'Newer',
+            'lastname' => 'Teacher',
+            'position' => 'Science Teacher',
+            'email' => 'newer.teacher@example.com',
+        ]);
+
+        $this->actingAs($user)
+            ->get('/teacher')
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Teacher/View')
+                ->where('teachers.data.0.id', $newerTeacher->id)
+                ->where('teachers.data.1.id', $olderTeacher->id));
     }
 
     public function test_authenticated_user_can_create_a_teacher(): void

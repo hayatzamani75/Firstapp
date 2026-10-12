@@ -13,7 +13,9 @@ class TeacherController extends Controller
 {
     public function view(): Response
     {
-        $teachers = Teacher::where('user_id', Auth::id())->latest()->paginate(12);
+        $teachers = Teacher::where('user_id', Auth::id())
+            ->orderByDesc('id')
+            ->paginate(12);
 
         return Inertia::render('Teacher/View', [
             'teachers' => $teachers,
