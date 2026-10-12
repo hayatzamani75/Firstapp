@@ -22,10 +22,12 @@ export function EditCustomerDialog({ customer }: IProps) {
     const form = useForm<{
         name: string;
         lastname: string;
+        email: string;
         address: string | null;
     }>({
         name: customer.name || '',
         lastname: customer.lastname || '',
+        email: customer.email || '',
         address: customer.address || null,
     });
 
@@ -92,6 +94,24 @@ export function EditCustomerDialog({ customer }: IProps) {
                         />
                         <span className="text-sm text-red-600 dark:text-red-400">
                             {form.errors.lastname}
+                        </span>
+                    </div>
+
+                    <div>
+                        <label htmlFor="edit-customer-email" className="mb-2 block text-sm font-medium">
+                            Email:
+                        </label>
+                        <Input
+                            onChange={(e) => form.setData('email', e.target.value)}
+                            placeholder="customer@example.com"
+                            name="email"
+                            id="edit-customer-email"
+                            value={form.data.email}
+                            type="email"
+                            className="bg-gray-50 focus:border-none focus:outline-none"
+                        />
+                        <span className="text-sm text-red-600 dark:text-red-400">
+                            {form.errors.email}
                         </span>
                     </div>
 

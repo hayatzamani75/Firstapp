@@ -19,10 +19,12 @@ export function CreateCustomerForm() {
     const form = useForm<{
         name: string;
         lastname: string;
+        email: string;
         address: string | null;
     }>({
         name: '',
         lastname: '',
+        email: '',
         address: null,
     });
 
@@ -91,6 +93,24 @@ export function CreateCustomerForm() {
                             />
                             <span className="text-sm text-red-600 dark:text-red-400">
                                 {form.errors.lastname}
+                            </span>
+                        </div>
+
+                        <div>
+                            <label htmlFor="create-customer-email" className="mb-2 block text-sm font-medium">
+                                Email:
+                            </label>
+                            <Input
+                                onChange={(e) => form.setData('email', e.target.value)}
+                                placeholder="customer@example.com"
+                                name="email"
+                                id="create-customer-email"
+                                value={form.data.email}
+                                type="email"
+                                className="bg-gray-50 focus:border-none focus:outline-none"
+                            />
+                            <span className="text-sm text-red-600 dark:text-red-400">
+                                {form.errors.email}
                             </span>
                         </div>
 

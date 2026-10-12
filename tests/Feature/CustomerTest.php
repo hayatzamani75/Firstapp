@@ -27,6 +27,7 @@ class CustomerTest extends TestCase
             ->post('/customer', [
                 'name' => 'Alice',
                 'lastname' => 'Johnson',
+                'email' => 'alice.johnson@example.com',
                 'address' => '15 Main Street',
             ])
             ->assertRedirect('/customer');
@@ -35,7 +36,47 @@ class CustomerTest extends TestCase
             'user_id' => $user->id,
             'name' => 'Alice',
             'lastname' => 'Johnson',
+            'email' => 'alice.johnson@example.com',
             'address' => '15 Main Street',
+        ]);
+    }
+
+    public function test_customer_email_must_be_unique(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->post('/customer', [
+            'name' => 'Alice',
+            'lastname' => 'Johnson',
+            'email' => 'alice.johnson@example.com',
+        ])->assertRedirect();
+
+        $this->actingAs($user)->post('/customer', [
+            'name' => 'Alicia',
+            'lastname' => 'Jones',
+            'email' => 'alice.johnson@example.com',
+        ])->assertSessionHasErrors('email');
+    }
+
+    public function test_customer_can_keep_the_same_email_when_updated(): void
+    {
+        $user = User::factory()->create();
+        $customer = \App\Models\Customer::create([
+            'user_id' => $user->id,
+            'name' => 'Alice',
+            'lastname' => 'Johnson',
+            'email' => 'alice.johnson@example.com',
+        ]);
+
+        $this->actingAs($user)->put("/customer/{$customer->id}", [
+            'name' => 'Alice',
+            'lastname' => 'Johnson',
+            'email' => 'alice.johnson@example.com',
+        ])->assertRedirect('/customer');
+
+        $this->assertDatabaseHas('customers', [
+            'id' => $customer->id,
+            'email' => 'alice.johnson@example.com',
         ]);
     }
 }

@@ -24,6 +24,9 @@ const CustomerCard = ({ customers }: IProps) => {
                                     <h3 className="mt-1 text-xl font-semibold text-slate-900 dark:text-slate-100">
                                         {customer.name} {customer.lastname}
                                     </h3>
+                                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                                        {customer.email}
+                                    </p>
                                     <p className="mt-2 whitespace-pre-wrap text-sm text-slate-600 dark:text-slate-300">
                                         {customer.address || 'No address added yet.'}
                                     </p>

@@ -10,7 +10,7 @@ class Customer extends Model
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = ['name', 'lastname', 'address', 'user_id'];
+    protected $fillable = ['name', 'lastname', 'email', 'address', 'user_id'];
 
     protected $attributes = [
         'address' => null,

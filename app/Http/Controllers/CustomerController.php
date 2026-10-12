@@ -25,6 +25,7 @@ class CustomerController extends Controller
         Customer::create([
             'name' => $request->name,
             'lastname' => $request->lastname,
+            'email' => $request->email,
             'address' => $request->address,
             'user_id' => Auth::id(),
         ]);
