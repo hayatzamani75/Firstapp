@@ -56,3 +56,11 @@ export interface Customer {
     email: string;
     address: string;
 }
+
+export interface Service {
+    id: number;
+    name: string;
+    service_type: string;
+    parts: string;
+    price: string;
+}
