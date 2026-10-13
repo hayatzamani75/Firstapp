@@ -81,6 +81,14 @@ export default function Authenticated({
                             </div>
                             <div className="relative ms-3">
                                 <Link
+                                    href={route('internship.view')}
+                                    className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
+                                >
+                                    Internships
+                                </Link>
+                            </div>
+                            <div className="relative ms-3">
+                                <Link
                                     href={route('employee.view')}
                                     className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
                                 >
@@ -224,6 +232,12 @@ export default function Authenticated({
                             active={route().current('customer.view')}
                         >
                             Customers
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('internship.view')}
+                            active={route().current('internship.view')}
+                        >
+                            Internships
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href={route('employee.view')}

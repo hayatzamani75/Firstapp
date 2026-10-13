@@ -37,5 +37,6 @@ require __DIR__.'/book.php';
 require __DIR__.'/company.php';
 require __DIR__.'/teacher.php';
 require __DIR__.'/customer.php';
+require __DIR__.'/internship.php';
 require __DIR__.'/employee.php';
 require __DIR__.'/service.php';

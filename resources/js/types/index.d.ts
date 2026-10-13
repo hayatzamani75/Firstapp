@@ -60,6 +60,16 @@ export interface Customer {
     address: string;
 }
 
+export interface Internship {
+    id: number;
+    name: string;
+    lastname: string;
+    phone: string;
+    email: string;
+    address: string | null;
+    contract: string;
+}
+
 export interface Employee {
     id: number;
     name: string;

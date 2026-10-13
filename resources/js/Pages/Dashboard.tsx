@@ -4,7 +4,8 @@ import { Head, Link } from '@inertiajs/react';
 const modules = [
     { name: 'Books', href: route('book.view'), accent: 'from-blue-600 to-blue-500' },
     { name: 'Customers', href: route('customer.view'), accent: 'from-emerald-600 to-emerald-500' },
-    { name: 'Employees', href: route('employee.view'), accent: 'from-violet-600 to-violet-500' },
+    { name: 'Internships', href: route('internship.view'), accent: 'from-violet-600 to-indigo-500' },
+    { name: 'Employees', href: route('employee.view'), accent: 'from-fuchsia-600 to-violet-500' },
     { name: 'Companies', href: route('company.view'), accent: 'from-amber-500 to-orange-500' },
     { name: 'Notes', href: route('note.view'), accent: 'from-pink-600 to-rose-500' },
 ];

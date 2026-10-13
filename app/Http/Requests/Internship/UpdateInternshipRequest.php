@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Http\Requests\Internship;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+
+class UpdateInternshipRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return Auth::check();
+    }
+
+    public function rules(): array
+    {
+        return [
+            'name' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'regex:/\A[0-9]{10,14}\z/'],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('internships', 'email')->ignore($this->route('internship')),
+            ],
+            'address' => ['nullable', 'string', 'max:1000'],
+            'contract' => ['required', 'string', 'max:255'],
+        ];
+    }
+}
