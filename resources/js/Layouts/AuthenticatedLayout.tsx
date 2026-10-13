@@ -205,9 +205,33 @@ export default function Authenticated({
                     </nav>
 
                     {header && (
-                        <header className={cn('bg-white shadow-sm dark:bg-gray-800', headerClassName)}>
-                            <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                                {header}
+                        <header className={cn('border-b border-slate-200 bg-gradient-to-r from-[#0f172a] via-[#172554] to-[#1d4ed8] shadow-sm', headerClassName)}>
+                            <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
+                                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                                    <div className="text-white">{header}</div>
+
+                                    <nav className="flex flex-wrap items-center gap-2 text-sm">
+                                        {sidebarItems.map(({ label, href, icon: Icon }) => {
+                                            const isActive = route().current(href);
+
+                                            return (
+                                                <Link
+                                                    key={href}
+                                                    href={route(href)}
+                                                    className={cn(
+                                                        'inline-flex items-center gap-2 rounded-full border px-3 py-1.5 transition-all duration-200',
+                                                        isActive
+                                                            ? 'border-white/20 bg-white/10 text-white shadow-md'
+                                                            : 'border-white/10 bg-white/5 text-slate-200 hover:border-white/20 hover:bg-white/10 hover:text-white',
+                                                    )}
+                                                >
+                                                    <Icon className="h-3.5 w-3.5" />
+                                                    <span>{label}</span>
+                                                </Link>
+                                            );
+                                        })}
+                                    </nav>
+                                </div>
                             </div>
                         </header>
                     )}
