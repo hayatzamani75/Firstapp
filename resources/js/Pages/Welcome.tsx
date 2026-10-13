@@ -69,6 +69,42 @@ export default function Welcome({
                             </nav>
                         </header>
 
+                        <div className="relative mb-6 overflow-hidden border-y border-slate-200 bg-slate-900/95 text-white shadow-lg shadow-slate-900/10">
+                            <div className="pointer-events-none absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-slate-900 to-transparent" />
+                            <div className="pointer-events-none absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-slate-900 to-transparent" />
+
+                            <div className="marquee-track flex min-w-max items-center gap-6 whitespace-nowrap py-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-200 sm:text-xs md:text-sm">
+                                {[
+                                    'Kabul Innovation Center',
+                                    'Technology',
+                                    'Creativity',
+                                    'Education',
+                                    'Innovation',
+                                    'Startup Growth',
+                                    'Collaboration',
+                                ].map((item, index) => (
+                                    <span key={index} className="flex items-center gap-6">
+                                        <span>{item}</span>
+                                        <span className="text-blue-400">•</span>
+                                    </span>
+                                ))}
+                                {[
+                                    'Kabul Innovation Center',
+                                    'Technology',
+                                    'Creativity',
+                                    'Education',
+                                    'Innovation',
+                                    'Startup Growth',
+                                    'Collaboration',
+                                ].map((item, index) => (
+                                    <span key={`repeat-${index}`} className="flex items-center gap-6">
+                                        <span>{item}</span>
+                                        <span className="text-blue-400">•</span>
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+
                         <main className="mt-6">
                             <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
                                 <a

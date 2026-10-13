@@ -67,3 +67,30 @@
         @apply bg-background text-foreground;
     }
 }
+
+@keyframes marqueeScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.marquee-track {
+    width: max-content;
+    animation: marqueeScroll 24s linear infinite;
+}
+
+@media (max-width: 640px) {
+    .marquee-track {
+        animation-duration: 20s;
+        letter-spacing: 0.18em;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+        animation: none;
+    }
+}
