@@ -15,9 +15,9 @@ interface IProps {
 }
 
 const ServiceCard = ({ services }: IProps) => (
-    <div className="overflow-x-auto rounded-lg border border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900">
+    <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
         <Table className="w-full min-w-[760px] table-auto text-left">
-            <TableHeader className="bg-gray-800 dark:bg-gray-950">
+            <TableHeader className="bg-[#172554]">
                 <TableRow className="border-0 hover:bg-transparent">
                     <TableHead className="w-[38%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[25%] lg:w-[22%]">
                         Service
@@ -41,7 +41,7 @@ const ServiceCard = ({ services }: IProps) => (
                     services.map((service) => (
                         <TableRow
                             key={service.id}
-                            className="border-gray-200 odd:bg-white even:bg-gray-100 hover:bg-gray-200/80 dark:border-gray-800 dark:odd:bg-gray-900 dark:even:bg-gray-800 dark:hover:bg-gray-700"
+                                className="border-slate-200 odd:bg-white even:bg-slate-50 hover:bg-slate-100 dark:border-slate-800 dark:odd:bg-slate-900 dark:even:bg-slate-800 dark:hover:bg-slate-700"
                         >
                             <TableCell className="px-3 py-3 align-top">
                                 <div className="break-words font-semibold text-gray-900 dark:text-gray-100">

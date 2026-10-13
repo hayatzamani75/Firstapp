@@ -32,7 +32,7 @@ export default function View() {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                <h2 className="text-xl font-semibold leading-tight text-white dark:text-white">
                     Note
                 </h2>
             }
@@ -44,19 +44,21 @@ export default function View() {
                     <div className="mb-6">
                         <CreateNoteForm />
                     </div>
-                    <div className="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
-                        <h1 className="py-5 text-center text-2xl font-bold">
-                            My Notes
-                        </h1>
-                        <h2 className="py-2 text-start pl-2 text-[12px] text font-medium text-gray-700 dark:text-gray-300">
-                            Showing {notes.from} - {notes.to} of {notes.total}{' '}
-                            results
-                        </h2>
-                        <div className="p-2 text-gray-900 dark:text-gray-100">
+                    <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                        <header className="flex flex-col gap-3 bg-[#172554] px-5 py-4 text-white sm:flex-row sm:items-center sm:justify-between">
+                            <h1 className="text-lg font-semibold">My Notes</h1>
+                            <span className="inline-flex w-fit items-center rounded-md bg-white/15 px-3 py-1.5 text-sm font-medium">
+                                {notes.total} total
+                            </span>
+                        </header>
+                        <div className="border-b border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                            Showing {notes.from ?? 0}–{notes.to ?? 0} of {notes.total} notes
+                        </div>
+                        <div className="p-3 text-slate-900 sm:p-4">
                             <NoteCard notes={notes.data} />
                             <Pagination links={notes.links} />
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </AuthenticatedLayout>

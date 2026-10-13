@@ -16,9 +16,9 @@ interface IProps {
 
 const CompanyCard = ({ companies }: IProps) => {
     return (
-        <div className="overflow-x-auto rounded-lg border border-blue-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
             <Table className="w-full min-w-[720px] table-auto text-left">
-                <TableHeader className="bg-blue-700 dark:bg-blue-900">
+            <TableHeader className="bg-[#172554]">
                     <TableRow className="border-0 hover:bg-transparent">
                         <TableHead className="w-[44%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[34%] lg:w-[24%]">
                             Company
@@ -39,7 +39,7 @@ const CompanyCard = ({ companies }: IProps) => {
                         companies.map((company) => (
                             <TableRow
                                 key={company.id}
-                                className="border-blue-100 odd:bg-white even:bg-blue-50/70 hover:bg-blue-100/80 dark:border-slate-800 dark:odd:bg-slate-900 dark:even:bg-blue-950/40 dark:hover:bg-blue-900/40"
+                                className="border-slate-200 odd:bg-white even:bg-slate-50 hover:bg-slate-100 dark:border-slate-800 dark:odd:bg-slate-900 dark:even:bg-slate-800 dark:hover:bg-slate-700"
                             >
                                 <TableCell className="px-3 py-3 align-top">
                                     <div className="break-words font-semibold text-slate-900 dark:text-slate-100">

@@ -35,9 +35,9 @@ const InternshipTable = ({ internships, sort, direction }: IProps) => {
     }
 
     return (
-        <div className="overflow-x-auto rounded-xl border border-violet-200 bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
             <Table className="w-full min-w-[880px] table-auto text-left">
-                <TableHeader className="bg-gradient-to-r from-violet-700 to-indigo-700">
+            <TableHeader className="bg-[#172554]">
                     <TableRow className="border-0 hover:bg-transparent">
                         <TableHead className="w-[9%] px-2 py-3 text-[11px] font-semibold uppercase text-white">
                             <button
@@ -80,7 +80,7 @@ const InternshipTable = ({ internships, sort, direction }: IProps) => {
                         internships.map((internship) => (
                             <TableRow
                                 key={internship.id}
-                                className="border-violet-100 odd:bg-white even:bg-violet-50/60 hover:bg-violet-100/80"
+                                className="border-slate-200 odd:bg-white even:bg-slate-50 hover:bg-slate-100 dark:border-slate-800 dark:odd:bg-slate-900 dark:even:bg-slate-800 dark:hover:bg-slate-700"
                             >
                                 <TableCell className="px-2 py-3 align-top text-sm tabular-nums text-slate-600">
                                     {internship.id}

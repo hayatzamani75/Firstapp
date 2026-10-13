@@ -31,7 +31,7 @@ export default function View() {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                <h2 className="text-xl font-semibold leading-tight text-white dark:text-white">
                     Books
                 </h2>
             }
@@ -44,18 +44,21 @@ export default function View() {
                         <CreateBookForm />
                     </div>
 
-                    <div className="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
-                        <h1 className="py-5 text-center text-2xl font-bold">
-                            My Books
-                        </h1>
-                        <h2 className="py-2 pl-2 text-start text-[12px] font-medium text-gray-700 dark:text-gray-300">
-                            Showing {books.from} - {books.to} of {books.total} results
-                        </h2>
-                        <div className="p-2 text-gray-900 dark:text-gray-100">
+                    <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                        <header className="flex flex-col gap-3 bg-[#172554] px-5 py-4 text-white sm:flex-row sm:items-center sm:justify-between">
+                            <h1 className="text-lg font-semibold">My Books</h1>
+                            <span className="inline-flex w-fit items-center rounded-md bg-white/15 px-3 py-1.5 text-sm font-medium">
+                                {books.total} total
+                            </span>
+                        </header>
+                        <div className="border-b border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                            Showing {books.from ?? 0}–{books.to ?? 0} of {books.total} books
+                        </div>
+                        <div className="p-3 text-slate-900 sm:p-4">
                             <BookCard books={books.data} />
                             <Pagination links={books.links} />
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </AuthenticatedLayout>
