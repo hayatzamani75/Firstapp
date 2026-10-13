@@ -38,7 +38,7 @@ const TeacherCard = ({ teachers }: IProps) => {
                         <TableHead className="hidden w-[12%] px-3 py-3 text-[11px] font-semibold uppercase text-white lg:table-cell">
                             Phone 2
                         </TableHead>
-                        <TableHead className="hidden w-[16%] px-3 py-3 text-[11px] font-semibold uppercase text-white lg:table-cell">
+                        <TableHead className="hidden w-[22%] px-3 py-3 text-[11px] font-semibold uppercase text-white lg:table-cell">
                             Address
                         </TableHead>
                         <TableHead className="w-[15%] px-2 py-3 text-right text-[11px] font-semibold uppercase text-white">
@@ -76,10 +76,10 @@ const TeacherCard = ({ teachers }: IProps) => {
                                     {teacher.phone_number_2 || 'Not provided'}
                                 </TableCell>
                                 <TableCell
-                                    className="hidden px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300 lg:table-cell"
+                                    className="hidden w-[22%] px-3 py-3 align-top text-sm text-slate-600 dark:text-slate-300 lg:table-cell"
                                     title={teacher.address || undefined}
                                 >
-                                    <span className="block break-words text-sm">
+                                    <span className="block break-words text-sm leading-6">
                                         {teacher.address || 'Not provided'}
                                     </span>
                                 </TableCell>
