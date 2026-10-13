@@ -91,40 +91,6 @@ export default function Authenticated({
                             );
                         })}
                     </nav>
-
-                    <div className="border-t border-slate-700 bg-slate-950/40 p-4">
-                        <Dropdown>
-                            <Dropdown.Trigger>
-                                <span className="inline-flex w-full rounded-xl">
-                                    <button
-                                        type="button"
-                                        className="inline-flex w-full items-center justify-between rounded-xl border border-slate-700 bg-slate-800/80 px-3 py-2.5 text-sm font-medium leading-4 text-slate-200 transition duration-150 ease-in-out hover:border-slate-600 hover:bg-slate-700 focus:outline-none"
-                                    >
-                                        <span className="flex items-center gap-2">
-                                            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-xs font-semibold text-white">
-                                                {user.name.charAt(0).toUpperCase()}
-                                            </span>
-                                            <span>{user.name}</span>
-                                        </span>
-
-                                        <ChevronDown className="h-4 w-4" />
-                                    </button>
-                                </span>
-                            </Dropdown.Trigger>
-
-                            <Dropdown.Content>
-                                <Dropdown.Link href={route('profile.edit')}>
-                                    Profile
-                                </Dropdown.Link>
-                                <Dropdown.Link href={route('logout')} method="post" as="button">
-                                    <span className="flex items-center gap-2">
-                                        <LogOut className="h-4 w-4" />
-                                        Log Out
-                                    </span>
-                                </Dropdown.Link>
-                            </Dropdown.Content>
-                        </Dropdown>
-                    </div>
                 </aside>
 
                 <div className="flex min-w-0 flex-1 flex-col">
@@ -177,30 +143,6 @@ export default function Authenticated({
                                     );
                                 })}
                             </div>
-
-                            <div className="mt-3 border-t border-slate-200 pt-4">
-                                <div className="px-4">
-                                    <div className="text-base font-medium text-slate-800">
-                                        {user.name}
-                                    </div>
-                                    <div className="text-sm font-medium text-slate-500">
-                                        {user.email}
-                                    </div>
-                                </div>
-
-                                <div className="mt-3 space-y-1">
-                                    <ResponsiveNavLink href={route('profile.edit')}>
-                                        Profile
-                                    </ResponsiveNavLink>
-                                    <ResponsiveNavLink
-                                        method="post"
-                                        href={route('logout')}
-                                        as="button"
-                                    >
-                                        Log Out
-                                    </ResponsiveNavLink>
-                                </div>
-                            </div>
                         </div>
                     </nav>
 
@@ -220,32 +162,34 @@ export default function Authenticated({
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-wrap items-center gap-2">
-                                        {[
-                                            { label: 'Books', href: route('book.view'), icon: BookOpenText },
-                                            { label: 'My Notes', href: route('note.view'), icon: NotebookText },
-                                            { label: 'Employees', href: route('employee.view'), icon: UserCircle2 },
-                                            { label: 'Customers', href: route('customer.view'), icon: Users },
-                                            { label: 'Companies', href: route('company.view'), icon: Building2 },
-                                            { label: 'Teachers', href: route('teacher.view'), icon: GraduationCap },
-                                        ].map(({ label, href, icon: Icon }) => {
-                                            const isActive = route().current(href);
-                                            return (
-                                                <Link
-                                                    key={href}
-                                                    href={href}
-                                                    className={cn(
-                                                        'inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-medium transition-all duration-200',
-                                                        isActive
-                                                            ? 'border-white/20 bg-white/12 text-white shadow-md shadow-blue-500/20'
-                                                            : 'border-white/10 bg-white/5 text-slate-200 hover:border-white/20 hover:bg-white/10 hover:text-white',
-                                                    )}
+                                    <div className="self-end sm:self-auto">
+                                        <Dropdown>
+                                            <Dropdown.Trigger>
+                                                <button
+                                                    type="button"
+                                                    aria-label="Open account menu"
+                                                    className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-sm font-medium text-white transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
                                                 >
-                                                    <Icon className="h-3.5 w-3.5" />
-                                                    {label}
-                                                </Link>
-                                            );
-                                        })}
+                                                    <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-600 text-xs font-semibold text-white">
+                                                        {user.name.charAt(0).toUpperCase()}
+                                                    </span>
+                                                    <span className="max-w-32 truncate">{user.name}</span>
+                                                    <ChevronDown className="h-4 w-4" />
+                                                </button>
+                                            </Dropdown.Trigger>
+
+                                            <Dropdown.Content contentClasses="py-1 bg-white">
+                                                <Dropdown.Link href={route('profile.edit')}>
+                                                    Profile
+                                                </Dropdown.Link>
+                                                <Dropdown.Link href={route('logout')} method="post" as="button">
+                                                    <span className="flex items-center gap-2">
+                                                        <LogOut className="h-4 w-4" />
+                                                        Log Out
+                                                    </span>
+                                                </Dropdown.Link>
+                                            </Dropdown.Content>
+                                        </Dropdown>
                                     </div>
                                 </div>
                             </div>
