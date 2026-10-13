@@ -2,6 +2,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Input } from '@/Components/ui/input';
 import { Company, PageProps } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
+import { Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import Pagination from '../Note/Partials/Pagination';
 import CompanyCard from './Partials/CompanyCard';
@@ -71,12 +72,13 @@ export default function View() {
                                 <span className="text-sm text-slate-600">
                                     Showing {filteredCompanies.length} of {companies.total} companies
                                 </span>
-                                <div className="w-full max-w-sm">
+                                <div className="relative w-full max-w-sm">
+                                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                                     <Input
                                         value={query}
                                         onChange={(event) => setQuery(event.target.value)}
                                         placeholder="Search company..."
-                                        className="border-slate-200 bg-white focus-visible:ring-blue-500"
+                                        className="border-slate-200 bg-white pl-9 focus-visible:ring-blue-500"
                                     />
                                 </div>
                             </div>
