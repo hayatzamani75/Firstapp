@@ -17,7 +17,7 @@ interface IProps {
 const TeacherCard = ({ teachers }: IProps) => {
     return (
         <div className="overflow-x-auto rounded-lg border border-blue-200 bg-white dark:border-slate-700 dark:bg-slate-900">
-            <Table className="w-full table-fixed text-left">
+            <Table className="w-full min-w-[860px] table-auto text-left">
                 <TableHeader className="bg-blue-700 dark:bg-blue-900">
                     <TableRow className="border-0 hover:bg-transparent">
                         <TableHead className="w-[7%] px-2 py-3 text-[11px] font-semibold uppercase text-white">
