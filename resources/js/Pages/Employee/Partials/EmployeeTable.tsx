@@ -12,8 +12,8 @@ import { EditEmployeeDialog } from './EditEmployeeDialog';
 
 export default function EmployeeTable({ employees }: { employees: Employee[] }) {
     return (
-        <div className="overflow-hidden rounded-lg border border-blue-200 dark:border-slate-700">
-            <Table className="table-fixed text-left">
+        <div className="overflow-x-auto rounded-lg border border-blue-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+            <Table className="w-full min-w-[820px] table-auto text-left">
                 <TableHeader className="bg-blue-700 dark:bg-blue-900">
                     <TableRow className="border-0 hover:bg-transparent">
                         <TableHead className="w-[12%] px-2 py-3 text-[11px] font-semibold uppercase text-white sm:w-[9%]">

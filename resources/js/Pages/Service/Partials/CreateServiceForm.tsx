@@ -45,13 +45,13 @@ export function CreateServiceForm() {
                         Create New Service
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[500px]">
-                    <DialogHeader>
-                        <DialogTitle>Create a new service</DialogTitle>
-                        <DialogDescription>Add the service details below.</DialogDescription>
+                <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100%-1rem)] overflow-y-auto rounded-xl border-blue-100 bg-[#F8FAFC] p-0 sm:max-w-lg">
+                    <DialogHeader className="rounded-t-xl bg-blue-700 px-4 py-4 text-left text-white sm:px-6">
+                        <DialogTitle className="text-white">Create a new service</DialogTitle>
+                        <DialogDescription className="text-blue-100">Add the service details below.</DialogDescription>
                     </DialogHeader>
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
+                    <form onSubmit={handleSubmit} className="space-y-4 px-4 py-5 sm:px-6">
                         <div>
                             <label htmlFor="create-service-name" className="mb-2 block text-sm font-medium">Name:</label>
                             <Input id="create-service-name" value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} placeholder="Service name" />

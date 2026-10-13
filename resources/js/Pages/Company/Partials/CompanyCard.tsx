@@ -16,8 +16,8 @@ interface IProps {
 
 const CompanyCard = ({ companies }: IProps) => {
     return (
-        <div className="overflow-hidden rounded-lg border border-blue-200 dark:border-slate-700">
-            <Table className="table-fixed text-left">
+        <div className="overflow-x-auto rounded-lg border border-blue-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+            <Table className="w-full min-w-[720px] table-auto text-left">
                 <TableHeader className="bg-blue-700 dark:bg-blue-900">
                     <TableRow className="border-0 hover:bg-transparent">
                         <TableHead className="w-[44%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[34%] lg:w-[24%]">

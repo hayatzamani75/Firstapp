@@ -35,8 +35,8 @@ const InternshipTable = ({ internships, sort, direction }: IProps) => {
     }
 
     return (
-        <div className="overflow-hidden rounded-xl border border-violet-200 bg-white shadow-sm">
-            <Table className="table-fixed text-left">
+        <div className="overflow-x-auto rounded-xl border border-violet-200 bg-white shadow-sm">
+            <Table className="w-full min-w-[880px] table-auto text-left">
                 <TableHeader className="bg-gradient-to-r from-violet-700 to-indigo-700">
                     <TableRow className="border-0 hover:bg-transparent">
                         <TableHead className="w-[9%] px-2 py-3 text-[11px] font-semibold uppercase text-white">

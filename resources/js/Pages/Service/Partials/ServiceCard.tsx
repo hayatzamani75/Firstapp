@@ -15,8 +15,8 @@ interface IProps {
 }
 
 const ServiceCard = ({ services }: IProps) => (
-    <div className="overflow-hidden rounded-lg border border-gray-300 dark:border-gray-700">
-        <Table className="table-fixed text-left">
+    <div className="overflow-x-auto rounded-lg border border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-900">
+        <Table className="w-full min-w-[760px] table-auto text-left">
             <TableHeader className="bg-gray-800 dark:bg-gray-950">
                 <TableRow className="border-0 hover:bg-transparent">
                     <TableHead className="w-[38%] px-3 py-3 text-[11px] font-semibold uppercase text-white sm:w-[25%] lg:w-[22%]">
