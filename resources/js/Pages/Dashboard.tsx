@@ -28,15 +28,18 @@ export default function Dashboard() {
                         <div className="relative p-8 sm:p-10 lg:p-12">
                             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(96,165,250,0.35),transparent_30%),radial-gradient(circle_at_bottom_left,_rgba(14,165,233,0.25),transparent_35%)]" />
 
-                            <div className="relative max-w-3xl">
-                                <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-100">
+                            <div className="relative max-w-4xl">
+                                <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-blue-100">
                                     Welcome
                                 </span>
-                                <h1 className="mt-5 text-3xl font-black leading-tight text-white sm:text-4xl lg:text-5xl">
+                                <h1 className="mt-6 animate-[pulse_4s_ease-in-out_infinite] text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-7xl">
                                     Welcome to Kabul Innovation Center
                                 </h1>
-                                <p className="mt-4 max-w-xl text-base text-blue-100 sm:text-lg">
-                                    Your workspace for managing programs, teams, and initiatives in a modern and efficient way.
+                                <p className="mt-5 max-w-2xl text-lg font-medium text-blue-100 sm:text-xl">
+                                    KIC delivers modern services, digital solutions, and impactful programs that empower individuals, teams, and communities.
+                                </p>
+                                <p className="mt-3 max-w-2xl text-sm text-blue-50/90 sm:text-base">
+                                    We connect technology, creativity, and opportunity to build a brighter future through smart services and innovative development.
                                 </p>
                             </div>
                         </div>
