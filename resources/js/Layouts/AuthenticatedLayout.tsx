@@ -236,7 +236,7 @@ export default function Authenticated({
                         </header>
                     )}
 
-                    <main className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#eef2ff_100%)] dark:bg-slate-950">
+                    <main className="min-h-screen bg-[linear-gradient(180deg,#f0fdf4_0%,#dcfce7_100%)] dark:bg-slate-950">
                         {children}
                     </main>
                 </div>
