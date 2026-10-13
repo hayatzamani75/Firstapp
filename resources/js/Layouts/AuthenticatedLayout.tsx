@@ -18,138 +18,143 @@ export default function Authenticated({
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <nav className="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
-                        <div className="flex">
-                            <div className="flex shrink-0 items-center">
+            <div className="flex min-h-screen">
+                <aside className="hidden w-64 shrink-0 border-r border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 lg:flex lg:flex-col">
+                    <div className="flex h-16 items-center border-b border-gray-200 px-4 dark:border-gray-700">
+                        <Link href="/" className="flex items-center">
+                            <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                        </Link>
+                    </div>
+
+                    <nav className="flex-1 space-y-1 p-4">
+                        <NavLink
+                            href={route('dashboard')}
+                            active={route().current('dashboard')}
+                            className="mb-2 block"
+                        >
+                            Dashboard
+                        </NavLink>
+                        <Link
+                            href={route('note.view')}
+                            className={cn(
+                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
+                                route().current('note.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
+                            )}
+                        >
+                            My Notes
+                        </Link>
+                        <Link
+                            href={route('book.view')}
+                            className={cn(
+                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
+                                route().current('book.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
+                            )}
+                        >
+                            Books
+                        </Link>
+                        <Link
+                            href={route('company.view')}
+                            className={cn(
+                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
+                                route().current('company.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
+                            )}
+                        >
+                            Companies
+                        </Link>
+                        <Link
+                            href={route('teacher.view')}
+                            className={cn(
+                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
+                                route().current('teacher.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
+                            )}
+                        >
+                            Teachers
+                        </Link>
+                        <Link
+                            href={route('customer.view')}
+                            className={cn(
+                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
+                                route().current('customer.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
+                            )}
+                        >
+                            Customers
+                        </Link>
+                        <Link
+                            href={route('internship.view')}
+                            className={cn(
+                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
+                                route().current('internship.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
+                            )}
+                        >
+                            Internships
+                        </Link>
+                        <Link
+                            href={route('employee.view')}
+                            className={cn(
+                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
+                                route().current('employee.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
+                            )}
+                        >
+                            Employees
+                        </Link>
+                        <Link
+                            href={route('service.view')}
+                            className={cn(
+                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
+                                route().current('service.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
+                            )}
+                        >
+                            Services
+                        </Link>
+                    </nav>
+
+                    <div className="border-t border-gray-200 p-4 dark:border-gray-700">
+                        <Dropdown>
+                            <Dropdown.Trigger>
+                                <span className="inline-flex w-full rounded-md">
+                                    <button
+                                        type="button"
+                                        className="inline-flex w-full items-center justify-between rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+                                    >
+                                        <span>{user.name}</span>
+
+                                        <svg
+                                            className="-me-0.5 ms-2 h-4 w-4"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clipRule="evenodd"
+                                            />
+                                        </svg>
+                                    </button>
+                                </span>
+                            </Dropdown.Trigger>
+
+                            <Dropdown.Content>
+                                <Dropdown.Link href={route('profile.edit')}>
+                                    Profile
+                                </Dropdown.Link>
+                                <Dropdown.Link href={route('logout')} method="post" as="button">
+                                    Log Out
+                                </Dropdown.Link>
+                            </Dropdown.Content>
+                        </Dropdown>
+                    </div>
+                </aside>
+
+                <div className="flex min-w-0 flex-1 flex-col">
+                    <nav className="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800 lg:hidden">
+                        <div className="flex h-16 items-center justify-between px-4">
+                            <div className="flex items-center gap-3">
                                 <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                                    <ApplicationLogo className="block h-8 w-auto fill-current text-gray-800 dark:text-gray-200" />
                                 </Link>
                             </div>
 
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
-                                >
-                                    Dashboard
-                                </NavLink>
-                            </div>
-                        </div>
-
-                        <div className="hidden flex-1 sm:ms-6 sm:flex sm:items-center sm:justify-end">
-                            <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
-                                <div className="relative">
-                                    <Link
-                                        href={'/note'}
-                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                    >
-                                        My Notes
-                                    </Link>
-                                </div>
-                                <div className="relative">
-                                    <Link
-                                        href={'/book'}
-                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                    >
-                                        Books
-                                    </Link>
-                                </div>
-                                <div className="relative">
-                                    <Link
-                                        href={'/company'}
-                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                    >
-                                        Companies
-                                    </Link>
-                                </div>
-                                <div className="relative">
-                                    <Link
-                                        href={'/teacher'}
-                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                    >
-                                        Teachers
-                                    </Link>
-                                </div>
-                                <div className="relative">
-                                    <Link
-                                        href={'/customer'}
-                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                    >
-                                        Customers
-                                    </Link>
-                                </div>
-                                <div className="relative">
-                                    <Link
-                                        href={route('internship.view')}
-                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                    >
-                                        Internships
-                                    </Link>
-                                </div>
-                                <div className="relative">
-                                    <Link
-                                        href={route('employee.view')}
-                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                    >
-                                        Employees
-                                    </Link>
-                                </div>
-                                <div className="relative">
-                                    <Link
-                                        href={route('service.view')}
-                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                    >
-                                        Services
-                                    </Link>
-                                </div>
-                                <div className="relative">
-                                    <Dropdown>
-                                        <Dropdown.Trigger>
-                                            <span className="inline-flex rounded-md">
-                                                <button
-                                                    type="button"
-                                                    className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
-                                                >
-                                                    {user.name}
-
-                                                    <svg
-                                                        className="-me-0.5 ms-2 h-4 w-4"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 20 20"
-                                                        fill="currentColor"
-                                                    >
-                                                        <path
-                                                            fillRule="evenodd"
-                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                            clipRule="evenodd"
-                                                        />
-                                                    </svg>
-                                                </button>
-                                            </span>
-                                        </Dropdown.Trigger>
-
-                                        <Dropdown.Content>
-                                            <Dropdown.Link
-                                                href={route('profile.edit')}
-                                            >
-                                                Profile
-                                            </Dropdown.Link>
-                                            <Dropdown.Link
-                                                href={route('logout')}
-                                                method="post"
-                                                as="button"
-                                            >
-                                                Log Out
-                                            </Dropdown.Link>
-                                        </Dropdown.Content>
-                                    </Dropdown>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="-me-2 flex items-center sm:hidden">
                             <button
                                 onClick={() =>
                                     setShowingNavigationDropdown(
@@ -189,107 +194,107 @@ export default function Authenticated({
                                 </svg>
                             </button>
                         </div>
-                    </div>
-                </div>
 
-                <div
-                    className={
-                        (showingNavigationDropdown ? 'block' : 'hidden') +
-                        ' sm:hidden'
-                    }
-                >
-                    <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            href={route('dashboard')}
-                            active={route().current('dashboard')}
+                        <div
+                            className={
+                                (showingNavigationDropdown ? 'block' : 'hidden') +
+                                ' border-t border-gray-200 px-2 pb-3 pt-2 dark:border-gray-700'
+                            }
                         >
-                            Dashboard
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('note.view')}
-                            active={route().current('note.view')}
-                        >
-                            My Notes
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('book.view')}
-                            active={route().current('book.view')}
-                        >
-                            Books
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('company.view')}
-                            active={route().current('company.view')}
-                        >
-                            Companies
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('teacher.view')}
-                            active={route().current('teacher.view')}
-                        >
-                            Teachers
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('customer.view')}
-                            active={route().current('customer.view')}
-                        >
-                            Customers
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('internship.view')}
-                            active={route().current('internship.view')}
-                        >
-                            Internships
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('employee.view')}
-                            active={route().current('employee.view')}
-                        >
-                            Employees
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            href={route('service.view')}
-                            active={route().current('service.view')}
-                        >
-                            Services
-                        </ResponsiveNavLink>
-                    </div>
-
-                    <div className="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
-                        <div className="px-4">
-                            <div className="text-base font-medium text-gray-800 dark:text-gray-200">
-                                {user.name}
+                            <div className="space-y-1">
+                                <ResponsiveNavLink
+                                    href={route('dashboard')}
+                                    active={route().current('dashboard')}
+                                >
+                                    Dashboard
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('note.view')}
+                                    active={route().current('note.view')}
+                                >
+                                    My Notes
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('book.view')}
+                                    active={route().current('book.view')}
+                                >
+                                    Books
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('company.view')}
+                                    active={route().current('company.view')}
+                                >
+                                    Companies
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('teacher.view')}
+                                    active={route().current('teacher.view')}
+                                >
+                                    Teachers
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('customer.view')}
+                                    active={route().current('customer.view')}
+                                >
+                                    Customers
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('internship.view')}
+                                    active={route().current('internship.view')}
+                                >
+                                    Internships
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('employee.view')}
+                                    active={route().current('employee.view')}
+                                >
+                                    Employees
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('service.view')}
+                                    active={route().current('service.view')}
+                                >
+                                    Services
+                                </ResponsiveNavLink>
                             </div>
-                            <div className="text-sm font-medium text-gray-500">
-                                {user.email}
+
+                            <div className="mt-3 border-t border-gray-200 pt-4 dark:border-gray-700">
+                                <div className="px-4">
+                                    <div className="text-base font-medium text-gray-800 dark:text-gray-200">
+                                        {user.name}
+                                    </div>
+                                    <div className="text-sm font-medium text-gray-500">
+                                        {user.email}
+                                    </div>
+                                </div>
+
+                                <div className="mt-3 space-y-1">
+                                    <ResponsiveNavLink href={route('profile.edit')}>
+                                        Profile
+                                    </ResponsiveNavLink>
+                                    <ResponsiveNavLink
+                                        method="post"
+                                        href={route('logout')}
+                                        as="button"
+                                    >
+                                        Log Out
+                                    </ResponsiveNavLink>
+                                </div>
                             </div>
                         </div>
+                    </nav>
 
-                        <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
-                                Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                method="post"
-                                href={route('logout')}
-                                as="button"
-                            >
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
-                    </div>
+                    {header && (
+                        <header className={cn('bg-white shadow dark:bg-gray-800', headerClassName)}>
+                            <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                                {header}
+                            </div>
+                        </header>
+                    )}
+
+                    <main>{children}</main>
                 </div>
-            </nav>
-
-            {header && (
-                <header className={cn('bg-white shadow dark:bg-gray-800', headerClassName)}>
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        {header}
-                    </div>
-                </header>
-            )}
-
-            <main>{children}</main>
+            </div>
         </div>
     );
 }
