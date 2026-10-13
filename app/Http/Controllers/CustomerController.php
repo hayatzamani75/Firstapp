@@ -25,7 +25,7 @@ class CustomerController extends Controller
 
         $customers = Customer::where('user_id', Auth::id())
             ->orderBy($sort, $direction)
-            ->paginate(12)
+            ->paginate(2)
             ->appends(['sort' => $sort, 'direction' => $direction]);
 
         return Inertia::render('Customer/View', [

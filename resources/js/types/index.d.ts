@@ -60,6 +60,15 @@ export interface Customer {
     address: string;
 }
 
+export interface Employee {
+    id: number;
+    name: string;
+    lastname: string;
+    phone: string;
+    email: string;
+    address: string | null;
+}
+
 export interface Service {
     id: number;
     name: string;
