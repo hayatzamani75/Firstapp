@@ -13,7 +13,7 @@ const modules = [
 export default function Dashboard() {
     return (
         <AuthenticatedLayout
-            headerClassName="bg-orange-100 dark:bg-orange-950"
+            headerClassName="bg-[#172554] dark:bg-[#172554]"
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                     Dashboard
