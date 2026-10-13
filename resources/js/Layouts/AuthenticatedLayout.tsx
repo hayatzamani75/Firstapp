@@ -44,7 +44,7 @@ export default function Authenticated({
     return (
         <div className="min-h-screen bg-slate-100">
             <div className="flex min-h-screen">
-                <aside className="hidden w-72 shrink-0 border-r border-slate-700 bg-[radial-gradient(circle_at_top_left,_rgba(99,102,241,0.18),_transparent_28%),linear-gradient(180deg,#0f172a_0%,#111827_100%)] shadow-2xl shadow-slate-900/20 lg:flex lg:flex-col">
+                <aside className="hidden w-72 shrink-0 border-r border-slate-700 bg-[#1E3A8A] shadow-2xl shadow-slate-900/20 lg:flex lg:flex-col">
                     <div className="flex h-20 items-center border-b border-slate-700 px-5">
                         <Link href="/" className="flex items-center gap-3">
                             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 shadow-lg shadow-indigo-500/30">
