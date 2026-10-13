@@ -38,112 +38,114 @@ export default function Authenticated({
                             </div>
                         </div>
 
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <div className="relative ms-3">
-                                <Link
-                                    href={'/note'}
-                                    className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                >
-                                    My Notes
-                                </Link>
-                            </div>
-                            <div className="relative ms-3">
-                                <Link
-                                    href={'/book'}
-                                    className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                >
-                                    Books
-                                </Link>
-                            </div>
-                            <div className="relative ms-3">
-                                <Link
-                                    href={'/company'}
-                                    className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                >
-                                    Companies
-                                </Link>
-                            </div>
-                            <div className="relative ms-3">
-                                <Link
-                                    href={'/teacher'}
-                                    className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                >
-                                    Teachers
-                                </Link>
-                            </div>
-                            <div className="relative ms-3">
-                                <Link
-                                    href={'/customer'}
-                                    className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                >
-                                    Customers
-                                </Link>
-                            </div>
-                            <div className="relative ms-3">
-                                <Link
-                                    href={route('internship.view')}
-                                    className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                >
-                                    Internships
-                                </Link>
-                            </div>
-                            <div className="relative ms-3">
-                                <Link
-                                    href={route('employee.view')}
-                                    className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                >
-                                    Employees
-                                </Link>
-                            </div>
-                            <div className="relative ms-3">
-                                <Link
-                                    href={route('service.view')}
-                                    className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
-                                >
-                                    Services
-                                </Link>
-                            </div>
-                            <div className="relative ms-3">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
-                                            >
-                                                {user.name}
-
-                                                <svg
-                                                    className="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
+                        <div className="hidden flex-1 sm:ms-6 sm:flex sm:items-center sm:justify-end">
+                            <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2">
+                                <div className="relative">
+                                    <Link
+                                        href={'/note'}
+                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
+                                    >
+                                        My Notes
+                                    </Link>
+                                </div>
+                                <div className="relative">
+                                    <Link
+                                        href={'/book'}
+                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
+                                    >
+                                        Books
+                                    </Link>
+                                </div>
+                                <div className="relative">
+                                    <Link
+                                        href={'/company'}
+                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
+                                    >
+                                        Companies
+                                    </Link>
+                                </div>
+                                <div className="relative">
+                                    <Link
+                                        href={'/teacher'}
+                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
+                                    >
+                                        Teachers
+                                    </Link>
+                                </div>
+                                <div className="relative">
+                                    <Link
+                                        href={'/customer'}
+                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
+                                    >
+                                        Customers
+                                    </Link>
+                                </div>
+                                <div className="relative">
+                                    <Link
+                                        href={route('internship.view')}
+                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
+                                    >
+                                        Internships
+                                    </Link>
+                                </div>
+                                <div className="relative">
+                                    <Link
+                                        href={route('employee.view')}
+                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
+                                    >
+                                        Employees
+                                    </Link>
+                                </div>
+                                <div className="relative">
+                                    <Link
+                                        href={route('service.view')}
+                                        className="text-sm font-medium text-gray-500 hover:text-black dark:text-gray-300 dark:hover:text-white"
+                                    >
+                                        Services
+                                    </Link>
+                                </div>
+                                <div className="relative">
+                                    <Dropdown>
+                                        <Dropdown.Trigger>
+                                            <span className="inline-flex rounded-md">
+                                                <button
+                                                    type="button"
+                                                    className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
                                                 >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </Dropdown.Trigger>
+                                                    {user.name}
 
-                                    <Dropdown.Content>
-                                        <Dropdown.Link
-                                            href={route('profile.edit')}
-                                        >
-                                            Profile
-                                        </Dropdown.Link>
-                                        <Dropdown.Link
-                                            href={route('logout')}
-                                            method="post"
-                                            as="button"
-                                        >
-                                            Log Out
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
+                                                    <svg
+                                                        className="-me-0.5 ms-2 h-4 w-4"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 20 20"
+                                                        fill="currentColor"
+                                                    >
+                                                        <path
+                                                            fillRule="evenodd"
+                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                            clipRule="evenodd"
+                                                        />
+                                                    </svg>
+                                                </button>
+                                            </span>
+                                        </Dropdown.Trigger>
+
+                                        <Dropdown.Content>
+                                            <Dropdown.Link
+                                                href={route('profile.edit')}
+                                            >
+                                                Profile
+                                            </Dropdown.Link>
+                                            <Dropdown.Link
+                                                href={route('logout')}
+                                                method="post"
+                                                as="button"
+                                            >
+                                                Log Out
+                                            </Dropdown.Link>
+                                        </Dropdown.Content>
+                                    </Dropdown>
+                                </div>
                             </div>
                         </div>
 
