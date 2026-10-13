@@ -32,7 +32,7 @@ export default function Dashboard() {
                                 <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-blue-100">
                                     Welcome
                                 </span>
-                                <h1 className="mt-6 animate-[pulse_4s_ease-in-out_infinite] text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-7xl">
+                                <h1 className="mt-6 animate-[slideInUp_0.9s_ease-out] text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-7xl">
                                     Welcome to Kabul Innovation Center
                                 </h1>
                                 <p className="mt-5 max-w-2xl text-lg font-medium text-blue-100 sm:text-xl">
