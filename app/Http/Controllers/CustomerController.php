@@ -21,11 +21,11 @@ class CustomerController extends Controller
         ]);
 
         $sort = $validated['sort'] ?? 'id';
-        $direction = $validated['direction'] ?? 'desc';
+        $direction = $validated['direction'] ?? 'asc';
 
         $customers = Customer::where('user_id', Auth::id())
             ->orderBy($sort, $direction)
-            ->paginate(2)
+            ->paginate(8)
             ->appends(['sort' => $sort, 'direction' => $direction]);
 
         return Inertia::render('Customer/View', [
