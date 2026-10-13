@@ -4,7 +4,34 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { cn } from '@/lib/utils';
 import { Link, usePage } from '@inertiajs/react';
+import {
+    BookOpenText,
+    BriefcaseBusiness,
+    Building2,
+    ChevronDown,
+    GraduationCap,
+    LayoutDashboard,
+    LogOut,
+    Menu,
+    NotebookText,
+    UserCircle2,
+    Users,
+    Wrench,
+    X,
+} from 'lucide-react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
+
+const sidebarItems = [
+    { label: 'Dashboard', href: 'dashboard', icon: LayoutDashboard },
+    { label: 'My Notes', href: 'note.view', icon: NotebookText },
+    { label: 'Books', href: 'book.view', icon: BookOpenText },
+    { label: 'Companies', href: 'company.view', icon: Building2 },
+    { label: 'Teachers', href: 'teacher.view', icon: GraduationCap },
+    { label: 'Customers', href: 'customer.view', icon: Users },
+    { label: 'Internships', href: 'internship.view', icon: BriefcaseBusiness },
+    { label: 'Employees', href: 'employee.view', icon: UserCircle2 },
+    { label: 'Services', href: 'service.view', icon: Wrench },
+];
 
 export default function Authenticated({
     header,
@@ -17,119 +44,73 @@ export default function Authenticated({
         useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="min-h-screen bg-slate-100 dark:bg-slate-950">
             <div className="flex min-h-screen">
-                <aside className="hidden w-64 shrink-0 border-r border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 lg:flex lg:flex-col">
-                    <div className="flex h-16 items-center border-b border-gray-200 px-4 dark:border-gray-700">
-                        <Link href="/" className="flex items-center">
-                            <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                <aside className="hidden w-72 shrink-0 border-r border-slate-200 bg-white/85 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/80 lg:flex lg:flex-col">
+                    <div className="flex h-20 items-center border-b border-slate-200 px-5 dark:border-slate-700">
+                        <Link href="/" className="flex items-center gap-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/20">
+                                <ApplicationLogo className="block h-6 w-auto fill-current text-white" />
+                            </div>
+                            <div className="text-left">
+                                <div className="text-sm font-semibold tracking-wide text-slate-900 dark:text-white">
+                                    CRM
+                                </div>
+                                <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                                    Workspace
+                                </div>
+                            </div>
                         </Link>
                     </div>
 
-                    <nav className="flex-1 space-y-1 p-4">
-                        <NavLink
-                            href={route('dashboard')}
-                            active={route().current('dashboard')}
-                            className="mb-2 block"
-                        >
-                            Dashboard
-                        </NavLink>
-                        <Link
-                            href={route('note.view')}
-                            className={cn(
-                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
-                                route().current('note.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
-                            )}
-                        >
-                            My Notes
-                        </Link>
-                        <Link
-                            href={route('book.view')}
-                            className={cn(
-                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
-                                route().current('book.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
-                            )}
-                        >
-                            Books
-                        </Link>
-                        <Link
-                            href={route('company.view')}
-                            className={cn(
-                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
-                                route().current('company.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
-                            )}
-                        >
-                            Companies
-                        </Link>
-                        <Link
-                            href={route('teacher.view')}
-                            className={cn(
-                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
-                                route().current('teacher.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
-                            )}
-                        >
-                            Teachers
-                        </Link>
-                        <Link
-                            href={route('customer.view')}
-                            className={cn(
-                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
-                                route().current('customer.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
-                            )}
-                        >
-                            Customers
-                        </Link>
-                        <Link
-                            href={route('internship.view')}
-                            className={cn(
-                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
-                                route().current('internship.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
-                            )}
-                        >
-                            Internships
-                        </Link>
-                        <Link
-                            href={route('employee.view')}
-                            className={cn(
-                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
-                                route().current('employee.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
-                            )}
-                        >
-                            Employees
-                        </Link>
-                        <Link
-                            href={route('service.view')}
-                            className={cn(
-                                'block rounded-md px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white',
-                                route().current('service.view') && 'bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-white',
-                            )}
-                        >
-                            Services
-                        </Link>
+                    <nav className="flex-1 space-y-2 p-4">
+                        {sidebarItems.map(({ label, href, icon: Icon }) => {
+                            const routeName = href;
+                            const isActive = route().current(routeName);
+
+                            return (
+                                <Link
+                                    key={routeName}
+                                    href={route(routeName)}
+                                    className={cn(
+                                        'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
+                                        isActive
+                                            ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-lg shadow-indigo-500/20'
+                                            : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white',
+                                    )}
+                                >
+                                    <span
+                                        className={cn(
+                                            'flex h-8 w-8 items-center justify-center rounded-lg border',
+                                            isActive
+                                                ? 'border-white/20 bg-white/10 text-white'
+                                                : 'border-slate-200 bg-slate-50 text-slate-500 group-hover:border-slate-200 group-hover:bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:group-hover:bg-slate-700',
+                                        )}
+                                    >
+                                        <Icon className="h-4 w-4" />
+                                    </span>
+                                    <span>{label}</span>
+                                </Link>
+                            );
+                        })}
                     </nav>
 
-                    <div className="border-t border-gray-200 p-4 dark:border-gray-700">
+                    <div className="border-t border-slate-200 p-4 dark:border-slate-700">
                         <Dropdown>
                             <Dropdown.Trigger>
-                                <span className="inline-flex w-full rounded-md">
+                                <span className="inline-flex w-full rounded-xl">
                                     <button
                                         type="button"
-                                        className="inline-flex w-full items-center justify-between rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+                                        className="inline-flex w-full items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-medium leading-4 text-slate-700 transition duration-150 ease-in-out hover:border-slate-300 hover:bg-slate-100 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-700"
                                     >
-                                        <span>{user.name}</span>
+                                        <span className="flex items-center gap-2">
+                                            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-slate-800 to-slate-600 text-xs font-semibold text-white dark:from-slate-700 dark:to-slate-500">
+                                                {user.name.charAt(0).toUpperCase()}
+                                            </span>
+                                            <span>{user.name}</span>
+                                        </span>
 
-                                        <svg
-                                            className="-me-0.5 ms-2 h-4 w-4"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 20 20"
-                                            fill="currentColor"
-                                        >
-                                            <path
-                                                fillRule="evenodd"
-                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                clipRule="evenodd"
-                                            />
-                                        </svg>
+                                        <ChevronDown className="h-4 w-4" />
                                     </button>
                                 </span>
                             </Dropdown.Trigger>
@@ -139,7 +120,10 @@ export default function Authenticated({
                                     Profile
                                 </Dropdown.Link>
                                 <Dropdown.Link href={route('logout')} method="post" as="button">
-                                    Log Out
+                                    <span className="flex items-center gap-2">
+                                        <LogOut className="h-4 w-4" />
+                                        Log Out
+                                    </span>
                                 </Dropdown.Link>
                             </Dropdown.Content>
                         </Dropdown>
@@ -161,37 +145,13 @@ export default function Authenticated({
                                         (previousState) => !previousState,
                                     )
                                 }
-                                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:bg-gray-900 dark:hover:text-gray-400 dark:focus:bg-gray-900 dark:focus:text-gray-400"
+                                className="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-slate-50 p-2 text-slate-600 transition hover:bg-slate-100 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
                             >
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        className={
-                                            !showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={
-                                            showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
+                                {showingNavigationDropdown ? (
+                                    <X className="h-5 w-5" />
+                                ) : (
+                                    <Menu className="h-5 w-5" />
+                                )}
                             </button>
                         </div>
 
