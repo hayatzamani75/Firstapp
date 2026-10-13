@@ -44,7 +44,7 @@ export default function Authenticated({
     return (
         <div className="min-h-screen bg-slate-100">
             <div className="flex min-h-screen">
-                <aside className="hidden w-72 shrink-0 border-r border-red-200 bg-[#FEE2E2] shadow-2xl shadow-red-200/40 lg:flex lg:flex-col">
+                <aside className="hidden w-72 shrink-0 border-r border-slate-700 bg-[#172554] shadow-2xl shadow-slate-900/20 lg:flex lg:flex-col">
                     <div className="flex h-20 items-center border-b border-slate-700 px-5">
                         <Link href="/" className="flex items-center gap-3">
                             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 shadow-lg shadow-indigo-500/30">
@@ -72,8 +72,8 @@ export default function Authenticated({
                                     className={cn(
                                         'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
                                         isActive
-                                            ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-lg shadow-indigo-500/25'
-                                            : 'text-slate-300 hover:bg-slate-800/80 hover:text-white',
+                                            ? 'bg-[#2563EB] text-[#FFFFFF] shadow-lg shadow-blue-500/25'
+                                            : 'text-[#FFFFFF] hover:bg-slate-800/80 hover:text-white',
                                     )}
                                 >
                                     <span
@@ -81,7 +81,7 @@ export default function Authenticated({
                                             'flex h-8 w-8 items-center justify-center rounded-lg border',
                                             isActive
                                                 ? 'border-white/20 bg-white/10 text-white'
-                                                : 'border-slate-700 bg-slate-800 text-slate-300 group-hover:border-slate-600 group-hover:bg-slate-700',
+                                                : 'border-slate-700 bg-slate-800 text-[#FFFFFF] group-hover:border-slate-600 group-hover:bg-slate-700',
                                         )}
                                     >
                                         <Icon className="h-4 w-4" />
