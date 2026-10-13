@@ -205,7 +205,7 @@ export default function Authenticated({
                     </nav>
 
                     {header && (
-                        <header className={cn('border-b border-slate-200 bg-gradient-to-r from-[#0f172a] via-[#1e3a8a] to-[#2563eb] shadow-lg shadow-blue-900/20', headerClassName)}>
+                        <header className={cn('border-b border-slate-700 bg-[#172554] shadow-lg shadow-slate-900/20', headerClassName)}>
                             <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
                                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                                     <div className="flex items-center gap-3 text-white">
