@@ -1,6 +1,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { Input } from '@/Components/ui/input';
 import { PageProps, Service } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
+import { useMemo, useState } from 'react';
 import Pagination from '../Note/Partials/Pagination';
 import ServiceCard from './Partials/ServiceCard';
 import { CreateServiceForm } from './Partials/CreateServiceForm';
@@ -27,11 +29,24 @@ type ViewPageProps = PageProps<{
 
 export default function View() {
     const { services } = usePage<ViewPageProps>().props;
+    const [query, setQuery] = useState('');
+
+    const filteredServices = useMemo(() => {
+        const searchText = query.trim().toLowerCase();
+        if (!searchText) return services.data;
+
+        return services.data.filter((service) =>
+            [service.name, service.service_type, service.parts]
+                .join(' ')
+                .toLowerCase()
+                .includes(searchText),
+        );
+    }, [query, services.data]);
 
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                <h2 className="text-xl font-semibold leading-tight text-white dark:text-white">
                     Services
                 </h2>
             }
@@ -44,20 +59,30 @@ export default function View() {
                         <CreateServiceForm />
                     </div>
 
-                    <section className="overflow-hidden rounded-xl border border-gray-300 bg-gray-50 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-                        <header className="flex flex-col gap-3 bg-gray-800 px-5 py-4 text-white dark:bg-gray-950 sm:flex-row sm:items-center sm:justify-between">
+                    <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                        <header className="flex flex-col gap-3 bg-[#172554] px-5 py-4 text-white sm:flex-row sm:items-center sm:justify-between">
                             <h1 className="text-lg font-semibold">Services</h1>
                             <span className="inline-flex w-fit items-center rounded-md bg-white/15 px-3 py-1.5 text-sm font-medium">
-                                {services.total} total
+                                {filteredServices.length} total
                             </span>
                         </header>
-                        <div className="flex flex-col gap-1 border-b border-gray-200 bg-gray-100 px-4 py-3 text-sm text-gray-600 dark:border-gray-800 dark:bg-gray-800 dark:text-gray-300 sm:flex-row sm:items-center sm:justify-between">
-                            <span>
-                                Showing {services.from ?? 0}–{services.to ?? 0} of {services.total} services
-                            </span>
+                        <div className="border-b border-slate-200 bg-slate-50 px-4 py-3">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <span className="text-sm text-slate-600">
+                                    Showing {filteredServices.length} of {services.total} services
+                                </span>
+                                <div className="w-full max-w-sm">
+                                    <Input
+                                        value={query}
+                                        onChange={(event) => setQuery(event.target.value)}
+                                        placeholder="Search service..."
+                                        className="border-slate-200 bg-white focus-visible:ring-blue-500"
+                                    />
+                                </div>
+                            </div>
                         </div>
                         <div className="p-3 sm:p-4">
-                            <ServiceCard services={services.data} />
+                            <ServiceCard services={filteredServices} />
                             <Pagination links={services.links} />
                         </div>
                     </section>

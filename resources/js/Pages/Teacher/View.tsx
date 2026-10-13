@@ -1,6 +1,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { Input } from '@/Components/ui/input';
 import { PageProps, Teacher } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
+import { useMemo, useState } from 'react';
 import Pagination from '../Note/Partials/Pagination';
 import TeacherCard from './Partials/TeacherCard';
 import { CreateTeacherForm } from './Partials/CreateTeacherForm';
@@ -27,11 +29,24 @@ type ViewPageProps = PageProps<{
 
 export default function View() {
     const { teachers } = usePage<ViewPageProps>().props;
+    const [query, setQuery] = useState('');
+
+    const filteredTeachers = useMemo(() => {
+        const searchText = query.trim().toLowerCase();
+        if (!searchText) return teachers.data;
+
+        return teachers.data.filter((teacher) =>
+            [teacher.name, teacher.lastname, teacher.position, teacher.email, teacher.phone_number_1, teacher.phone_number_2, teacher.address]
+                .join(' ')
+                .toLowerCase()
+                .includes(searchText),
+        );
+    }, [query, teachers.data]);
 
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                <h2 className="text-xl font-semibold leading-tight text-white dark:text-white">
                     Teachers
                 </h2>
             }
@@ -44,20 +59,32 @@ export default function View() {
                         <CreateTeacherForm />
                     </div>
 
-                    <section className="overflow-hidden rounded-xl border border-blue-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
-                        <header className="flex flex-col gap-3 bg-blue-700 px-5 py-4 text-white sm:flex-row sm:items-center sm:justify-between">
+                    <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                        <header className="flex flex-col gap-3 bg-[#172554] px-5 py-4 text-white sm:flex-row sm:items-center sm:justify-between">
                             <h1 className="text-lg font-semibold">Teachers</h1>
                             <span className="inline-flex w-fit items-center rounded-md bg-white/15 px-3 py-1.5 text-sm font-medium">
-                                {teachers.total} total
+                                {filteredTeachers.length} total
                             </span>
                         </header>
-                        <div className="flex flex-col gap-1 border-b border-blue-100 bg-blue-50/70 px-4 py-3 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-300 sm:flex-row sm:items-center sm:justify-between">
-                            <span>
-                                Showing {teachers.from ?? 0}–{teachers.to ?? 0} of {teachers.total} teachers
-                            </span>
+
+                        <div className="border-b border-slate-200 bg-slate-50 px-4 py-3">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <span className="text-sm text-slate-600">
+                                    Showing {filteredTeachers.length} of {teachers.total} teachers
+                                </span>
+                                <div className="w-full max-w-sm">
+                                    <Input
+                                        value={query}
+                                        onChange={(event) => setQuery(event.target.value)}
+                                        placeholder="Search teacher..."
+                                        className="border-slate-200 bg-white focus-visible:ring-blue-500"
+                                    />
+                                </div>
+                            </div>
                         </div>
+
                         <div className="p-3 sm:p-4">
-                            <TeacherCard teachers={teachers.data} />
+                            <TeacherCard teachers={filteredTeachers} />
                             <Pagination links={teachers.links} />
                         </div>
                     </section>

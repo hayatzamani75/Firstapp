@@ -34,7 +34,7 @@ export function DeleteAlertDialog({ note }: IProps) {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button size={'sm'} className="text-[11px]">
+                <Button size={'sm'} className="h-8 px-2.5 text-[10px] font-medium text-white bg-red-600 hover:bg-red-700 focus-visible:ring-red-600">
                     Delete
                 </Button>
             </AlertDialogTrigger>
@@ -51,7 +51,7 @@ export function DeleteAlertDialog({ note }: IProps) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleSubmit}>Continue</AlertDialogAction>
+                    <AlertDialogAction onClick={handleSubmit} className="bg-red-600 text-white hover:bg-red-700">Continue</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

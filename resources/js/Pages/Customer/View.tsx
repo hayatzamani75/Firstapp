@@ -1,6 +1,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { Input } from '@/Components/ui/input';
 import { Customer, PageProps } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
+import { useMemo, useState } from 'react';
 import Pagination from '../Note/Partials/Pagination';
 import CustomerCard from './Partials/CustomerCard';
 import { CreateCustomerForm } from './Partials/CreateCustomerForm';
@@ -29,11 +31,24 @@ type ViewPageProps = PageProps<{
 
 export default function View() {
     const { customers, sort, direction } = usePage<ViewPageProps>().props;
+    const [query, setQuery] = useState('');
+
+    const filteredCustomers = useMemo(() => {
+        const searchText = query.trim().toLowerCase();
+        if (!searchText) return customers.data;
+
+        return customers.data.filter((customer) =>
+            [customer.name, customer.lastname, customer.email, customer.phone, customer.address]
+                .join(' ')
+                .toLowerCase()
+                .includes(searchText),
+        );
+    }, [query, customers.data]);
 
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                <h2 className="text-xl font-semibold leading-tight text-white dark:text-white">
                     Customers
                 </h2>
             }
@@ -46,21 +61,31 @@ export default function View() {
                         <CreateCustomerForm />
                     </div>
 
-                    <section className="overflow-hidden rounded-xl border border-blue-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
-                        <header className="flex flex-col gap-3 bg-blue-700 px-5 py-4 text-white sm:flex-row sm:items-center sm:justify-between">
+                    <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                        <header className="flex flex-col gap-3 bg-[#172554] px-5 py-4 text-white sm:flex-row sm:items-center sm:justify-between">
                             <h1 className="text-lg font-semibold">Customers</h1>
                             <span className="inline-flex w-fit items-center rounded-md bg-white/15 px-3 py-1.5 text-sm font-medium">
-                                {customers.total} total
+                                {filteredCustomers.length} total
                             </span>
                         </header>
-                        <div className="flex flex-col gap-1 border-b border-blue-100 bg-blue-50/70 px-4 py-3 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-300 sm:flex-row sm:items-center sm:justify-between">
-                            <span>
-                                Showing {customers.from ?? 0}–{customers.to ?? 0} of {customers.total} customers
-                            </span>
+                        <div className="border-b border-slate-200 bg-slate-50 px-4 py-3">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <span className="text-sm text-slate-600">
+                                    Showing {filteredCustomers.length} of {customers.total} customers
+                                </span>
+                                <div className="w-full max-w-sm">
+                                    <Input
+                                        value={query}
+                                        onChange={(event) => setQuery(event.target.value)}
+                                        placeholder="Search customer..."
+                                        className="border-slate-200 bg-white focus-visible:ring-blue-500"
+                                    />
+                                </div>
+                            </div>
                         </div>
                         <div className="p-3 sm:p-4">
                             <CustomerCard
-                                customers={customers.data}
+                                customers={filteredCustomers}
                                 sort={sort}
                                 direction={direction}
                             />
