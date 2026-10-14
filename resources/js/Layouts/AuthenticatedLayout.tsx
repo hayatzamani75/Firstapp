@@ -38,8 +38,13 @@ const sidebarItems = [
 export default function Authenticated({
     header,
     headerClassName,
+    hideAccountMenu = false,
     children,
-}: PropsWithChildren<{ header?: ReactNode; headerClassName?: string }>) {
+}: PropsWithChildren<{
+    header?: ReactNode;
+    headerClassName?: string;
+    hideAccountMenu?: boolean;
+}>) {
     const user = usePage().props.auth.user;
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
@@ -165,35 +170,37 @@ export default function Authenticated({
                                         </div>
                                     </div>
 
-                                    <div className="self-end sm:self-auto">
-                                        <Dropdown>
-                                            <Dropdown.Trigger>
-                                                <button
-                                                    type="button"
-                                                    aria-label="Open account menu"
-                                                    className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-sm font-medium text-white transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-                                                >
-                                                    <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-600 text-xs font-semibold text-white">
-                                                        {user.name.charAt(0).toUpperCase()}
-                                                    </span>
-                                                    <span className="max-w-32 truncate">{user.name}</span>
-                                                    <ChevronDown className="h-4 w-4" />
-                                                </button>
-                                            </Dropdown.Trigger>
+                                    {!hideAccountMenu && (
+                                        <div className="self-end sm:self-auto">
+                                            <Dropdown>
+                                                <Dropdown.Trigger>
+                                                    <button
+                                                        type="button"
+                                                        aria-label="Open account menu"
+                                                        className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-sm font-medium text-white transition hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                                                    >
+                                                        <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-600 text-xs font-semibold text-white">
+                                                            {user.name.charAt(0).toUpperCase()}
+                                                        </span>
+                                                        <span className="max-w-32 truncate">{user.name}</span>
+                                                        <ChevronDown className="h-4 w-4" />
+                                                    </button>
+                                                </Dropdown.Trigger>
 
-                                            <Dropdown.Content contentClasses="py-1 bg-white">
-                                                <Dropdown.Link href={route('profile.edit')}>
-                                                    Profile
-                                                </Dropdown.Link>
-                                                <Dropdown.Link href={route('logout')} method="post" as="button">
-                                                    <span className="flex items-center gap-2">
-                                                        <LogOut className="h-4 w-4" />
-                                                        Log Out
-                                                    </span>
-                                                </Dropdown.Link>
-                                            </Dropdown.Content>
-                                        </Dropdown>
-                                    </div>
+                                                <Dropdown.Content contentClasses="py-1 bg-white">
+                                                    <Dropdown.Link href={route('profile.edit')}>
+                                                        Profile
+                                                    </Dropdown.Link>
+                                                    <Dropdown.Link href={route('logout')} method="post" as="button">
+                                                        <span className="flex items-center gap-2">
+                                                            <LogOut className="h-4 w-4" />
+                                                            Log Out
+                                                        </span>
+                                                    </Dropdown.Link>
+                                                </Dropdown.Content>
+                                            </Dropdown>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </header>

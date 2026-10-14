@@ -4,6 +4,7 @@ import { Head } from '@inertiajs/react';
 export default function Product() {
     return (
         <AuthenticatedLayout
+            hideAccountMenu
             header={
                 <h2 className="text-xl font-semibold leading-tight text-white dark:text-white">
                     Product
