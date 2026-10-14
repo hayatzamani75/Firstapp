@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -157,6 +158,45 @@ class ProductController extends Controller
         }
 
         return to_route('product.view')->with('success', 'Product added successfully.');
+    }
+
+    public function update(UpdateProductRequest $request, Product $product): RedirectResponse
+    {
+        abort_unless($product->created_by === $request->user()->id, 403);
+
+        $data = $request->validated();
+        $oldImagePath = $product->image_path;
+        $newImagePath = null;
+
+        if ($request->hasFile('image')) {
+            $newImagePath = $request->file('image')->store('products', 'public');
+
+            if (!$newImagePath) {
+                throw ValidationException::withMessages([
+                    'image' => 'The product image could not be stored. Please try again.',
+                ]);
+            }
+
+            $data['image_path'] = $newImagePath;
+        }
+
+        unset($data['image']);
+
+        try {
+            $product->update($data);
+        } catch (Throwable $exception) {
+            if ($newImagePath) {
+                Storage::disk('public')->delete($newImagePath);
+            }
+
+            throw $exception;
+        }
+
+        if ($newImagePath) {
+            Storage::disk('public')->delete($oldImagePath);
+        }
+
+        return back()->with('success', 'Product updated successfully.');
     }
 
     public function destroy(Request $request, Product $product): RedirectResponse

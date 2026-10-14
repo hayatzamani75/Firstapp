@@ -24,6 +24,7 @@ class StoreProductRequest extends FormRequest
                 Rule::in([
                     "Men's Clothing",
                     "Women's Clothing",
+                    'Clothing',
                     'Shoes',
                     'Boots',
                     'Sportswear',

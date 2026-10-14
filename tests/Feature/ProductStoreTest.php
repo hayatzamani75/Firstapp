@@ -67,6 +67,79 @@ class ProductStoreTest extends TestCase
         $this->assertSame(['Olive', 'Black'], $product->colors);
     }
 
+    public function test_product_owner_can_update_details_without_replacing_image(): void
+    {
+        Storage::fake('public');
+        $user = User::factory()->create();
+        $imagePath = UploadedFile::fake()->image('original.png')->store('products', 'public');
+        $product = $this->createProduct($user, ['image_path' => $imagePath]);
+
+        $this->actingAs($user)->put(route('product.update', $product), [
+            'name' => 'Updated Everyday Shoe',
+            'category' => 'Shoes',
+            'description' => 'Updated product details.',
+            'price' => '64.50',
+            'discount_price' => '54.50',
+            'brand' => 'KIC Studio',
+            'sizes' => ['9', '10'],
+            'colors' => ['White'],
+            'stock_quantity' => 7,
+            'sku' => 'SHOE-UPDATED',
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('products', [
+            'id' => $product->id,
+            'name' => 'Updated Everyday Shoe',
+            'price' => '64.50',
+            'sku' => 'SHOE-UPDATED',
+            'image_path' => $imagePath,
+        ]);
+        Storage::disk('public')->assertExists($imagePath);
+    }
+
+    public function test_product_owner_can_replace_the_product_image(): void
+    {
+        Storage::fake('public');
+        $user = User::factory()->create();
+        $oldImagePath = UploadedFile::fake()->image('old.png')->store('products', 'public');
+        $product = $this->createProduct($user, ['image_path' => $oldImagePath]);
+
+        $this->actingAs($user)->put(route('product.update', $product), [
+            'image' => UploadedFile::fake()->image('new.png'),
+            'name' => $product->name,
+            'category' => $product->category,
+            'description' => $product->description,
+            'price' => $product->price,
+            'stock_quantity' => $product->stock_quantity,
+        ])->assertRedirect();
+
+        $product->refresh();
+        $this->assertNotSame($oldImagePath, $product->image_path);
+        Storage::disk('public')->assertExists($product->image_path);
+        Storage::disk('public')->assertMissing($oldImagePath);
+    }
+
+    public function test_another_user_cannot_update_someone_elses_product(): void
+    {
+        $owner = User::factory()->create();
+        $otherUser = User::factory()->create();
+        $product = $this->createProduct($owner);
+
+        $this->actingAs($otherUser)
+            ->put(route('product.update', $product), [
+                'name' => 'Unauthorized edit',
+                'category' => 'Shoes',
+                'price' => 10,
+                'stock_quantity' => 1,
+            ])
+            ->assertForbidden();
+
+        $this->assertDatabaseHas('products', [
+            'id' => $product->id,
+            'name' => 'Everyday Shoe',
+        ]);
+    }
+
     public function test_saved_product_image_is_served_from_public_storage(): void
     {
         Storage::fake('public');

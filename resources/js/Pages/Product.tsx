@@ -30,6 +30,7 @@ import {
     Filter,
     Minus,
     Package,
+    Pencil,
     Plus,
     Search,
     ShoppingBag,
@@ -87,17 +88,20 @@ function StoreImage({
     src,
     alt,
     className = '',
+    fit = 'contain',
 }: {
     src: string;
     alt: string;
     className?: string;
+    fit?: 'contain' | 'cover';
 }) {
     const [failed, setFailed] = useState(false);
+    const fitClass = fit === 'contain' ? 'object-contain' : 'object-cover';
 
     if (failed) {
         return (
             <div
-                className={`flex items-center justify-center bg-slate-100 text-slate-400 ${className}`}
+                className={`flex items-center justify-center bg-[#F8F6F2] text-[#B89B72] ${className}`}
             >
                 <Package className="h-9 w-9" aria-hidden="true" />
             </div>
@@ -110,7 +114,7 @@ function StoreImage({
             alt={alt}
             loading="lazy"
             onError={() => setFailed(true)}
-            className={`h-full w-full object-cover ${className}`}
+            className={`h-full w-full ${fitClass} ${className}`}
         />
     );
 }
@@ -130,6 +134,8 @@ export default function Product() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [productBeingEdited, setProductBeingEdited] =
+        useState<StoreProduct | null>(null);
     const [detailProduct, setDetailProduct] = useState<StoreProduct | null>(
         null,
     );
@@ -230,9 +236,37 @@ export default function Product() {
         addToCart(product, null, null, 1);
     }
 
+    function openCreateProduct() {
+        setProductBeingEdited(null);
+        form.reset();
+        form.clearErrors();
+        setImagePreview(null);
+        setIsAddOpen(true);
+    }
+
+    function openEditProduct(product: StoreProduct) {
+        setProductBeingEdited(product);
+        form.clearErrors();
+        form.setData({
+            image: null,
+            name: product.name,
+            category: product.category,
+            description: product.description ?? '',
+            price: product.price,
+            discount_price: product.discount_price ?? '',
+            brand: product.brand ?? '',
+            sizes: product.sizes ?? [],
+            colors: product.colors ?? [],
+            stock_quantity: String(product.stock_quantity),
+            sku: product.sku ?? '',
+        });
+        setImagePreview(product.image_url);
+        setIsAddOpen(true);
+    }
+
     function submitProduct(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        form.post(route('product.store'), {
+        const options: Parameters<typeof form.post>[1] = {
             forceFormData: true,
             preserveScroll: true,
             onSuccess: (response) => {
@@ -240,9 +274,21 @@ export default function Product() {
                 if (message) MakeToastSuccess(message);
                 form.reset();
                 setImagePreview(null);
+                setProductBeingEdited(null);
                 setIsAddOpen(false);
             },
-        });
+        };
+
+        if (productBeingEdited) {
+            form.transform((data) => ({ ...data, _method: 'put' }));
+            form.post(route('product.update', productBeingEdited.id), {
+                ...options,
+                onFinish: () => form.transform((data) => data),
+            });
+            return;
+        }
+
+        form.post(route('product.store'), options);
     }
 
     function updateCartQuantity(itemKey: string, quantity: number) {
@@ -322,7 +368,7 @@ export default function Product() {
                         key={item.label}
                         href={item.href}
                         onClick={onClick}
-                        className={`${className} text-slate-700 transition hover:text-blue-700`}
+                        className={`${className} text-slate-700 transition hover:text-[#8F744F]`}
                     >
                         {item.label}
                     </a>
@@ -332,7 +378,7 @@ export default function Product() {
                     key={item.label}
                     href={item.href}
                     onClick={onClick}
-                    className={`${className} text-slate-700 transition hover:text-blue-700`}
+                    className={`${className} text-slate-700 transition hover:text-[#8F744F]`}
                 >
                     {item.label}
                 </Link>
@@ -343,18 +389,18 @@ export default function Product() {
     return (
         <AuthenticatedLayout hideNavigation hideAccountMenu>
             <Head title="Products" />
-            <div className="min-h-screen bg-slate-50 text-slate-900">
-                <header className="sticky top-0 z-40 border-b border-blue-100 bg-white shadow-sm">
+            <div className="min-h-screen bg-[#F8F6F2] text-[#171717]">
+                <header className="sticky top-0 z-40 border-b border-[#EAE6DE] bg-white shadow-[0_2px_18px_rgba(23,23,23,0.04)]">
                     <div className="mx-auto flex min-h-20 max-w-7xl items-center gap-3 px-4 py-3 sm:gap-4 sm:px-6 lg:px-8">
                         <Link
                             href="/"
                             className="flex shrink-0 items-center gap-2.5"
                             aria-label="KIC Store home"
                         >
-                            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-700 text-white shadow-sm">
+                            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#171717] text-white shadow-sm">
                                 <ShoppingBag className="h-5 w-5" />
                             </span>
-                            <span className="text-base font-bold text-slate-900 sm:text-lg">
+                            <span className="text-base font-semibold text-[#171717] sm:text-lg">
                                 KIC Store
                             </span>
                         </Link>
@@ -378,7 +424,7 @@ export default function Product() {
                                         setSearch(event.target.value)
                                     }
                                     placeholder="Search products"
-                                    className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 pl-9 pr-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                                    className="h-10 w-full rounded-lg border border-[#EAE6DE] bg-[#F8F6F2] pl-9 pr-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-[#B89B72] focus:ring-2 focus:ring-[#B89B72]/20"
                                 />
                             </label>
                         </form>
@@ -386,7 +432,7 @@ export default function Product() {
                             href={route('profile.edit')}
                             aria-label="Account"
                             title="Account"
-                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#EAE6DE] text-[#171717] transition hover:border-[#B89B72]/50 hover:bg-[#F8F6F2] hover:text-[#8F744F]"
                         >
                             <UserRound className="h-5 w-5" />
                         </Link>
@@ -395,11 +441,11 @@ export default function Product() {
                             onClick={() => setIsCartOpen(true)}
                             aria-label={`Shopping cart, ${cartCount} items`}
                             title="Shopping cart"
-                            className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+                            className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#EAE6DE] text-[#171717] transition hover:border-[#B89B72]/50 hover:bg-[#F8F6F2] hover:text-[#8F744F]"
                         >
                             <ShoppingCart className="h-5 w-5" />
                             {cartCount > 0 && (
-                                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-700 px-1 text-[10px] font-bold text-white">
+                                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#B89B72] px-1 text-[10px] font-bold text-white">
                                     {cartCount}
                                 </span>
                             )}
@@ -409,7 +455,7 @@ export default function Product() {
                             aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
                             aria-expanded={isMenuOpen}
                             onClick={() => setIsMenuOpen((open) => !open)}
-                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-700 transition hover:bg-slate-50 xl:hidden"
+                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#EAE6DE] text-[#171717] transition hover:bg-[#F8F6F2] xl:hidden"
                         >
                             {isMenuOpen ? (
                                 <X className="h-5 w-5" />
@@ -419,7 +465,7 @@ export default function Product() {
                         </button>
                     </div>
                     {isMenuOpen && (
-                        <div className="border-t border-slate-100 bg-white px-4 py-4 xl:hidden">
+                        <div className="border-t border-[#EAE6DE] bg-white px-4 py-4 xl:hidden">
                             <form
                                 onSubmit={submitSearch}
                                 className="mb-3 md:hidden"
@@ -436,7 +482,7 @@ export default function Product() {
                                             setSearch(event.target.value)
                                         }
                                         placeholder="Search products"
-                                        className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 pl-9 pr-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                                        className="h-10 w-full rounded-lg border border-[#EAE6DE] bg-[#F8F6F2] pl-9 pr-3 text-sm outline-none focus:border-[#B89B72] focus:ring-2 focus:ring-[#B89B72]/20"
                                     />
                                 </label>
                             </form>
@@ -453,10 +499,10 @@ export default function Product() {
                 <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
                     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                         <div>
-                            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-blue-700">
+                            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#8F744F]">
                                 KIC Store
                             </p>
-                            <h1 className="mt-1 text-3xl font-bold text-slate-900">
+                            <h1 className="mt-1 text-3xl font-semibold text-[#171717]">
                                 Clothing, shoes & accessories
                             </h1>
                             <p className="mt-2 text-sm text-slate-500">
@@ -465,8 +511,8 @@ export default function Product() {
                             </p>
                         </div>
                         <Button
-                            onClick={() => setIsAddOpen(true)}
-                            className="h-11 bg-blue-700 text-white hover:bg-blue-800"
+                            onClick={openCreateProduct}
+                            className="h-11 bg-[#171717] text-white hover:bg-[#333333]"
                         >
                             <Plus className="mr-2 h-4 w-4" />
                             Add New Product
@@ -486,13 +532,13 @@ export default function Product() {
                                     setSearch(event.target.value)
                                 }
                                 placeholder="Search products"
-                                className="h-10 w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                                className="h-10 w-full rounded-lg border border-[#EAE6DE] bg-white pl-9 pr-3 text-sm outline-none focus:border-[#B89B72] focus:ring-2 focus:ring-[#B89B72]/20"
                             />
                         </label>
                         <Button
                             type="submit"
                             aria-label="Search"
-                            className="bg-blue-700 hover:bg-blue-800"
+                            className="bg-[#171717] hover:bg-[#333333]"
                         >
                             <Search className="h-4 w-4" />
                         </Button>
@@ -502,7 +548,7 @@ export default function Product() {
                             type="button"
                             onClick={() => setIsSidebarOpen((open) => !open)}
                             aria-expanded={isSidebarOpen}
-                            className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 shadow-sm"
+                            className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#EAE6DE] bg-white px-3 text-sm font-medium text-[#171717] shadow-sm"
                         >
                             <SlidersHorizontal className="h-4 w-4" />
                             Filters
@@ -514,7 +560,7 @@ export default function Product() {
 
                     <div className="grid items-start gap-6 lg:grid-cols-[250px_minmax(0,1fr)]">
                         <aside
-                            className={`${isSidebarOpen ? 'block' : 'hidden'} space-y-6 rounded-xl border border-slate-200 bg-white p-4 shadow-sm lg:sticky lg:top-24 lg:block`}
+                            className={`${isSidebarOpen ? 'block' : 'hidden'} space-y-6 rounded-xl border border-[#EAE6DE] bg-white p-4 shadow-[0_8px_24px_rgba(23,23,23,0.035)] lg:sticky lg:top-24 lg:block`}
                         >
                             <div>
                                 <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.15em] text-slate-500">
@@ -554,7 +600,7 @@ export default function Product() {
                                                         category: '',
                                                     })
                                                 }
-                                                className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition ${active ? 'bg-blue-50 font-semibold text-blue-800' : 'text-slate-600 hover:bg-slate-50 hover:text-blue-700'}`}
+                                                className={`flex w-full items-center justify-between rounded-lg border-l-2 px-3 py-2 text-left text-sm transition ${active ? 'border-[#B89B72] bg-[#F8F6F2] font-semibold text-[#171717]' : 'border-transparent text-slate-600 hover:bg-[#F8F6F2] hover:text-[#171717]'}`}
                                             >
                                                 {collection.label}
                                                 {active && (
@@ -575,7 +621,7 @@ export default function Product() {
                                         onClick={() =>
                                             applyFilters({ category: '' })
                                         }
-                                        className={`block w-full rounded-lg px-3 py-2 text-left text-sm ${filters.category === '' ? 'bg-blue-50 font-semibold text-blue-800' : 'text-slate-600 hover:bg-slate-50'}`}
+                                        className={`block w-full rounded-lg border-l-2 px-3 py-2 text-left text-sm ${filters.category === '' ? 'border-[#B89B72] bg-[#F8F6F2] font-semibold text-[#171717]' : 'border-transparent text-slate-600 hover:bg-[#F8F6F2]'}`}
                                     >
                                         All categories
                                     </button>
@@ -589,7 +635,7 @@ export default function Product() {
                                                     collection: 'all',
                                                 })
                                             }
-                                            className={`block w-full rounded-lg px-3 py-2 text-left text-sm ${filters.category === category ? 'bg-blue-50 font-semibold text-blue-800' : 'text-slate-600 hover:bg-slate-50'}`}
+                                            className={`block w-full rounded-lg border-l-2 px-3 py-2 text-left text-sm ${filters.category === category ? 'border-[#B89B72] bg-[#F8F6F2] font-semibold text-[#171717]' : 'border-transparent text-slate-600 hover:bg-[#F8F6F2]'}`}
                                         >
                                             {category}
                                         </button>
@@ -657,7 +703,7 @@ export default function Product() {
                                                     size: event.target.value,
                                                 })
                                             }
-                                            className="mt-2 h-9 w-full rounded-md border border-slate-200 bg-white px-2 text-sm disabled:bg-slate-50 disabled:text-slate-400"
+                                            className="mt-2 h-9 w-full rounded-md border border-[#EAE6DE] bg-white px-2 text-sm focus:border-[#B89B72] focus:outline-none disabled:bg-[#F8F6F2] disabled:text-slate-400"
                                         >
                                             <option value="">All sizes</option>
                                             {filterOptions.sizes.map((size) => (
@@ -680,7 +726,7 @@ export default function Product() {
                                                     color: event.target.value,
                                                 })
                                             }
-                                            className="mt-2 h-9 w-full rounded-md border border-slate-200 bg-white px-2 text-sm disabled:bg-slate-50 disabled:text-slate-400"
+                                            className="mt-2 h-9 w-full rounded-md border border-[#EAE6DE] bg-white px-2 text-sm focus:border-[#B89B72] focus:outline-none disabled:bg-[#F8F6F2] disabled:text-slate-400"
                                         >
                                             <option value="">All colors</option>
                                             {filterOptions.colors.map(
@@ -708,7 +754,7 @@ export default function Product() {
                                                     brand: event.target.value,
                                                 })
                                             }
-                                            className="mt-2 h-9 w-full rounded-md border border-slate-200 bg-white px-2 text-sm disabled:bg-slate-50 disabled:text-slate-400"
+                                            className="mt-2 h-9 w-full rounded-md border border-[#EAE6DE] bg-white px-2 text-sm focus:border-[#B89B72] focus:outline-none disabled:bg-[#F8F6F2] disabled:text-slate-400"
                                         >
                                             <option value="">All brands</option>
                                             {filterOptions.brands.map(
@@ -733,7 +779,7 @@ export default function Product() {
                                                         .value as ProductPageProps['filters']['availability'],
                                                 })
                                             }
-                                            className="mt-2 h-9 w-full rounded-md border border-slate-200 bg-white px-2 text-sm"
+                                            className="mt-2 h-9 w-full rounded-md border border-[#EAE6DE] bg-white px-2 text-sm focus:border-[#B89B72] focus:outline-none"
                                         >
                                             <option value="">
                                                 Any availability
@@ -749,7 +795,7 @@ export default function Product() {
                                     <Button
                                         type="submit"
                                         variant="outline"
-                                        className="w-full border-blue-200 text-blue-800 hover:bg-blue-50"
+                                        className="w-full border-[#EAE6DE] text-[#171717] hover:bg-[#F8F6F2]"
                                     >
                                         Apply price
                                     </Button>
@@ -771,7 +817,7 @@ export default function Product() {
                                                 availability: '',
                                             });
                                         }}
-                                        className="w-full text-center text-xs font-medium text-slate-500 hover:text-blue-700"
+                                        className="w-full text-center text-xs font-medium text-slate-500 hover:text-[#8F744F]"
                                     >
                                         Clear filters
                                     </button>
@@ -783,11 +829,11 @@ export default function Product() {
                             aria-labelledby="products-heading"
                             className="min-w-0"
                         >
-                            <div className="mb-4 flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+                            <div className="mb-4 flex flex-col gap-3 rounded-xl border border-[#EAE6DE] bg-white p-4 shadow-[0_4px_16px_rgba(23,23,23,0.025)] sm:flex-row sm:items-center sm:justify-between">
                                 <div>
                                     <h2
                                         id="products-heading"
-                                        className="text-lg font-semibold text-slate-900"
+                                        className="text-lg font-semibold text-[#171717]"
                                     >
                                         All Products
                                     </h2>
@@ -806,7 +852,7 @@ export default function Product() {
                                                     .value as ProductPageProps['filters']['sort'],
                                             })
                                         }
-                                        className="h-9 rounded-md border border-slate-200 bg-white px-2 font-medium text-slate-700"
+                                        className="h-9 rounded-md border border-[#EAE6DE] bg-white px-2 font-medium text-[#171717] focus:border-[#B89B72] focus:outline-none"
                                     >
                                         <option value="newest">Newest</option>
                                         <option value="price_asc">
@@ -828,34 +874,35 @@ export default function Product() {
                                         return (
                                             <article
                                                 key={product.id}
-                                                className="group min-w-0 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                                                className="group min-w-0 overflow-hidden rounded-xl border border-[#EAE6DE] bg-white shadow-[0_8px_24px_rgba(23,23,23,0.035)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(23,23,23,0.08)]"
                                             >
                                                 <button
                                                     type="button"
                                                     onClick={() =>
                                                         openDetails(product)
                                                     }
-                                                    className="relative block aspect-[4/5] w-full overflow-hidden bg-slate-100 text-left"
+                                                    className="relative block aspect-[4/5] w-full overflow-hidden bg-[#F8F6F2] text-left"
                                                 >
                                                     <StoreImage
                                                         src={product.image_url}
                                                         alt={product.name}
+                                                        fit="contain"
                                                         className="transition duration-300 group-hover:scale-[1.03]"
                                                     />
                                                     {onSale && (
-                                                        <span className="absolute left-3 top-3 rounded-full bg-blue-700 px-2.5 py-1 text-xs font-bold text-white">
+                                                        <span className="absolute left-3 top-3 rounded-full bg-[#B89B72] px-2.5 py-1 text-xs font-semibold text-white">
                                                             Sale
                                                         </span>
                                                     )}
                                                     {product.stock_quantity ===
                                                         0 && (
-                                                        <span className="absolute inset-x-0 bottom-0 bg-slate-900/75 px-3 py-2 text-center text-xs font-semibold text-white">
+                                                        <span className="absolute inset-x-0 bottom-0 bg-[#171717]/80 px-3 py-2 text-center text-xs font-semibold text-white">
                                                             Out of stock
                                                         </span>
                                                     )}
                                                 </button>
                                                 <div className="p-3 sm:p-4">
-                                                    <p className="text-[11px] font-semibold uppercase tracking-wide text-blue-700">
+                                                    <p className="text-[11px] font-semibold uppercase tracking-wide text-[#8F744F]">
                                                         {product.category}
                                                     </p>
                                                     <button
@@ -863,7 +910,7 @@ export default function Product() {
                                                         onClick={() =>
                                                             openDetails(product)
                                                         }
-                                                        className="mt-1 line-clamp-2 min-h-10 text-left text-sm font-semibold text-slate-900 hover:text-blue-700 sm:text-base"
+                                                        className="mt-1 line-clamp-2 min-h-10 text-left text-sm font-semibold text-[#171717] hover:text-[#8F744F] sm:text-base"
                                                     >
                                                         {product.name}
                                                     </button>
@@ -895,7 +942,7 @@ export default function Product() {
                                                                     product,
                                                                 )
                                                             }
-                                                            className="min-w-0 px-2 text-xs"
+                                                            className="min-w-0 border-[#EAE6DE] px-2 text-xs text-[#171717] hover:bg-[#F8F6F2]"
                                                         >
                                                             View Details
                                                         </Button>
@@ -910,7 +957,7 @@ export default function Product() {
                                                                     product,
                                                                 )
                                                             }
-                                                            className="min-w-0 bg-blue-700 px-2 text-xs hover:bg-blue-800"
+                                                            className="min-w-0 bg-[#171717] px-2 text-xs text-white hover:bg-[#333333]"
                                                         >
                                                             <ShoppingBag className="mr-1 h-3.5 w-3.5" />
                                                             Add
@@ -918,7 +965,22 @@ export default function Product() {
                                                     </div>
                                                     {product.created_by ===
                                                         auth.user.id && (
-                                                        <div className="mt-2">
+                                                        <div className="mt-2 grid grid-cols-2 gap-2">
+                                                            <Button
+                                                                type="button"
+                                                                aria-label={`Edit ${product.name}`}
+                                                                title={`Edit ${product.name}`}
+                                                                onClick={() =>
+                                                                    openEditProduct(
+                                                                        product,
+                                                                    )
+                                                                }
+                                                                variant="outline"
+                                                                className="h-9 min-h-9 min-w-0 w-full border-blue-200 bg-blue-50 px-2 py-0 text-xs font-semibold text-blue-800 hover:bg-blue-100"
+                                                            >
+                                                                <Pencil className="mr-1.5 h-3.5 w-3.5 shrink-0" />
+                                                                Edit
+                                                            </Button>
                                                             <Button
                                                                 type="button"
                                                                 aria-label={`Delete ${product.name}`}
@@ -928,10 +990,11 @@ export default function Product() {
                                                                         product,
                                                                     )
                                                                 }
-                                                                className="h-11 min-h-11 w-full bg-red-600 text-sm font-semibold text-white hover:bg-red-700 focus-visible:ring-red-600"
+                                                                variant="outline"
+                                                                className="h-9 min-h-9 min-w-0 w-full border-red-200 bg-red-50 px-2 py-0 text-xs font-semibold text-red-700 hover:bg-red-100 focus-visible:ring-red-300"
                                                             >
-                                                                <Trash2 className="mr-2 h-4 w-4" />
-                                                                Delete Product
+                                                                <Trash2 className="mr-1.5 h-3.5 w-3.5 shrink-0" />
+                                                                Delete
                                                             </Button>
                                                         </div>
                                                     )}
@@ -941,11 +1004,11 @@ export default function Product() {
                                     })}
                                 </div>
                             ) : (
-                                <div className="flex min-h-72 flex-col items-center justify-center rounded-xl border border-dashed border-blue-200 bg-white px-6 py-12 text-center shadow-sm">
-                                    <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                                <div className="flex min-h-72 flex-col items-center justify-center rounded-xl border border-dashed border-[#D8C6AA] bg-white px-6 py-12 text-center shadow-sm">
+                                    <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#F8F6F2] text-[#8F744F]">
                                         <Package className="h-6 w-6" />
                                     </span>
-                                    <h3 className="text-base font-semibold text-slate-900">
+                                    <h3 className="text-base font-semibold text-[#171717]">
                                         No products found
                                     </h3>
                                     <p className="mt-2 max-w-md text-sm leading-6 text-slate-500">
@@ -954,8 +1017,8 @@ export default function Product() {
                                         filters.
                                     </p>
                                     <Button
-                                        onClick={() => setIsAddOpen(true)}
-                                        className="mt-5 bg-blue-700 hover:bg-blue-800"
+                                        onClick={openCreateProduct}
+                                        className="mt-5 bg-[#171717] hover:bg-[#333333]"
                                     >
                                         <Plus className="mr-2 h-4 w-4" />
                                         Add New Product
@@ -982,7 +1045,7 @@ export default function Product() {
                                                 key={`${link.label}-${index}`}
                                                 href={link.url}
                                                 preserveScroll
-                                                className={`inline-flex h-9 min-w-9 items-center justify-center rounded-lg border px-3 text-sm ${link.active ? 'border-blue-700 bg-blue-700 font-semibold text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-blue-200 hover:bg-blue-50'}`}
+                                                className={`inline-flex h-9 min-w-9 items-center justify-center rounded-lg border px-3 text-sm ${link.active ? 'border-[#171717] bg-[#171717] font-semibold text-white' : 'border-[#EAE6DE] bg-white text-slate-700 hover:border-[#B89B72] hover:bg-[#F8F6F2]'}`}
                                             >
                                                 {previous ? (
                                                     <ChevronLeft className="h-4 w-4" />
@@ -996,7 +1059,7 @@ export default function Product() {
                                             <span
                                                 key={`${link.label}-${index}`}
                                                 aria-disabled="true"
-                                                className="inline-flex h-9 min-w-9 items-center justify-center rounded-lg border border-slate-100 px-3 text-sm text-slate-300"
+                                                className="inline-flex h-9 min-w-9 items-center justify-center rounded-lg border border-[#EEEAE2] px-3 text-sm text-slate-300"
                                             >
                                                 {previous ? (
                                                     <ChevronLeft className="h-4 w-4" />
@@ -1015,14 +1078,17 @@ export default function Product() {
                 </main>
 
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-                    <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100%-1rem)] overflow-y-auto rounded-xl border-blue-100 bg-slate-50 p-0 sm:max-w-2xl">
-                        <DialogHeader className="rounded-t-xl bg-blue-800 px-5 py-5 text-left text-white sm:px-6">
+                    <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100%-1rem)] overflow-y-auto rounded-xl border-[#EAE6DE] bg-[#F8F6F2] p-0 sm:max-w-2xl">
+                        <DialogHeader className="rounded-t-xl bg-[#171717] px-5 py-5 text-left text-white sm:px-6">
                             <DialogTitle className="text-white">
-                                Add New Product
+                                {productBeingEdited
+                                    ? 'Edit Product'
+                                    : 'Add New Product'}
                             </DialogTitle>
-                            <DialogDescription className="text-blue-100">
-                                Enter product details and upload a product
-                                photo.
+                            <DialogDescription className="text-white/70">
+                                {productBeingEdited
+                                    ? 'Update the product details. Select a new image only if you want to replace the current one.'
+                                    : 'Enter product details and upload a product photo.'}
                             </DialogDescription>
                         </DialogHeader>
                         <form
@@ -1033,12 +1099,13 @@ export default function Product() {
                                 <label
                                     htmlFor="product-image"
                                     className="mb-2 block text-sm font-medium"
-                                >
-                                    Product image
+                                    >
+                                    Product image{productBeingEdited ? ' (optional replacement)' : ' *'}
                                 </label>
                                 <input
                                     id="product-image"
                                     type="file"
+                                    required={!productBeingEdited}
                                     accept="image/jpeg,image/png,image/webp"
                                     onChange={(event) => {
                                         const file =
@@ -1051,7 +1118,7 @@ export default function Product() {
                                                 : null,
                                         );
                                     }}
-                                    className="block w-full rounded-lg border border-slate-200 bg-white p-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-blue-50 file:px-3 file:py-1.5 file:font-semibold file:text-blue-800"
+                                    className="block w-full rounded-lg border border-[#EAE6DE] bg-white p-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-[#F8F6F2] file:px-3 file:py-1.5 file:font-semibold file:text-[#171717]"
                                 />
                                 <p className="mt-1 text-xs text-slate-500">
                                     JPG, PNG, or WebP. Maximum size 5 MB.
@@ -1060,7 +1127,7 @@ export default function Product() {
                                     <img
                                         src={imagePreview}
                                         alt="Selected product preview"
-                                        className="mt-3 h-40 w-32 rounded-lg border border-slate-200 object-cover"
+                                        className="mt-3 h-40 w-32 rounded-lg border border-[#EAE6DE] bg-white object-contain p-2"
                                     />
                                 )}
                                 {form.errors.image && (
@@ -1355,11 +1422,13 @@ export default function Product() {
                                 <Button
                                     type="submit"
                                     disabled={form.processing}
-                                    className="bg-blue-700 hover:bg-blue-800"
+                                    className="bg-[#171717] hover:bg-[#333333]"
                                 >
-                                    {form.processing
-                                        ? 'Saving…'
-                                        : 'Save Product'}
+                                                                        {form.processing
+                                                                                ? 'Saving…'
+                                                                                : productBeingEdited
+                                                                                    ? 'Save Changes'
+                                                                                    : 'Save Product'}
                                 </Button>
                             </DialogFooter>
                         </form>
@@ -1373,20 +1442,22 @@ export default function Product() {
                     }}
                 >
                     {detailProduct && (
-                        <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100%-1rem)] overflow-y-auto rounded-xl border-blue-100 bg-white p-0 sm:max-w-3xl">
+                        <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100%-1rem)] overflow-y-auto rounded-xl border-[#EAE6DE] bg-white p-0 sm:max-w-3xl">
                             <div className="grid md:grid-cols-2">
-                                <div className="aspect-[4/5] bg-slate-100 md:aspect-auto md:min-h-[480px]">
+                                <div className="aspect-[4/5] bg-[#F8F6F2] md:aspect-auto md:min-h-[480px]">
                                     <StoreImage
                                         src={detailProduct.image_url}
                                         alt={detailProduct.name}
+                                        fit="contain"
+                                        className="p-4"
                                     />
                                 </div>
                                 <div className="flex flex-col p-5 sm:p-7">
                                     <DialogHeader className="text-left">
-                                        <p className="text-xs font-semibold uppercase tracking-wide text-blue-700">
+                                        <p className="text-xs font-semibold uppercase tracking-wide text-[#8F744F]">
                                             {detailProduct.category}
                                         </p>
-                                        <DialogTitle className="pr-8 text-2xl text-slate-900">
+                                        <DialogTitle className="pr-8 text-2xl text-[#171717]">
                                             {detailProduct.name}
                                         </DialogTitle>
                                         <DialogDescription>
@@ -1430,7 +1501,7 @@ export default function Product() {
                                                         event.target.value,
                                                     )
                                                 }
-                                                className="mt-2 h-10 w-full rounded-md border border-slate-200 bg-white px-3"
+                                                className="mt-2 h-10 w-full rounded-md border border-[#EAE6DE] bg-white px-3 focus:border-[#B89B72] focus:outline-none"
                                             >
                                                 {detailProduct.sizes?.map(
                                                     (size) => (
@@ -1455,7 +1526,7 @@ export default function Product() {
                                                         event.target.value,
                                                     )
                                                 }
-                                                className="mt-2 h-10 w-full rounded-md border border-slate-200 bg-white px-3"
+                                                className="mt-2 h-10 w-full rounded-md border border-[#EAE6DE] bg-white px-3 focus:border-[#B89B72] focus:outline-none"
                                             >
                                                 {detailProduct.colors?.map(
                                                     (color) => (
@@ -1491,7 +1562,7 @@ export default function Product() {
                                                     ),
                                                 )
                                             }
-                                            className="mt-2 h-10 w-24 rounded-md border border-slate-200 px-3"
+                                            className="mt-2 h-10 w-24 rounded-md border border-[#EAE6DE] px-3 focus:border-[#B89B72] focus:outline-none"
                                         />
                                     </label>
                                     {cartErrors.cart && (
@@ -1531,7 +1602,7 @@ export default function Product() {
                                                 detailQuantity,
                                             )
                                         }
-                                        className="mt-auto bg-blue-700 hover:bg-blue-800"
+                                        className="mt-auto bg-[#171717] hover:bg-[#333333]"
                                     >
                                         <ShoppingCart className="mr-2 h-4 w-4" />
                                         Add to Cart
@@ -1543,12 +1614,12 @@ export default function Product() {
                 </Dialog>
 
                 <Dialog open={isCartOpen} onOpenChange={setIsCartOpen}>
-                    <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100%-1rem)] overflow-y-auto rounded-xl border-blue-100 bg-white p-0 sm:max-w-xl">
-                        <DialogHeader className="bg-blue-800 px-5 py-5 text-left text-white sm:px-6">
+                    <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100%-1rem)] overflow-y-auto rounded-xl border-[#EAE6DE] bg-white p-0 sm:max-w-xl">
+                        <DialogHeader className="bg-[#171717] px-5 py-5 text-left text-white sm:px-6">
                             <DialogTitle className="text-white">
                                 Shopping Cart ({cartCount})
                             </DialogTitle>
-                            <DialogDescription className="text-blue-100">
+                            <DialogDescription className="text-white/70">
                                 Cart updates are saved to your session. Checkout
                                 is not available.
                             </DialogDescription>
@@ -1570,12 +1641,12 @@ export default function Product() {
                                 cartItems.map((item) => (
                                     <article
                                         key={item.key}
-                                        className="flex gap-3 border-b border-slate-100 pb-4"
+                                        className="flex gap-3 border-b border-[#EEEAE2] pb-4"
                                     >
                                         <img
                                             src={item.image_url}
                                             alt={item.name}
-                                            className="h-24 w-20 rounded-lg bg-slate-100 object-cover"
+                                            className="h-24 w-20 rounded-lg bg-[#F8F6F2] object-contain p-1"
                                         />
                                         <div className="min-w-0 flex-1">
                                             <h3 className="truncate text-sm font-semibold text-slate-900">
@@ -1603,7 +1674,7 @@ export default function Product() {
                                                         )
                                                     }
                                                     aria-label={`Decrease ${item.name} quantity`}
-                                                    className="flex h-7 w-7 items-center justify-center rounded border border-slate-200 disabled:opacity-40"
+                                                    className="flex h-7 w-7 items-center justify-center rounded border border-[#EAE6DE] disabled:opacity-40"
                                                 >
                                                     <Minus className="h-3.5 w-3.5" />
                                                 </button>
@@ -1623,7 +1694,7 @@ export default function Product() {
                                                         )
                                                     }
                                                     aria-label={`Increase ${item.name} quantity`}
-                                                    className="flex h-7 w-7 items-center justify-center rounded border border-slate-200 disabled:opacity-40"
+                                                    className="flex h-7 w-7 items-center justify-center rounded border border-[#EAE6DE] disabled:opacity-40"
                                                 >
                                                     <Plus className="h-3.5 w-3.5" />
                                                 </button>
@@ -1645,7 +1716,7 @@ export default function Product() {
                                 ))
                             )}
                             {cartItems.length > 0 && (
-                                <div className="flex items-center justify-between border-t border-slate-200 pt-4">
+                                <div className="flex items-center justify-between border-t border-[#EAE6DE] pt-4">
                                     <span className="font-semibold text-slate-700">
                                         Total
                                     </span>
