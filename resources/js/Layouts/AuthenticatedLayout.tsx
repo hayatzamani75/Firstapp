@@ -39,11 +39,13 @@ export default function Authenticated({
     header,
     headerClassName,
     hideAccountMenu = false,
+    hideNavigation = false,
     children,
 }: PropsWithChildren<{
     header?: ReactNode;
     headerClassName?: string;
     hideAccountMenu?: boolean;
+    hideNavigation?: boolean;
 }>) {
     const user = usePage().props.auth.user;
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -52,6 +54,7 @@ export default function Authenticated({
     return (
         <div className="min-h-screen bg-slate-100">
             <div className="flex min-h-screen">
+                {!hideNavigation && (
                 <aside className="hidden w-72 shrink-0 border-r border-slate-700 bg-[#172554] shadow-2xl shadow-slate-900/20 lg:flex lg:flex-col">
                     <div className="flex h-20 items-center border-b border-slate-700 px-5">
                         <Link href="/" className="flex items-center gap-3">
@@ -100,8 +103,10 @@ export default function Authenticated({
                         })}
                     </nav>
                 </aside>
+                )}
 
                 <div className="flex min-w-0 flex-1 flex-col">
+                    {!hideNavigation && (
                     <nav className="border-b border-slate-200 bg-white/90 backdrop-blur lg:hidden">
                         <div className="flex h-16 items-center justify-between px-4">
                             <div className="flex items-center gap-3">
@@ -153,6 +158,7 @@ export default function Authenticated({
                             </div>
                         </div>
                     </nav>
+                    )}
 
                     {header && (
                         <header className={cn('border-b border-slate-700 bg-[#172554] shadow-lg shadow-slate-900/20', headerClassName)}>
