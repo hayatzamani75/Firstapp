@@ -86,3 +86,69 @@ export interface Service {
     parts: string;
     price: string;
 }
+
+export interface Product {
+    id: number;
+    name: string;
+    category: string;
+    description: string | null;
+    price: string;
+    discount_price: string | null;
+    effective_price: number;
+    brand: string | null;
+    sizes: string[] | null;
+    colors: string[] | null;
+    stock_quantity: number;
+    sku: string | null;
+    image_url: string;
+    created_at: string;
+}
+
+export interface ProductFilterState {
+    search: string;
+    category: string;
+    collection: 'all' | 'new' | 'sale';
+    sort: 'newest' | 'price_asc' | 'price_desc';
+    price_min: string | number;
+    price_max: string | number;
+    size: string;
+    color: string;
+    brand: string;
+    availability: '' | 'in_stock' | 'out_of_stock';
+}
+
+export interface ProductCartItem {
+    key: string;
+    product_id: number;
+    name: string;
+    category: string;
+    image_url: string;
+    size: string | null;
+    color: string | null;
+    quantity: number;
+    stock_quantity: number;
+    unit_price: number;
+    subtotal: number;
+}
+
+export interface ProductPageProps {
+    products: {
+        data: Product[];
+        current_page: number;
+        last_page: number;
+        total: number;
+        from: number | null;
+        to: number | null;
+        links: { url: string | null; label: string; active: boolean }[];
+    };
+    categories: string[];
+    filterOptions: {
+        sizes: string[];
+        colors: string[];
+        brands: string[];
+    };
+    filters: ProductFilterState;
+    cartItems: ProductCartItem[];
+    cartCount: number;
+    cartTotal: number;
+}

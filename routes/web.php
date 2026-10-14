@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
@@ -19,9 +20,13 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/product', function () {
-    return Inertia::render('Product');
-})->middleware(['auth', 'verified'])->name('product.view');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/product', [ProductController::class, 'index'])->name('product.view');
+    Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+    Route::post('/product/cart/items', [ProductController::class, 'addToCart'])->name('product.cart.add');
+    Route::patch('/product/cart/items', [ProductController::class, 'updateCart'])->name('product.cart.update');
+    Route::delete('/product/cart/items', [ProductController::class, 'removeFromCart'])->name('product.cart.remove');
+});
 
 Route::get('/education', function () {
     return Inertia::render('Education');
