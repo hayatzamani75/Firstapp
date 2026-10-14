@@ -29,17 +29,17 @@ const categories = [
     },
 ];
 
-export default function Personal() {
+export default function Education() {
     return (
         <AuthenticatedLayout
             headerClassName="bg-[#172554] dark:bg-[#172554]"
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Personal
+                    Education
                 </h2>
             }
         >
-            <Head title="Personal" />
+            <Head title="Education" />
 
             <div className="min-h-[calc(100vh-4rem)] bg-[#f8fafc] py-12 dark:bg-slate-950">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
@@ -48,7 +48,7 @@ export default function Personal() {
                             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(96,165,250,0.35),transparent_30%),radial-gradient(circle_at_bottom_left,_rgba(14,165,233,0.25),transparent_35%)]" />
                             <div className="relative max-w-4xl">
                                 <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-blue-100">
-                                    Personal
+                                    Education
                                 </span>
                                 <h1 className="mt-6 text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-7xl">
                                     Education
