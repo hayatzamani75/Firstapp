@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
@@ -20,15 +21,20 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/product', [ProductController::class, 'index'])->name('product.view');
+Route::get('/product/{product}/image', [ProductController::class, 'image'])->name('product.image');
+Route::post('/product/cart/items', [ProductController::class, 'addToCart'])->name('product.cart.add');
+Route::patch('/product/cart/items', [ProductController::class, 'updateCart'])->name('product.cart.update');
+Route::delete('/product/cart/items', [ProductController::class, 'removeFromCart'])->name('product.cart.remove');
+
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/product', [ProductController::class, 'index'])->name('product.view');
-    Route::get('/product/{product}/image', [ProductController::class, 'image'])->name('product.image');
-    Route::post('/product', [ProductController::class, 'store'])->name('product.store');
-    Route::put('/product/{product}', [ProductController::class, 'update'])->name('product.update');
-    Route::delete('/product/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
-    Route::post('/product/cart/items', [ProductController::class, 'addToCart'])->name('product.cart.add');
-    Route::patch('/product/cart/items', [ProductController::class, 'updateCart'])->name('product.cart.update');
-    Route::delete('/product/cart/items', [ProductController::class, 'removeFromCart'])->name('product.cart.remove');
+    Route::post('/product', [ProductController::class, 'store'])->middleware('can:manage-products')->name('product.store');
+    Route::put('/product/{product}', [ProductController::class, 'update'])->middleware('can:manage-products')->name('product.update');
+    Route::delete('/product/{product}', [ProductController::class, 'destroy'])->middleware('can:manage-products')->name('product.destroy');
+    Route::post('/checkout', [OrderController::class, 'checkout'])->middleware('can:place-orders')->name('checkout.store');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::patch('/orders/{order}/cancel', [OrderController::class, 'cancel'])->middleware('can:place-orders')->name('orders.cancel');
+    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->middleware('can:manage-orders')->name('orders.status');
 });
 
 Route::get('/education', function () {

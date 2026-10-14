@@ -14,14 +14,14 @@ class ProductStoreTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_product_page_requires_authentication(): void
+    public function test_guest_can_browse_product_page(): void
     {
-        $this->get('/product')->assertRedirect('/login');
+        $this->get('/product')->assertOk();
     }
 
     public function test_authenticated_user_sees_saved_products_and_categories(): void
     {
-        $user = User::factory()->create();
+        $user = $this->createEmployee();
         $product = $this->createProduct($user, ['category' => 'Boots']);
 
         $this->actingAs($user)
@@ -37,7 +37,7 @@ class ProductStoreTest extends TestCase
     public function test_product_image_and_fields_are_persisted_from_multipart_request(): void
     {
         Storage::fake('public');
-        $user = User::factory()->create();
+        $user = $this->createEmployee();
 
         $this->actingAs($user)->post(route('product.store'), [
             'image' => UploadedFile::fake()->image('jacket.png'),
@@ -70,7 +70,7 @@ class ProductStoreTest extends TestCase
     public function test_product_owner_can_update_details_without_replacing_image(): void
     {
         Storage::fake('public');
-        $user = User::factory()->create();
+        $user = $this->createEmployee();
         $imagePath = UploadedFile::fake()->image('original.png')->store('products', 'public');
         $product = $this->createProduct($user, ['image_path' => $imagePath]);
 
@@ -100,7 +100,7 @@ class ProductStoreTest extends TestCase
     public function test_product_owner_can_replace_the_product_image(): void
     {
         Storage::fake('public');
-        $user = User::factory()->create();
+        $user = $this->createEmployee();
         $oldImagePath = UploadedFile::fake()->image('old.png')->store('products', 'public');
         $product = $this->createProduct($user, ['image_path' => $oldImagePath]);
         $oldImageUrl = $product->image_url;
@@ -131,7 +131,7 @@ class ProductStoreTest extends TestCase
     public function test_replacing_an_image_keeps_the_old_file_if_another_product_uses_it(): void
     {
         Storage::fake('public');
-        $user = User::factory()->create();
+        $user = $this->createEmployee();
         $sharedImagePath = UploadedFile::fake()->image('shared.png')->store('products', 'public');
         $product = $this->createProduct($user, ['image_path' => $sharedImagePath]);
         $otherProduct = $this->createProduct($user, [
@@ -155,13 +155,13 @@ class ProductStoreTest extends TestCase
         Storage::disk('public')->assertExists($sharedImagePath);
     }
 
-    public function test_another_user_cannot_update_someone_elses_product(): void
+    public function test_customer_cannot_update_a_product(): void
     {
-        $owner = User::factory()->create();
-        $otherUser = User::factory()->create();
-        $product = $this->createProduct($owner);
+        $employee = $this->createEmployee();
+        $customer = User::factory()->create();
+        $product = $this->createProduct($employee);
 
-        $this->actingAs($otherUser)
+        $this->actingAs($customer)
             ->put(route('product.update', $product), [
                 'name' => 'Unauthorized edit',
                 'category' => 'Shoes',
@@ -179,7 +179,7 @@ class ProductStoreTest extends TestCase
     public function test_saved_product_image_is_served_from_public_storage(): void
     {
         Storage::fake('public');
-        $user = User::factory()->create();
+        $user = $this->createEmployee();
         $imagePath = UploadedFile::fake()->image('shoe.png')->store('products', 'public');
         $product = $this->createProduct($user, ['image_path' => $imagePath]);
 
@@ -192,7 +192,7 @@ class ProductStoreTest extends TestCase
     public function test_product_owner_can_delete_product_and_stored_image(): void
     {
         Storage::fake('public');
-        $user = User::factory()->create();
+        $user = $this->createEmployee();
         $imagePath = UploadedFile::fake()->image('to-delete.png')->store('products', 'public');
         $product = $this->createProduct($user, ['image_path' => $imagePath]);
 
@@ -204,15 +204,15 @@ class ProductStoreTest extends TestCase
         Storage::disk('public')->assertMissing($imagePath);
     }
 
-    public function test_another_user_cannot_delete_someone_elses_product(): void
+    public function test_customer_cannot_delete_a_product(): void
     {
         Storage::fake('public');
-        $owner = User::factory()->create();
-        $otherUser = User::factory()->create();
+        $owner = $this->createEmployee();
+        $customer = User::factory()->create();
         $imagePath = UploadedFile::fake()->image('protected.png')->store('products', 'public');
         $product = $this->createProduct($owner, ['image_path' => $imagePath]);
 
-        $this->actingAs($otherUser)
+        $this->actingAs($customer)
             ->delete(route('product.destroy', $product))
             ->assertForbidden();
 
@@ -223,7 +223,7 @@ class ProductStoreTest extends TestCase
     public function test_invalid_product_image_is_rejected(): void
     {
         Storage::fake('public');
-        $user = User::factory()->create();
+        $user = $this->createEmployee();
 
         $this->actingAs($user)->from('/product')->post(route('product.store'), [
             'image' => UploadedFile::fake()->create('not-an-image.txt', 20, 'text/plain'),
@@ -324,5 +324,13 @@ class ProductStoreTest extends TestCase
             'sku' => null,
             'image_path' => 'products/test.jpg',
         ], $attributes));
+    }
+
+    private function createEmployee(): User
+    {
+        $employee = User::factory()->create();
+        $employee->forceFill(['role' => User::ROLE_EMPLOYEE])->save();
+
+        return $employee;
     }
 }

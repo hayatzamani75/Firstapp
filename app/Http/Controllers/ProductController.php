@@ -128,6 +128,8 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request): RedirectResponse
     {
+        abort_unless($request->user()->isEmployee(), 403);
+
         $data = $request->validated();
         $imagePath = $request->file('image')->store('products', 'public');
 
@@ -162,7 +164,7 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
-        abort_unless($product->created_by === $request->user()->id, 403);
+        abort_unless($request->user()->isEmployee(), 403);
 
         $data = $request->validated();
         $oldImagePath = $product->image_path;
@@ -208,7 +210,7 @@ class ProductController extends Controller
 
     public function destroy(Request $request, Product $product): RedirectResponse
     {
-        abort_unless($product->created_by === $request->user()->id, 403);
+        abort_unless($request->user()->isEmployee(), 403);
 
         $imagePath = $product->image_path;
         $productId = $product->id;

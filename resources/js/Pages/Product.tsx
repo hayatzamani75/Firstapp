@@ -21,13 +21,20 @@ import {
 import { Input } from '@/Components/ui/input';
 import { Textarea } from '@/Components/ui/textarea';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { PageProps, ProductPageProps, Product as StoreProduct } from '@/types';
+import {
+    PageProps,
+    ProductPageProps,
+    Product as StoreProduct,
+    User,
+} from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import {
     Check,
     ChevronLeft,
     ChevronRight,
+    ClipboardList,
     Filter,
+    LogOut,
     Minus,
     Package,
     Pencil,
@@ -130,6 +137,9 @@ export default function Product() {
         cartCount,
         cartTotal,
     } = usePage<ProductInertiaProps>().props;
+    const currentUser = auth.user as User | null;
+    const isEmployee = currentUser?.role === 'employee';
+    const isCustomer = currentUser?.role === 'customer';
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -322,6 +332,26 @@ export default function Product() {
         });
     }
 
+    function placeOrder() {
+        if (!currentUser) {
+            router.visit(route('login'));
+            return;
+        }
+
+        if (!isCustomer) return;
+
+        setCartErrors({});
+        router.post(route('checkout.store'), {}, {
+            preserveScroll: true,
+            onSuccess: (response) => {
+                const message = response.props.flash.success;
+                if (message) MakeToastSuccess(message);
+                setIsCartOpen(false);
+            },
+            onError: (errors) => setCartErrors(errors as Record<string, string>),
+        });
+    }
+
     function deleteProduct() {
         if (!productToDelete) return;
 
@@ -428,14 +458,52 @@ export default function Product() {
                                 />
                             </label>
                         </form>
-                        <Link
-                            href={route('profile.edit')}
-                            aria-label="Account"
-                            title="Account"
-                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#EAE6DE] text-[#171717] transition hover:border-[#B89B72]/50 hover:bg-[#F8F6F2] hover:text-[#8F744F]"
-                        >
-                            <UserRound className="h-5 w-5" />
-                        </Link>
+                        {currentUser ? (
+                            <div className="flex shrink-0 items-center gap-2">
+                                <Link
+                                    href={route('orders.index')}
+                                    aria-label="My orders"
+                                    title="My orders"
+                                    className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#EAE6DE] text-[#171717] transition hover:border-[#B89B72]/50 hover:bg-[#F8F6F2] hover:text-[#8F744F]"
+                                >
+                                    <ClipboardList className="h-5 w-5" />
+                                </Link>
+                                <Link
+                                    href={route('profile.edit')}
+                                    aria-label="Account"
+                                    title={currentUser.name}
+                                    className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#EAE6DE] text-[#171717] transition hover:border-[#B89B72]/50 hover:bg-[#F8F6F2] hover:text-[#8F744F]"
+                                >
+                                    <UserRound className="h-5 w-5" />
+                                </Link>
+                                <Link
+                                    href={route('logout')}
+                                    method="post"
+                                    as="button"
+                                    aria-label="Log out"
+                                    title="Log out"
+                                    className="hidden h-10 items-center gap-2 rounded-lg border border-[#EAE6DE] px-3 text-sm text-[#171717] transition hover:bg-[#F8F6F2] sm:flex"
+                                >
+                                    <LogOut className="h-4 w-4" />
+                                    Log out
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="flex shrink-0 items-center gap-2">
+                                <Link
+                                    href={route('login')}
+                                    className="rounded-lg px-2 py-2 text-sm font-medium text-[#171717] hover:text-[#8F744F] sm:px-3"
+                                >
+                                    Log in
+                                </Link>
+                                <Link
+                                    href={route('register')}
+                                    className="rounded-lg bg-[#171717] px-3 py-2 text-sm font-medium text-white transition hover:bg-[#333333]"
+                                >
+                                    Register
+                                </Link>
+                            </div>
+                        )}
                         <button
                             type="button"
                             onClick={() => setIsCartOpen(true)}
@@ -510,13 +578,15 @@ export default function Product() {
                                 favorite.
                             </p>
                         </div>
-                        <Button
-                            onClick={openCreateProduct}
-                            className="h-11 bg-[#171717] text-white hover:bg-[#333333]"
-                        >
-                            <Plus className="mr-2 h-4 w-4" />
-                            Add New Product
-                        </Button>
+                        {isEmployee && (
+                            <Button
+                                onClick={openCreateProduct}
+                                className="h-11 bg-[#171717] text-white hover:bg-[#333333]"
+                            >
+                                <Plus className="mr-2 h-4 w-4" />
+                                Add New Product
+                            </Button>
+                        )}
                     </div>
                     <form
                         onSubmit={submitSearch}
@@ -963,8 +1033,7 @@ export default function Product() {
                                                             Add
                                                         </Button>
                                                     </div>
-                                                    {product.created_by ===
-                                                        auth.user.id && (
+                                                    {isEmployee && (
                                                         <div className="mt-2 grid grid-cols-2 gap-2">
                                                             <Button
                                                                 type="button"
@@ -1016,13 +1085,15 @@ export default function Product() {
                                         catalog, or adjust your search and
                                         filters.
                                     </p>
-                                    <Button
-                                        onClick={openCreateProduct}
-                                        className="mt-5 bg-[#171717] hover:bg-[#333333]"
-                                    >
-                                        <Plus className="mr-2 h-4 w-4" />
-                                        Add New Product
-                                    </Button>
+                                    {isEmployee && (
+                                        <Button
+                                            onClick={openCreateProduct}
+                                            className="mt-5 bg-[#171717] hover:bg-[#333333]"
+                                        >
+                                            <Plus className="mr-2 h-4 w-4" />
+                                            Add New Product
+                                        </Button>
+                                    )}
                                 </div>
                             )}
                             {products.last_page > 1 && (
@@ -1620,8 +1691,7 @@ export default function Product() {
                                 Shopping Cart ({cartCount})
                             </DialogTitle>
                             <DialogDescription className="text-white/70">
-                                Cart updates are saved to your session. Checkout
-                                is not available.
+                                Your cart is saved in this session. Stock and prices are checked when you place the order.
                             </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4 px-5 py-5 sm:px-6">
@@ -1716,13 +1786,31 @@ export default function Product() {
                                 ))
                             )}
                             {cartItems.length > 0 && (
-                                <div className="flex items-center justify-between border-t border-[#EAE6DE] pt-4">
-                                    <span className="font-semibold text-slate-700">
-                                        Total
-                                    </span>
-                                    <span className="text-lg font-bold text-slate-900">
-                                        {money(cartTotal)}
-                                    </span>
+                                <div className="space-y-4 border-t border-[#EAE6DE] pt-4">
+                                    <div className="flex items-center justify-between">
+                                        <span className="font-semibold text-slate-700">Total</span>
+                                        <span className="text-lg font-bold text-slate-900">{money(cartTotal)}</span>
+                                    </div>
+                                    {isCustomer ? (
+                                        <Button
+                                            type="button"
+                                            onClick={placeOrder}
+                                            className="w-full bg-[#171717] hover:bg-[#333333]"
+                                        >
+                                            Place Order
+                                        </Button>
+                                    ) : !currentUser ? (
+                                        <Link
+                                            href={route('login')}
+                                            className="flex h-11 w-full items-center justify-center rounded-lg bg-[#171717] text-sm font-semibold text-white transition hover:bg-[#333333]"
+                                        >
+                                            Log in to place order
+                                        </Link>
+                                    ) : (
+                                        <p className="text-center text-xs text-slate-500">
+                                            Employee accounts cannot place customer orders.
+                                        </p>
+                                    )}
                                 </div>
                             )}
                         </div>

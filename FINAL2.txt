@@ -1,0 +1,58 @@
+PHPUnit 11.5.19 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.3.30
+Configuration: D:\workspace\laravel-react-crud\phpunit.xml
+
+.................................                                 33 / 33 (100%)
+
+Time: 00:19.054, Memory: 54.00 MB
+
+Authentication (Tests\Feature\Auth\Authentication)
+ ✔ Login screen can be rendered
+ ✔ Users can authenticate using the login screen
+ ✔ Users can not authenticate with invalid password
+ ✔ Users can logout
+
+Book (Tests\Feature\Book)
+ ✔ Authenticated user can visit the book page
+ ✔ Authenticated user can create a book
+
+Company (Tests\Feature\Company)
+ ✔ Authenticated user can visit the company page
+ ✔ Authenticated user can create a company
+
+Employee Registration (Tests\Feature\EmployeeRegistration)
+ ✔ Employee can register a new employee account
+ ✔ Newly registered employee can log in with username
+ ✔ Registered employee can add edit and delete products
+ ✔ Customer cannot register employee accounts
+ ✔ Guest cannot register employee accounts
+ ✔ Username must be unique
+ ✔ Passwords must match
+ ✔ Registration requires a username and password
+ ✔ Customer can still log in with email
+
+Example (Tests\Unit\Example)
+ ✔ That true is true
+
+Product Store (Tests\Feature\ProductStore)
+ ✔ Guest can browse product page
+ ✔ Authenticated user sees saved products and categories
+ ✔ Product image and fields are persisted from multipart request
+ ✔ Product owner can update details without replacing image
+ ✔ Product owner can replace the product image
+ ✔ Replacing an image keeps the old file if another product uses it
+ ✔ Customer cannot update a product
+ ✔ Saved product image is served from public storage
+ ✔ Product owner can delete product and stored image
+ ✔ Customer cannot delete a product
+ ✔ Invalid product image is rejected
+ ✔ Cart keeps different products and variants as separate items
+ ✔ Cart rejects quantities above database stock
+
+Registration (Tests\Feature\Auth\Registration)
+ ✔ Registration screen can be rendered
+ ✔ New users can register
+
+OK (33 tests, 153 assertions)
+EXIT=0 

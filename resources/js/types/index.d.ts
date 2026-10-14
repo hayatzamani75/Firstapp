@@ -3,7 +3,10 @@ import { Config } from 'ziggy-js';
 export interface User {
     id: number;
     name: string;
+    lastname: string | null;
+    username: string | null;
     email: string;
+    role: 'employee' | 'customer';
     email_verified_at?: string;
 }
 
@@ -152,4 +155,38 @@ export interface ProductPageProps {
     cartItems: ProductCartItem[];
     cartCount: number;
     cartTotal: number;
+}
+
+export interface OrderItemRecord {
+    id: number;
+    product_id: number | null;
+    product_name: string;
+    category: string;
+    sku: string | null;
+    size: string | null;
+    color: string | null;
+    unit_price: string;
+    quantity: number;
+    line_total: string;
+}
+
+export interface OrderRecord {
+    id: number;
+    user_id: number;
+    status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+    total: string;
+    created_at: string;
+    user?: Pick<User, 'id' | 'name' | 'email'>;
+    items: OrderItemRecord[];
+}
+
+export interface OrderPageProps {
+    orders: {
+        data: OrderRecord[];
+        current_page: number;
+        last_page: number;
+        total: number;
+        links: { url: string | null; label: string; active: boolean }[];
+    };
+    isEmployee: boolean;
 }

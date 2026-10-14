@@ -9,6 +9,10 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    public const ROLE_EMPLOYEE = 'employee';
+
+    public const ROLE_CUSTOMER = 'customer';
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -19,6 +23,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'lastname',
+        'username',
         'email',
         'password',
     ];
@@ -44,5 +50,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isEmployee(): bool
+    {
+        return $this->role === self::ROLE_EMPLOYEE;
+    }
+
+    public function isCustomer(): bool
+    {
+        return $this->role === self::ROLE_CUSTOMER;
     }
 }

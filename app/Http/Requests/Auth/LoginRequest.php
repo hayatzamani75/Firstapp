@@ -27,7 +27,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -35,13 +35,23 @@ class LoginRequest extends FormRequest
     /**
      * Attempt to authenticate the request's credentials.
      *
+     * Employee accounts sign in with their username, customer accounts use an
+     * e-mail address, so the single login field accepts either one.
+     *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $loginField = filter_var($this->string('email'), FILTER_VALIDATE_EMAIL)
+            ? 'email'
+            : 'username';
+
+        if (! Auth::attempt(
+            [$loginField => $this->input('email'), 'password' => $this->input('password')],
+            $this->boolean('remember'),
+        )) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
