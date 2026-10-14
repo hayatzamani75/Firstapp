@@ -67,6 +67,19 @@ class ProductStoreTest extends TestCase
         $this->assertSame(['Olive', 'Black'], $product->colors);
     }
 
+    public function test_saved_product_image_is_served_from_public_storage(): void
+    {
+        Storage::fake('public');
+        $user = User::factory()->create();
+        $imagePath = UploadedFile::fake()->image('shoe.png')->store('products', 'public');
+        $product = $this->createProduct($user, ['image_path' => $imagePath]);
+
+        $this->actingAs($user)
+            ->get(route('product.image', $product))
+            ->assertOk()
+            ->assertHeader('content-type', 'image/png');
+    }
+
     public function test_invalid_product_image_is_rejected(): void
     {
         Storage::fake('public');

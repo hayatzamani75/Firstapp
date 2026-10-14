@@ -9,6 +9,7 @@ import {
 } from '@/Components/ui/dialog';
 import { Input } from '@/Components/ui/input';
 import { Textarea } from '@/Components/ui/textarea';
+import { MakeToastSuccess } from '@/Components/MakeToast';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps, ProductPageProps, Product as StoreProduct } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
@@ -113,7 +114,6 @@ export default function Product() {
         cartCount,
         cartTotal,
     } = usePage<ProductInertiaProps>().props;
-    const { props } = usePage<ProductInertiaProps>();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -195,7 +195,11 @@ export default function Product() {
                 preserveScroll: true,
                 onError: (errors) =>
                     setCartErrors(errors as Record<string, string>),
-                onSuccess: () => setDetailProduct(null),
+                onSuccess: (response) => {
+                    const message = response.props.flash.success;
+                    if (message) MakeToastSuccess(message);
+                    setDetailProduct(null);
+                },
             },
         );
     }
@@ -216,7 +220,9 @@ export default function Product() {
         form.post(route('product.store'), {
             forceFormData: true,
             preserveScroll: true,
-            onSuccess: () => {
+            onSuccess: (response) => {
+                const message = response.props.flash.success;
+                if (message) MakeToastSuccess(message);
                 form.reset();
                 setImagePreview(null);
                 setIsAddOpen(false);
@@ -231,6 +237,10 @@ export default function Product() {
             { item_key: itemKey, quantity },
             {
                 preserveScroll: true,
+                onSuccess: (response) => {
+                    const message = response.props.flash.success;
+                    if (message) MakeToastSuccess(message);
+                },
                 onError: (errors) =>
                     setCartErrors(errors as Record<string, string>),
             },
@@ -242,6 +252,10 @@ export default function Product() {
         router.delete(route('product.cart.remove'), {
             data: { item_key: itemKey },
             preserveScroll: true,
+            onSuccess: (response) => {
+                const message = response.props.flash.success;
+                if (message) MakeToastSuccess(message);
+            },
             onError: (errors) =>
                 setCartErrors(errors as Record<string, string>),
         });
@@ -409,14 +423,6 @@ export default function Product() {
                 </header>
 
                 <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-                    {props.flash.success && (
-                        <div
-                            role="status"
-                            className="mb-5 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800"
-                        >
-                            {props.flash.success}
-                        </div>
-                    )}
                     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                         <div>
                             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-blue-700">

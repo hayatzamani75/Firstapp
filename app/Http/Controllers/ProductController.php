@@ -11,10 +11,18 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Throwable;
 
 class ProductController extends Controller
 {
+    public function image(Product $product): StreamedResponse
+    {
+        abort_unless(Storage::disk('public')->exists($product->image_path), 404);
+
+        return Storage::disk('public')->response($product->image_path);
+    }
+
     public function index(Request $request): Response
     {
         $filters = $request->validate([

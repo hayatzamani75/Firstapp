@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -43,7 +42,7 @@ class Product extends Model
 
     public function getImageUrlAttribute(): string
     {
-        return Storage::disk('public')->url($this->image_path);
+        return route('product.image', $this);
     }
 
     public function getEffectivePriceAttribute(): float
