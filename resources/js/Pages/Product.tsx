@@ -1,14 +1,3 @@
-import { Button } from '@/Components/ui/button';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from '@/Components/ui/dialog';
-import { Input } from '@/Components/ui/input';
-import { Textarea } from '@/Components/ui/textarea';
 import { MakeToastSuccess } from '@/Components/MakeToast';
 import {
     AlertDialog,
@@ -20,6 +9,17 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/Components/ui/alert-dialog';
+import { Button } from '@/Components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/Components/ui/dialog';
+import { Input } from '@/Components/ui/input';
+import { Textarea } from '@/Components/ui/textarea';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps, ProductPageProps, Product as StoreProduct } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
@@ -133,8 +133,9 @@ export default function Product() {
     const [detailProduct, setDetailProduct] = useState<StoreProduct | null>(
         null,
     );
-    const [productToDelete, setProductToDelete] =
-        useState<StoreProduct | null>(null);
+    const [productToDelete, setProductToDelete] = useState<StoreProduct | null>(
+        null,
+    );
     const [selectedSize, setSelectedSize] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
     const [detailQuantity, setDetailQuantity] = useState(1);
@@ -917,19 +918,22 @@ export default function Product() {
                                                     </div>
                                                     {product.created_by ===
                                                         auth.user.id && (
+                                                        <div className="mt-2 flex justify-end">
                                                             <Button
                                                                 type="button"
+                                                                aria-label={`Delete ${product.name}`}
+                                                                title={`Delete ${product.name}`}
                                                                 onClick={() =>
                                                                     setProductToDelete(
                                                                         product,
                                                                     )
                                                                 }
-                                                                className="mt-2 w-full bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-600"
+                                                                className="h-10 min-h-10 w-10 bg-red-600 p-0 text-white hover:bg-red-700 focus-visible:ring-red-600 sm:h-9 sm:min-h-9 sm:w-9"
                                                             >
-                                                                <Trash2 className="mr-2 h-4 w-4" />
-                                                                Delete Product
+                                                                <Trash2 className="h-4 w-4" />
                                                             </Button>
-                                                        )}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </article>
                                         );
@@ -1661,9 +1665,12 @@ export default function Product() {
                 >
                     <AlertDialogContent className="w-[calc(100%-2rem)] rounded-xl">
                         <AlertDialogHeader>
-                            <AlertDialogTitle>Delete this product?</AlertDialogTitle>
+                            <AlertDialogTitle>
+                                Delete this product?
+                            </AlertDialogTitle>
                             <AlertDialogDescription>
-                                “{productToDelete?.name}” and its stored image will be permanently deleted.
+                                “{productToDelete?.name}” and its stored image
+                                will be permanently deleted.
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
