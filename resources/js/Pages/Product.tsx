@@ -918,7 +918,7 @@ export default function Product() {
                                                     </div>
                                                     {product.created_by ===
                                                         auth.user.id && (
-                                                        <div className="mt-2 flex justify-end">
+                                                        <div className="mt-2">
                                                             <Button
                                                                 type="button"
                                                                 aria-label={`Delete ${product.name}`}
@@ -928,9 +928,10 @@ export default function Product() {
                                                                         product,
                                                                     )
                                                                 }
-                                                                className="h-10 min-h-10 w-10 bg-red-600 p-0 text-white hover:bg-red-700 focus-visible:ring-red-600 sm:h-9 sm:min-h-9 sm:w-9"
+                                                                className="h-11 min-h-11 w-full bg-red-600 text-sm font-semibold text-white hover:bg-red-700 focus-visible:ring-red-600"
                                                             >
-                                                                <Trash2 className="h-4 w-4" />
+                                                                <Trash2 className="mr-2 h-4 w-4" />
+                                                                Delete Product
                                                             </Button>
                                                         </div>
                                                     )}
