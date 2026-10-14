@@ -42,7 +42,10 @@ class Product extends Model
 
     public function getImageUrlAttribute(): string
     {
-        return route('product.image', $this);
+        return route('product.image', [
+            'product' => $this->getKey(),
+            'v' => sha1((string) $this->image_path),
+        ]);
     }
 
     public function getEffectivePriceAttribute(): float

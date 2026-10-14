@@ -95,10 +95,10 @@ function StoreImage({
     className?: string;
     fit?: 'contain' | 'cover';
 }) {
-    const [failed, setFailed] = useState(false);
+    const [failedSrc, setFailedSrc] = useState<string | null>(null);
     const fitClass = fit === 'contain' ? 'object-contain' : 'object-cover';
 
-    if (failed) {
+    if (failedSrc === src) {
         return (
             <div
                 className={`flex items-center justify-center bg-[#F8F6F2] text-[#B89B72] ${className}`}
@@ -113,7 +113,7 @@ function StoreImage({
             src={src}
             alt={alt}
             loading="lazy"
-            onError={() => setFailed(true)}
+            onError={() => setFailedSrc(src)}
             className={`h-full w-full ${fitClass} ${className}`}
         />
     );

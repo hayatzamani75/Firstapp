@@ -183,7 +183,11 @@ class ProductController extends Controller
         unset($data['image']);
 
         try {
-            $product->update($data);
+            if (!$product->update($data)) {
+                throw ValidationException::withMessages([
+                    'product' => 'The product could not be updated. Please try again.',
+                ]);
+            }
         } catch (Throwable $exception) {
             if ($newImagePath) {
                 Storage::disk('public')->delete($newImagePath);
@@ -192,7 +196,10 @@ class ProductController extends Controller
             throw $exception;
         }
 
-        if ($newImagePath) {
+        if ($newImagePath && !Product::query()
+            ->whereKeyNot($product->id)
+            ->where('image_path', $oldImagePath)
+            ->exists()) {
             Storage::disk('public')->delete($oldImagePath);
         }
 

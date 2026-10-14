@@ -103,20 +103,56 @@ class ProductStoreTest extends TestCase
         $user = User::factory()->create();
         $oldImagePath = UploadedFile::fake()->image('old.png')->store('products', 'public');
         $product = $this->createProduct($user, ['image_path' => $oldImagePath]);
+        $oldImageUrl = $product->image_url;
 
         $this->actingAs($user)->put(route('product.update', $product), [
             'image' => UploadedFile::fake()->image('new.png'),
-            'name' => $product->name,
+            'name' => 'Updated Everyday Shoe',
             'category' => $product->category,
             'description' => $product->description,
-            'price' => $product->price,
+            'price' => '64.50',
             'stock_quantity' => $product->stock_quantity,
         ])->assertRedirect();
 
         $product->refresh();
+        $this->assertSame('Updated Everyday Shoe', $product->name);
+        $this->assertSame('64.50', $product->price);
         $this->assertNotSame($oldImagePath, $product->image_path);
+        $this->assertNotSame($oldImageUrl, $product->image_url);
+        $this->assertStringContainsString(sha1($product->image_path), $product->image_url);
         Storage::disk('public')->assertExists($product->image_path);
         Storage::disk('public')->assertMissing($oldImagePath);
+
+        $this->get('/product')->assertInertia(fn (Assert $page) => $page
+            ->where('products.data.0.id', $product->id)
+            ->where('products.data.0.image_url', $product->image_url));
+    }
+
+    public function test_replacing_an_image_keeps_the_old_file_if_another_product_uses_it(): void
+    {
+        Storage::fake('public');
+        $user = User::factory()->create();
+        $sharedImagePath = UploadedFile::fake()->image('shared.png')->store('products', 'public');
+        $product = $this->createProduct($user, ['image_path' => $sharedImagePath]);
+        $otherProduct = $this->createProduct($user, [
+            'name' => 'Another Shoe',
+            'sku' => 'ANOTHER-SHOE',
+            'image_path' => $sharedImagePath,
+        ]);
+
+        $this->actingAs($user)->put(route('product.update', $product), [
+            'image' => UploadedFile::fake()->image('replacement.png'),
+            'name' => $product->name,
+            'category' => $product->category,
+            'price' => $product->price,
+            'stock_quantity' => $product->stock_quantity,
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('products', [
+            'id' => $otherProduct->id,
+            'image_path' => $sharedImagePath,
+        ]);
+        Storage::disk('public')->assertExists($sharedImagePath);
     }
 
     public function test_another_user_cannot_update_someone_elses_product(): void
