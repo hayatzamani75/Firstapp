@@ -21,6 +21,7 @@ import {
 import { Input } from '@/Components/ui/input';
 import { Textarea } from '@/Components/ui/textarea';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { RegisterEmployeeAccountForm } from '@/Pages/Employee/Partials/RegisterEmployeeAccountForm';
 import {
     PageProps,
     ProductPageProps,
@@ -579,13 +580,16 @@ export default function Product() {
                             </p>
                         </div>
                         {isEmployee && (
-                            <Button
-                                onClick={openCreateProduct}
-                                className="h-11 bg-[#171717] text-white hover:bg-[#333333]"
-                            >
-                                <Plus className="mr-2 h-4 w-4" />
-                                Add New Product
-                            </Button>
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                                <RegisterEmployeeAccountForm />
+                                <Button
+                                    onClick={openCreateProduct}
+                                    className="h-11 bg-[#171717] text-white hover:bg-[#333333]"
+                                >
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    Add New Product
+                                </Button>
+                            </div>
                         )}
                     </div>
                     <form
