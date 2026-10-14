@@ -24,6 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/product', [ProductController::class, 'index'])->name('product.view');
     Route::get('/product/{product}/image', [ProductController::class, 'image'])->name('product.image');
     Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+    Route::delete('/product/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
     Route::post('/product/cart/items', [ProductController::class, 'addToCart'])->name('product.cart.add');
     Route::patch('/product/cart/items', [ProductController::class, 'updateCart'])->name('product.cart.update');
     Route::delete('/product/cart/items', [ProductController::class, 'removeFromCart'])->name('product.cart.remove');

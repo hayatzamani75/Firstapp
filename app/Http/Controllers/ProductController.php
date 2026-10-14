@@ -159,6 +159,26 @@ class ProductController extends Controller
         return to_route('product.view')->with('success', 'Product added successfully.');
     }
 
+    public function destroy(Request $request, Product $product): RedirectResponse
+    {
+        abort_unless($product->created_by === $request->user()->id, 403);
+
+        $imagePath = $product->image_path;
+        $productId = $product->id;
+        $product->delete();
+        Storage::disk('public')->delete($imagePath);
+
+        $cart = session()->get('product_cart', []);
+        foreach ($cart as $key => $item) {
+            if (($item['product_id'] ?? null) === $productId) {
+                unset($cart[$key]);
+            }
+        }
+        session()->put('product_cart', $cart);
+
+        return back()->with('success', 'Product deleted successfully.');
+    }
+
     public function addToCart(Request $request): RedirectResponse
     {
         $data = $request->validate([

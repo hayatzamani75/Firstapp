@@ -80,6 +80,37 @@ class ProductStoreTest extends TestCase
             ->assertHeader('content-type', 'image/png');
     }
 
+    public function test_product_owner_can_delete_product_and_stored_image(): void
+    {
+        Storage::fake('public');
+        $user = User::factory()->create();
+        $imagePath = UploadedFile::fake()->image('to-delete.png')->store('products', 'public');
+        $product = $this->createProduct($user, ['image_path' => $imagePath]);
+
+        $this->actingAs($user)
+            ->delete(route('product.destroy', $product))
+            ->assertRedirect();
+
+        $this->assertDatabaseMissing('products', ['id' => $product->id]);
+        Storage::disk('public')->assertMissing($imagePath);
+    }
+
+    public function test_another_user_cannot_delete_someone_elses_product(): void
+    {
+        Storage::fake('public');
+        $owner = User::factory()->create();
+        $otherUser = User::factory()->create();
+        $imagePath = UploadedFile::fake()->image('protected.png')->store('products', 'public');
+        $product = $this->createProduct($owner, ['image_path' => $imagePath]);
+
+        $this->actingAs($otherUser)
+            ->delete(route('product.destroy', $product))
+            ->assertForbidden();
+
+        $this->assertDatabaseHas('products', ['id' => $product->id]);
+        Storage::disk('public')->assertExists($imagePath);
+    }
+
     public function test_invalid_product_image_is_rejected(): void
     {
         Storage::fake('public');

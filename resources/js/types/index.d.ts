@@ -89,6 +89,7 @@ export interface Service {
 
 export interface Product {
     id: number;
+    created_by: number | null;
     name: string;
     category: string;
     description: string | null;

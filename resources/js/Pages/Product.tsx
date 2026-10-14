@@ -10,6 +10,16 @@ import {
 import { Input } from '@/Components/ui/input';
 import { Textarea } from '@/Components/ui/textarea';
 import { MakeToastSuccess } from '@/Components/MakeToast';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/Components/ui/alert-dialog';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps, ProductPageProps, Product as StoreProduct } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
@@ -25,6 +35,7 @@ import {
     ShoppingBag,
     ShoppingCart,
     SlidersHorizontal,
+    Trash2,
     UserRound,
     X,
 } from 'lucide-react';
@@ -106,6 +117,7 @@ function StoreImage({
 
 export default function Product() {
     const {
+        auth,
         products,
         categories,
         filterOptions,
@@ -121,6 +133,8 @@ export default function Product() {
     const [detailProduct, setDetailProduct] = useState<StoreProduct | null>(
         null,
     );
+    const [productToDelete, setProductToDelete] =
+        useState<StoreProduct | null>(null);
     const [selectedSize, setSelectedSize] = useState('');
     const [selectedColor, setSelectedColor] = useState('');
     const [detailQuantity, setDetailQuantity] = useState(1);
@@ -258,6 +272,19 @@ export default function Product() {
             },
             onError: (errors) =>
                 setCartErrors(errors as Record<string, string>),
+        });
+    }
+
+    function deleteProduct() {
+        if (!productToDelete) return;
+
+        router.delete(route('product.destroy', productToDelete.id), {
+            preserveScroll: true,
+            onSuccess: (response) => {
+                const message = response.props.flash.success;
+                if (message) MakeToastSuccess(message);
+                setProductToDelete(null);
+            },
         });
     }
 
@@ -791,7 +818,7 @@ export default function Product() {
                                 </label>
                             </div>
                             {products.data.length > 0 ? (
-                                <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-3">
+                                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3">
                                     {products.data.map((product) => {
                                         const onSale =
                                             product.discount_price !== null &&
@@ -800,7 +827,7 @@ export default function Product() {
                                         return (
                                             <article
                                                 key={product.id}
-                                                className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+                                                className="group min-w-0 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-lg"
                                             >
                                                 <button
                                                     type="button"
@@ -888,6 +915,21 @@ export default function Product() {
                                                             Add
                                                         </Button>
                                                     </div>
+                                                    {product.created_by ===
+                                                        auth.user.id && (
+                                                            <Button
+                                                                type="button"
+                                                                onClick={() =>
+                                                                    setProductToDelete(
+                                                                        product,
+                                                                    )
+                                                                }
+                                                                className="mt-2 w-full bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-600"
+                                                            >
+                                                                <Trash2 className="mr-2 h-4 w-4" />
+                                                                Delete Product
+                                                            </Button>
+                                                        )}
                                                 </div>
                                             </article>
                                         );
@@ -1610,6 +1652,31 @@ export default function Product() {
                         </div>
                     </DialogContent>
                 </Dialog>
+
+                <AlertDialog
+                    open={productToDelete !== null}
+                    onOpenChange={(open) => {
+                        if (!open) setProductToDelete(null);
+                    }}
+                >
+                    <AlertDialogContent className="w-[calc(100%-2rem)] rounded-xl">
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Delete this product?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                “{productToDelete?.name}” and its stored image will be permanently deleted.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                                onClick={deleteProduct}
+                                className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-600"
+                            >
+                                Delete Product
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         </AuthenticatedLayout>
     );
