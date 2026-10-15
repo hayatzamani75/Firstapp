@@ -139,6 +139,16 @@ export default function Product() {
     } = usePage<ProductInertiaProps>().props;
     const currentUser = auth.user as User | null;
     const isEmployee = currentUser?.role === 'employee';
+    const unreadOrderNotifications = Number(auth.unreadOrderNotifications ?? 0);
+    useEffect(() => {
+        if (!isEmployee) return;
+
+        const timer = window.setInterval(() => {
+            router.reload({ only: ['auth'], preserveState: true, preserveScroll: true });
+        }, 30000);
+
+        return () => window.clearInterval(timer);
+    }, [isEmployee]);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
@@ -488,6 +498,11 @@ export default function Product() {
                                     className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#EAE6DE] text-[#171717] transition hover:border-[#B89B72]/50 hover:bg-[#F8F6F2] hover:text-[#8F744F]"
                                 >
                                     <ClipboardList className="h-5 w-5" />
+                                    {isEmployee && unreadOrderNotifications > 0 && (
+                                        <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold text-white">
+                                            {unreadOrderNotifications > 9 ? '9+' : unreadOrderNotifications}
+                                        </span>
+                                    )}
                                 </Link>
                                 {isEmployee && <Link
                                     href={route('profile.edit')}

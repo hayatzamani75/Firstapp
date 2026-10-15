@@ -14,7 +14,7 @@ import { Textarea } from '@/Components/ui/textarea';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { OrderPageProps, OrderRecord, PageProps } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
-import { ArrowLeft, ClipboardList } from 'lucide-react';
+import { ArrowLeft, Bell, ClipboardList } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 
 const money = (amount: string | number) =>
@@ -67,7 +67,7 @@ function EmployeeReplyForm({ order }: { order: OrderRecord }) {
 }
 
 export default function Index() {
-    const { orders, isEmployee } = usePage<
+    const { orders, isEmployee, orderNotifications } = usePage<
         PageProps<OrderPageProps & Record<string, unknown>>
     >().props;
     const [orderToCancel, setOrderToCancel] = useState<OrderRecord | null>(null);
@@ -112,6 +112,31 @@ export default function Index() {
                 </header>
 
                 <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+                    {isEmployee && orderNotifications.length > 0 && (
+                        <section className="mb-7 rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-sm">
+                            <div className="mb-3 flex items-center gap-2 font-semibold text-amber-950">
+                                <Bell className="h-4 w-4" /> New order notifications
+                            </div>
+                            <div className="space-y-2">
+                                {orderNotifications.map((notification) => (
+                                    <div key={notification.id} className="flex flex-col gap-2 rounded-lg bg-white/80 p-3 sm:flex-row sm:items-center sm:justify-between">
+                                        <div>
+                                            <p className="text-sm font-medium text-slate-800">{notification.data.message}</p>
+                                            <p className="mt-1 text-xs text-slate-500">{new Date(notification.created_at).toLocaleString()} · {money(notification.data.total)}</p>
+                                        </div>
+                                        <Button
+                                            size="sm"
+                                            variant="outline"
+                                            onClick={() => router.patch(route('notifications.read', notification.id), {}, { preserveScroll: true })}
+                                            className="shrink-0 border-amber-300"
+                                        >
+                                            Mark read
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
                     <div className="mb-7 flex items-end justify-between gap-4">
                         <div>
                             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8F744F]">KIC Store</p>

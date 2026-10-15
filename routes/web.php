@@ -34,6 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/orders/{order}/cancel', [OrderController::class, 'cancel'])->middleware('can:employee-only')->name('orders.cancel');
     Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->middleware('can:employee-only')->name('orders.status');
     Route::patch('/orders/{order}/reply', [OrderController::class, 'updateReply'])->middleware('can:employee-only')->name('orders.reply');
+    Route::patch('/notifications/{notification}/read', [OrderController::class, 'markNotificationRead'])->middleware('can:employee-only')->name('notifications.read');
 });
 
 Route::get('/orders', [OrderController::class, 'index'])

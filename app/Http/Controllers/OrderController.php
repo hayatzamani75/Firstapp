@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
+use App\Notifications\NewOrderPlaced;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +28,26 @@ class OrderController extends Controller
         return Inertia::render('Orders/Index', [
             'orders' => $query->paginate(12)->withQueryString(),
             'isEmployee' => $isEmployee,
+            'orderNotifications' => $isEmployee
+                ? $request->user()->unreadNotifications()
+                    ->where('type', NewOrderPlaced::class)
+                    ->latest()
+                    ->limit(8)
+                    ->get(['id', 'data', 'created_at'])
+                    ->map(fn ($notification) => [
+                        'id' => $notification->id,
+                        'data' => $notification->data,
+                        'created_at' => $notification->created_at,
+                    ])
+                : [],
         ]);
+    }
+
+    public function markNotificationRead(Request $request, string $notification): RedirectResponse
+    {
+        $request->user()->notifications()->whereKey($notification)->firstOrFail()->markAsRead();
+
+        return back();
     }
 
     public function updateReply(Request $request, Order $order): RedirectResponse
@@ -92,6 +113,17 @@ class OrderController extends Controller
 
             return $order;
         });
+
+        if ($request->user()->isCustomer()) {
+            User::query()
+                ->where('role', User::ROLE_EMPLOYEE)
+                ->get()
+                ->each(fn (User $employee) => $employee->notify(new NewOrderPlaced(
+                    $order->id,
+                    $request->user()->name,
+                    (string) $order->total,
+                )));
+        }
 
         $request->session()->forget('product_cart');
 

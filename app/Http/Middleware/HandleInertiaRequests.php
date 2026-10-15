@@ -34,6 +34,9 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'unreadOrderNotifications' => $request->user()?->isEmployee()
+                    ? $request->user()->unreadNotifications()->where('type', \App\Notifications\NewOrderPlaced::class)->count()
+                    : 0,
             ],
             'ziggy' => fn() => [
                 ...(new Ziggy)->toArray(),

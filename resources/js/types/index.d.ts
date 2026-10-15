@@ -15,6 +15,7 @@ export type PageProps<
 > = T & {
     auth: {
         user: User;
+        unreadOrderNotifications?: number;
     };
     flash: {
         success?: string;
@@ -183,6 +184,11 @@ export interface OrderRecord {
 
 export interface OrderPageProps {
     isEmployee: boolean;
+    orderNotifications: {
+        id: string;
+        data: { order_id: number; customer_name: string; total: string; message: string };
+        created_at: string;
+    }[];
     orders: {
         data: OrderRecord[];
         current_page: number;
