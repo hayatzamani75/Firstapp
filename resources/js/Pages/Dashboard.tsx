@@ -20,9 +20,7 @@ export default function Dashboard() {
         <AuthenticatedLayout
             headerClassName="bg-[#172554] dark:bg-[#172554]"
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    Dashboard
-                </h2>
+                <div className="flex w-full items-center justify-between gap-4"><h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Dashboard</h2>{isEmployee && <RegisterEmployeeAccountForm />}</div>
             }
         >
             <Head title="Dashboard" />
@@ -49,32 +47,6 @@ export default function Dashboard() {
                             </div>
                         </div>
                     </div>
-
-                    {isEmployee && (
-                        <section className="rounded-2xl border border-blue-200 bg-white shadow-sm dark:border-blue-800 dark:bg-slate-900">
-                            <div className="flex flex-col gap-4 border-b border-slate-200 px-5 py-4 dark:border-slate-700 sm:flex-row sm:items-center sm:justify-between">
-                                <div>
-                                    <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">
-                                        Employee registration
-                                    </h3>
-                                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                                        Create a login account for a new employee.
-                                        Employees can add, edit and delete products.
-                                    </p>
-                                </div>
-                                <div className="flex shrink-0 flex-wrap items-center gap-3">
-                                    <RegisterEmployeeAccountForm />
-                                    <Link
-                                        href={route('employee.view')}
-                                        className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
-                                    >
-                                        Manage employees
-                                    </Link>
-                                </div>
-                            </div>
-                        </section>
-                    )}
-
                     <section className="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
                         <div className="border-b border-slate-200 px-5 py-4 dark:border-slate-700">
                             <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">
@@ -107,3 +79,6 @@ export default function Dashboard() {
         </AuthenticatedLayout>
     );
 }
+
+
+

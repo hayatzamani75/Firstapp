@@ -192,7 +192,7 @@ export function RegisterEmployeeAccountForm() {
                             type="submit"
                             className="bg-blue-700 text-white hover:bg-blue-800"
                         >
-                            {form.processing ? 'Saving…' : 'Register employee'}
+                            {form.processing ? 'Saving...' : 'Register employee'}
                         </Button>
                     </DialogFooter>
                 </form>
@@ -200,3 +200,4 @@ export function RegisterEmployeeAccountForm() {
         </Dialog>
     );
 }
+
