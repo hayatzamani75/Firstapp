@@ -493,6 +493,14 @@ export default function Product() {
                                 >
                                     <UserRound className="h-5 w-5" />
                                 </Link>
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setIsRegisterOpen(true)}
+                                    className="hidden h-10 rounded-lg border border-[#EAE6DE] bg-white px-3 text-sm font-medium text-[#171717] shadow-none transition hover:bg-[#F8F6F2] sm:flex"
+                                >
+                                    Register
+                                </Button>
                                 <Link
                                     href={route('logout')}
                                     method="post"
@@ -562,7 +570,9 @@ export default function Product() {
                             <DialogHeader className="border-b border-[#EAE6DE] px-6 py-5 text-left">
                                 <DialogTitle className="text-[#171717]">Create a customer account</DialogTitle>
                                 <DialogDescription>
-                                    Register to shop and place orders. You will be signed in after registration.
+                                    {currentUser
+                                        ? 'Create a customer account. Your current session will stay signed in; log out to sign in with the new account.'
+                                        : 'Register to shop and place orders. You will be signed in after registration.'}
                                 </DialogDescription>
                             </DialogHeader>
                             <form onSubmit={submitRegistration} className="space-y-4 px-6 py-5">
@@ -620,6 +630,18 @@ export default function Product() {
                                 className="space-y-1"
                             >
                                 {renderNavigation(true)}
+                                {currentUser && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setIsMenuOpen(false);
+                                            setIsRegisterOpen(true);
+                                        }}
+                                        className="block rounded-md px-3 py-2 text-sm font-medium text-slate-700 transition hover:text-[#8F744F]"
+                                    >
+                                        Register customer
+                                    </button>
+                                )}
                             </nav>
                         </div>
                     )}
