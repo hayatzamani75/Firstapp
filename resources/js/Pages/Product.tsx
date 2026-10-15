@@ -174,7 +174,10 @@ export default function Product() {
     });
     const registrationForm = useForm({
         name: '',
+        lastname: '',
         email: '',
+        phone: '',
+        address: '',
         password: '',
         password_confirmation: '',
     });
@@ -577,14 +580,29 @@ export default function Product() {
                             </DialogHeader>
                             <form onSubmit={submitRegistration} className="space-y-4 px-6 py-5">
                                 <div>
-                                    <label htmlFor="customer-register-name" className="mb-1.5 block text-sm font-medium text-slate-700">Name</label>
+                                    <label htmlFor="customer-register-name" className="mb-1.5 block text-sm font-medium text-slate-700">First name</label>
                                     <Input id="customer-register-name" value={registrationForm.data.name} onChange={(event) => registrationForm.setData('name', event.target.value)} autoComplete="name" maxLength={255} required className="border-[#EAE6DE] focus-visible:ring-[#B89B72]" />
                                     {registrationForm.errors.name && <p className="mt-1 text-sm text-red-600">{registrationForm.errors.name}</p>}
+                                </div>
+                                <div>
+                                    <label htmlFor="customer-register-lastname" className="mb-1.5 block text-sm font-medium text-slate-700">Last name</label>
+                                    <Input id="customer-register-lastname" value={registrationForm.data.lastname} onChange={(event) => registrationForm.setData('lastname', event.target.value)} autoComplete="family-name" maxLength={255} required className="border-[#EAE6DE] focus-visible:ring-[#B89B72]" />
+                                    {registrationForm.errors.lastname && <p className="mt-1 text-sm text-red-600">{registrationForm.errors.lastname}</p>}
                                 </div>
                                 <div>
                                     <label htmlFor="customer-register-email" className="mb-1.5 block text-sm font-medium text-slate-700">Email</label>
                                     <Input id="customer-register-email" type="email" value={registrationForm.data.email} onChange={(event) => registrationForm.setData('email', event.target.value)} autoComplete="email" maxLength={255} required className="border-[#EAE6DE] focus-visible:ring-[#B89B72]" />
                                     {registrationForm.errors.email && <p className="mt-1 text-sm text-red-600">{registrationForm.errors.email}</p>}
+                                </div>
+                                <div>
+                                    <label htmlFor="customer-register-phone" className="mb-1.5 block text-sm font-medium text-slate-700">Phone (optional)</label>
+                                    <Input id="customer-register-phone" type="tel" value={registrationForm.data.phone} onChange={(event) => registrationForm.setData('phone', event.target.value)} autoComplete="tel" maxLength={30} className="border-[#EAE6DE] focus-visible:ring-[#B89B72]" />
+                                    {registrationForm.errors.phone && <p className="mt-1 text-sm text-red-600">{registrationForm.errors.phone}</p>}
+                                </div>
+                                <div>
+                                    <label htmlFor="customer-register-address" className="mb-1.5 block text-sm font-medium text-slate-700">Address (optional)</label>
+                                    <Textarea id="customer-register-address" value={registrationForm.data.address} onChange={(event) => registrationForm.setData('address', event.target.value)} autoComplete="street-address" maxLength={255} className="border-[#EAE6DE] focus-visible:ring-[#B89B72]" />
+                                    {registrationForm.errors.address && <p className="mt-1 text-sm text-red-600">{registrationForm.errors.address}</p>}
                                 </div>
                                 <div>
                                     <label htmlFor="customer-register-password" className="mb-1.5 block text-sm font-medium text-slate-700">Password</label>
