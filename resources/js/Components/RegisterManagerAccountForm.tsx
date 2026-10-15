@@ -21,7 +21,7 @@ type ManagerFormData = {
     password: string;
 };
 
-export default function RegisterManagerAccountForm() {
+export default function RegisterManagerAccountForm({ buttonClassName = 'w-full justify-start' }: { buttonClassName?: string }) {
     const [isOpen, setIsOpen] = useState(false);
     const form = useForm<ManagerFormData>({
         name: '',
@@ -66,7 +66,7 @@ export default function RegisterManagerAccountForm() {
     return (
         <Dialog open={isOpen} onOpenChange={(open) => (open ? setIsOpen(true) : closeDialog())}>
             <DialogTrigger asChild>
-                <Button type="button" className="w-full justify-start bg-blue-700 text-white hover:bg-blue-800">
+                <Button type="button" className={`${buttonClassName} bg-blue-700 text-white hover:bg-blue-800`}>
                     Register manager
                 </Button>
             </DialogTrigger>

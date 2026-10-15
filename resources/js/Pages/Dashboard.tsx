@@ -1,5 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
+import RegisterManagerAccountForm from '@/Components/RegisterManagerAccountForm';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { PageProps } from '@/types';
 
 const modules = [
     { name: 'Books', href: route('book.view'), accent: 'from-blue-600 to-blue-500' },
@@ -11,6 +13,9 @@ const modules = [
 ];
 
 export default function Dashboard() {
+    const { auth } = usePage<PageProps>().props;
+    const isManager = auth.user.role === 'manager';
+
     return (
         <AuthenticatedLayout
             headerClassName="bg-[#172554] dark:bg-[#172554]"
@@ -22,6 +27,24 @@ export default function Dashboard() {
 
             <div className="min-h-[calc(100vh-4rem)] bg-[#f8fafc] py-12 dark:bg-slate-950">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+                    {isManager ? (
+                        <section className="overflow-hidden rounded-2xl border border-blue-200 bg-[#EFF6FF] shadow-sm">
+                            <header className="border-b border-blue-200 bg-blue-700 px-6 py-5 text-white">
+                                <h1 className="text-xl font-semibold">Manager registration</h1>
+                                <p className="mt-1 text-sm text-blue-100">Create a manager account with the same registration form style used for employees.</p>
+                            </header>
+                            <div className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
+                                <div>
+                                    <h2 className="font-semibold text-slate-900">Register a manager</h2>
+                                    <p className="mt-1 text-sm text-slate-600">Enter the manager’s name, contact details, and sign-in password.</p>
+                                </div>
+                                <div className="flex w-full justify-end sm:w-auto">
+                                    <RegisterManagerAccountForm buttonClassName="w-full sm:w-auto" />
+                                </div>
+                            </div>
+                        </section>
+                    ) : (
+                    <>
                     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-[#0f172a] via-[#172554] to-[#1d4ed8] shadow-xl shadow-blue-900/20">
                         <div className="relative p-8 sm:p-10 lg:p-12">
                             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(96,165,250,0.35),transparent_30%),radial-gradient(circle_at_bottom_left,_rgba(14,165,233,0.25),transparent_35%)]" />
@@ -69,6 +92,8 @@ export default function Dashboard() {
                             ))}
                         </div>
                     </section>
+                    </>
+                    )}
                 </div>
             </div>
         </AuthenticatedLayout>
