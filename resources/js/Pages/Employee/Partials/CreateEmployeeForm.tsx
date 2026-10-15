@@ -17,6 +17,8 @@ import * as React from 'react';
 type EmployeeFormData = {
     name: string;
     lastname: string;
+    password: string;
+    password_confirmation: string;
     phone: string;
     email: string;
     address: string;
@@ -27,6 +29,8 @@ export function CreateEmployeeForm() {
     const form = useForm<EmployeeFormData>({
         name: '',
         lastname: '',
+        password: '',
+        password_confirmation: '',
         phone: '',
         email: '',
         address: '',
@@ -81,6 +85,22 @@ export function CreateEmployeeForm() {
                             </label>
                             <Input id="employee-lastname" value={form.data.lastname} onChange={(event) => form.setData('lastname', event.target.value)} autoComplete="family-name" maxLength={255} required className="border-blue-200 bg-white focus-visible:ring-blue-500" />
                             <span className="text-sm text-red-600">{form.errors.lastname}</span>
+                        </div>
+
+                        <div>
+                            <label htmlFor="employee-password" className="mb-2 block text-sm font-medium text-slate-800">
+                                Password
+                            </label>
+                            <Input id="employee-password" type="password" value={form.data.password} onChange={(event) => form.setData('password', event.target.value)} autoComplete="new-password" required className="border-blue-200 bg-white focus-visible:ring-blue-500" />
+                            <span className="text-sm text-red-600">{form.errors.password}</span>
+                        </div>
+
+                        <div>
+                            <label htmlFor="employee-password-confirmation" className="mb-2 block text-sm font-medium text-slate-800">
+                                Confirm password
+                            </label>
+                            <Input id="employee-password-confirmation" type="password" value={form.data.password_confirmation} onChange={(event) => form.setData('password_confirmation', event.target.value)} autoComplete="new-password" required className="border-blue-200 bg-white focus-visible:ring-blue-500" />
+                            <span className="text-sm text-red-600">{form.errors.password_confirmation}</span>
                         </div>
 
                         <div>
