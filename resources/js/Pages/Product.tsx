@@ -251,6 +251,8 @@ export default function Product() {
         color: string | null,
         quantity: number,
     ) {
+        if (isEmployee) return;
+
         setCartErrors({});
         router.post(
             route('product.cart.add'),
@@ -366,6 +368,8 @@ export default function Product() {
     }
 
     function placeOrder() {
+        if (isEmployee) return;
+
         if (!currentUser) {
             router.visit(route('login'));
             return;
@@ -550,7 +554,7 @@ export default function Product() {
                                 </Button>
                             </div>
                         )}
-                        <button
+                        {!isEmployee && <button
                             type="button"
                             onClick={() => setIsCartOpen(true)}
                             aria-label={`Shopping cart, ${cartCount} items`}
@@ -563,7 +567,7 @@ export default function Product() {
                                     {cartCount}
                                 </span>
                             )}
-                        </button>
+                        </button>}
                         <button
                             type="button"
                             aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
@@ -1132,7 +1136,7 @@ export default function Product() {
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <div className="mt-3 grid grid-cols-2 gap-2">
+                                                    <div className={`mt-3 grid gap-2 ${isEmployee ? 'grid-cols-1' : 'grid-cols-2'}`}>
                                                         <Button
                                                             type="button"
                                                             variant="outline"
@@ -1145,7 +1149,7 @@ export default function Product() {
                                                         >
                                                             View Details
                                                         </Button>
-                                                        <Button
+                                                        {!isEmployee && <Button
                                                             type="button"
                                                             disabled={
                                                                 product.stock_quantity ===
@@ -1160,7 +1164,7 @@ export default function Product() {
                                                         >
                                                             <ShoppingBag className="mr-1 h-3.5 w-3.5" />
                                                             Add
-                                                        </Button>
+                                                        </Button>}
                                                     </div>
                                                     {isEmployee && (
                                                         <div className="mt-2 grid grid-cols-2 gap-2">
@@ -1691,7 +1695,7 @@ export default function Product() {
                                             ? `${detailProduct.stock_quantity} in stock`
                                             : 'Out of stock'}
                                     </p>
-                                    {Boolean(detailProduct.sizes?.length) && (
+                                    {!isEmployee && Boolean(detailProduct.sizes?.length) && (
                                         <label className="mt-5 block text-sm font-medium text-slate-700">
                                             Size
                                             <select
@@ -1716,7 +1720,7 @@ export default function Product() {
                                             </select>
                                         </label>
                                     )}
-                                    {Boolean(detailProduct.colors?.length) && (
+                                    {!isEmployee && Boolean(detailProduct.colors?.length) && (
                                         <label className="mt-4 block text-sm font-medium text-slate-700">
                                             Color
                                             <select
@@ -1741,7 +1745,7 @@ export default function Product() {
                                             </select>
                                         </label>
                                     )}
-                                    <label className="mt-4 block text-sm font-medium text-slate-700">
+                                    {!isEmployee && <label className="mt-4 block text-sm font-medium text-slate-700">
                                         Quantity
                                         <input
                                             type="number"
@@ -1764,8 +1768,8 @@ export default function Product() {
                                             }
                                             className="mt-2 h-10 w-24 rounded-md border border-[#EAE6DE] px-3 focus:border-[#B89B72] focus:outline-none"
                                         />
-                                    </label>
-                                    {cartErrors.cart && (
+                                    </label>}
+                                    {!isEmployee && cartErrors.cart && (
                                         <p
                                             role="alert"
                                             className="mt-3 text-sm text-red-600"
@@ -1773,7 +1777,7 @@ export default function Product() {
                                             {cartErrors.cart}
                                         </p>
                                     )}
-                                    {cartErrors.size && (
+                                    {!isEmployee && cartErrors.size && (
                                         <p
                                             role="alert"
                                             className="mt-1 text-sm text-red-600"
@@ -1781,7 +1785,7 @@ export default function Product() {
                                             {cartErrors.size}
                                         </p>
                                     )}
-                                    {cartErrors.color && (
+                                    {!isEmployee && cartErrors.color && (
                                         <p
                                             role="alert"
                                             className="mt-1 text-sm text-red-600"
@@ -1789,7 +1793,7 @@ export default function Product() {
                                             {cartErrors.color}
                                         </p>
                                     )}
-                                    <Button
+                                    {!isEmployee && <Button
                                         type="button"
                                         disabled={
                                             detailProduct.stock_quantity === 0
@@ -1806,14 +1810,14 @@ export default function Product() {
                                     >
                                         <ShoppingCart className="mr-2 h-4 w-4" />
                                         Add to Cart
-                                    </Button>
+                                    </Button>}
                                 </div>
                             </div>
                         </DialogContent>
                     )}
                 </Dialog>
 
-                <Dialog open={isCartOpen} onOpenChange={setIsCartOpen}>
+                {!isEmployee && <Dialog open={isCartOpen} onOpenChange={setIsCartOpen}>
                     <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100%-1rem)] overflow-y-auto rounded-xl border-[#EAE6DE] bg-white p-0 sm:max-w-xl">
                         <DialogHeader className="bg-[#171717] px-5 py-5 text-left text-white sm:px-6">
                             <DialogTitle className="text-white">
@@ -1940,7 +1944,7 @@ export default function Product() {
                             )}
                         </div>
                     </DialogContent>
-                </Dialog>
+                </Dialog>}
 
                 <AlertDialog
                     open={productToDelete !== null}
