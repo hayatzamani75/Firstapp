@@ -499,11 +499,11 @@ export default function Product() {
                                     href={route('orders.index')}
                                     aria-label={isEmployee ? 'Orders' : 'My orders'}
                                     title={isEmployee ? 'Orders' : 'My orders'}
-                                    className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#EAE6DE] text-[#171717] transition hover:border-[#B89B72]/50 hover:bg-[#F8F6F2] hover:text-[#8F744F]"
+                                    className="relative flex h-10 w-10 items-center justify-center rounded-lg border border-[#EAE6DE] text-[#171717] transition hover:border-[#B89B72]/50 hover:bg-[#F8F6F2] hover:text-[#8F744F]"
                                 >
                                     <ClipboardList className="h-5 w-5" />
                                     {isEmployee && unreadOrderNotifications > 0 && (
-                                        <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold text-white">
+                                        <span className="absolute -top-2 left-1/2 flex h-5 min-w-5 -translate-x-1/2 -translate-y-full items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold text-white">
                                             {unreadOrderNotifications > 9 ? '9+' : unreadOrderNotifications}
                                         </span>
                                     )}
