@@ -21,6 +21,7 @@ import {
 import { Input } from '@/Components/ui/input';
 import { Textarea } from '@/Components/ui/textarea';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { formatDualPrice } from '@/lib/currency';
 import {
     PageProps,
     ProductPageProps,
@@ -84,12 +85,6 @@ type ProductFormData = {
 type ProductInertiaProps = PageProps<
     ProductPageProps & Record<string, unknown>
 >;
-
-const money = (amount: number | string) =>
-    new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-    }).format(Number(amount));
 
 function StoreImage({
     src,
@@ -1124,13 +1119,13 @@ export default function Product() {
                                                     )}
                                                     <div className="mt-3 flex flex-wrap items-baseline gap-2">
                                                         <span className="font-bold text-slate-900">
-                                                            {money(
+                                                            {formatDualPrice(
                                                                 product.effective_price,
                                                             )}
                                                         </span>
                                                         {onSale && (
                                                             <span className="text-xs text-slate-400 line-through">
-                                                                {money(
+                                                                {formatDualPrice(
                                                                     product.price,
                                                                 )}
                                                             </span>
@@ -1671,7 +1666,7 @@ export default function Product() {
                                     </DialogHeader>
                                     <div className="mt-5 flex items-baseline gap-3">
                                         <span className="text-xl font-bold text-slate-900">
-                                            {money(
+                                            {formatDualPrice(
                                                 detailProduct.effective_price,
                                             )}
                                         </span>
@@ -1680,7 +1675,7 @@ export default function Product() {
                                                 detailProduct.discount_price,
                                             ) < Number(detailProduct.price) && (
                                                 <span className="text-sm text-slate-400 line-through">
-                                                    {money(detailProduct.price)}
+                                                    {formatDualPrice(detailProduct.price)}
                                                 </span>
                                             )}
                                     </div>
@@ -1862,7 +1857,7 @@ export default function Product() {
                                                     item.category}
                                             </p>
                                             <p className="mt-1 text-sm font-medium text-slate-700">
-                                                {money(item.unit_price)} each
+                                                {formatDualPrice(item.unit_price)} each
                                             </p>
                                             <div className="mt-2 flex items-center gap-2">
                                                 <button
@@ -1913,7 +1908,7 @@ export default function Product() {
                                             </div>
                                         </div>
                                         <p className="shrink-0 text-sm font-bold text-slate-900">
-                                            {money(item.subtotal)}
+                                            {formatDualPrice(item.subtotal)}
                                         </p>
                                     </article>
                                 ))
@@ -1922,7 +1917,7 @@ export default function Product() {
                                 <div className="space-y-4 border-t border-[#EAE6DE] pt-4">
                                     <div className="flex items-center justify-between">
                                         <span className="font-semibold text-slate-700">Total</span>
-                                        <span className="text-lg font-bold text-slate-900">{money(cartTotal)}</span>
+                                        <span className="text-lg font-bold text-slate-900">{formatDualPrice(cartTotal)}</span>
                                     </div>
                                     {currentUser ? (
                                         <Button

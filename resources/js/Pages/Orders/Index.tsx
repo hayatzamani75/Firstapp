@@ -12,15 +12,13 @@ import {
 import { Button } from '@/Components/ui/button';
 import { Textarea } from '@/Components/ui/textarea';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { formatDualPrice } from '@/lib/currency';
 import OrderInvoice from '@/Pages/Orders/OrderInvoice';
 import type { InvoiceContentSize } from '@/Pages/Orders/OrderInvoice';
 import { OrderPageProps, OrderRecord, PageProps } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { ArrowLeft, Bell, ClipboardList, Printer, Trash2 } from 'lucide-react';
 import { FormEvent, useState } from 'react';
-
-const money = (amount: string | number) =>
-    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(amount));
 
 function nextStatus(status: OrderRecord['status']): OrderRecord['status'] | null {
     if (status === 'pending') return 'processing';
@@ -139,7 +137,7 @@ export default function Index() {
                                     <div key={notification.id} className="flex flex-col gap-2 rounded-lg bg-white/80 p-3 sm:flex-row sm:items-center sm:justify-between">
                                         <div>
                                             <p className="text-sm font-medium text-slate-800">{notification.data.message}</p>
-                                            <p className="mt-1 text-xs text-slate-500">{new Date(notification.created_at).toLocaleString()} · {money(notification.data.total)}</p>
+                                            <p className="mt-1 text-xs text-slate-500">{new Date(notification.created_at).toLocaleString()} · {formatDualPrice(notification.data.total)}</p>
                                         </div>
                                         <Button
                                             size="sm"
@@ -216,7 +214,7 @@ export default function Index() {
                                                 {order.user && <p className="mt-1 text-xs text-slate-500">{order.user.name} · {order.user.email}</p>}
                                             </div>
                                             <div className="flex flex-wrap items-center justify-between gap-2 sm:justify-end">
-                                                <span className="text-lg font-semibold">{money(order.total)}</span>
+                                                <span className="text-lg font-semibold">{formatDualPrice(order.total)}</span>
                                                 {isEmployee && <div className="flex flex-wrap gap-2">
                                                     <Button size="sm" variant="outline" onClick={() => printOrder(order)} className="border-slate-300">
                                                         <Printer className="mr-2 h-4 w-4" /> Print Directly
@@ -235,7 +233,7 @@ export default function Index() {
                                                         <h3 className="truncate text-sm font-medium">{item.product_name}</h3>
                                                         <p className="mt-1 text-xs text-slate-500">{[item.category, item.size, item.color, item.sku].filter(Boolean).join(' · ')}</p>
                                                     </div>
-                                                    <p className="shrink-0 text-sm text-slate-600">{item.quantity} × {money(item.unit_price)} <span className="ml-2 font-semibold text-[#171717]">{money(item.line_total)}</span></p>
+                                                    <p className="shrink-0 text-sm text-slate-600">{item.quantity} × {formatDualPrice(item.unit_price)} <span className="ml-2 font-semibold text-[#171717]">{formatDualPrice(item.line_total)}</span></p>
                                                 </div>
                                             ))}
                                         </div>

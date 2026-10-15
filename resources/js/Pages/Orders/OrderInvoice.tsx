@@ -1,7 +1,5 @@
 import { OrderRecord } from '@/types';
-
-const money = (amount: number | string) =>
-    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(amount));
+import { formatDualPrice } from '@/lib/currency';
 
 export type InvoiceContentSize = 'compact' | 'standard' | 'large';
 
@@ -62,8 +60,8 @@ export default function OrderInvoice({ order, contentSize }: { order: OrderRecor
                                 <p className="mt-1 text-xs text-slate-500">{[item.category, item.sku, item.size, item.color].filter(Boolean).join(' · ')}</p>
                             </td>
                             <td className="px-3 py-4 text-right tabular-nums">{item.quantity}</td>
-                            <td className="px-3 py-4 text-right tabular-nums">{money(item.unit_price)}</td>
-                            <td className="py-4 pl-3 text-right font-medium tabular-nums">{money(item.line_total)}</td>
+                            <td className="px-3 py-4 text-right tabular-nums">{formatDualPrice(item.unit_price)}</td>
+                            <td className="py-4 pl-3 text-right font-medium tabular-nums">{formatDualPrice(item.line_total)}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -71,13 +69,13 @@ export default function OrderInvoice({ order, contentSize }: { order: OrderRecor
 
             <section className="invoice-totals ml-auto mt-6 w-full max-w-xs space-y-3 text-sm">
                 <div className="flex justify-between gap-6 text-slate-600">
-                    <span>Subtotal</span><span className="tabular-nums">{money(subtotalCents / 100)}</span>
+                    <span>Subtotal</span><span className="tabular-nums">{formatDualPrice(subtotalCents / 100)}</span>
                 </div>
                 <div className="flex justify-between gap-6 text-slate-600">
-                    <span>Discount</span><span className="tabular-nums">−{money(discountCents / 100)}</span>
+                    <span>Discount</span><span className="tabular-nums">−{formatDualPrice(discountCents / 100)}</span>
                 </div>
                 <div className="flex justify-between gap-6 border-t-2 border-slate-900 pt-3 text-base font-bold">
-                    <span>Total</span><span className="tabular-nums">{money(order.total)}</span>
+                    <span>Total</span><span className="tabular-nums">{formatDualPrice(order.total)}</span>
                 </div>
             </section>
 
