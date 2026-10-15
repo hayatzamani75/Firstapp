@@ -16,11 +16,28 @@ class OrderController extends Controller
 {
     public function index(Request $request): Response
     {
+        $isEmployee = $request->user()->isEmployee();
         $query = Order::query()->with(['items', 'user'])->latest();
+
+        if (!$isEmployee) {
+            $query->where('user_id', $request->user()->id);
+        }
 
         return Inertia::render('Orders/Index', [
             'orders' => $query->paginate(12)->withQueryString(),
+            'isEmployee' => $isEmployee,
         ]);
+    }
+
+    public function updateReply(Request $request, Order $order): RedirectResponse
+    {
+        $data = $request->validate([
+            'employee_reply' => ['nullable', 'string', 'max:5000'],
+        ]);
+
+        $order->update($data);
+
+        return back()->with('success', "Reply for order #{$order->id} saved.");
     }
 
     public function checkout(Request $request): RedirectResponse

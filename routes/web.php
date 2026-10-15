@@ -31,10 +31,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/product', [ProductController::class, 'store'])->middleware('can:employee-only')->name('product.store');
     Route::put('/product/{product}', [ProductController::class, 'update'])->middleware('can:employee-only')->name('product.update');
     Route::delete('/product/{product}', [ProductController::class, 'destroy'])->middleware('can:employee-only')->name('product.destroy');
-    Route::get('/orders', [OrderController::class, 'index'])->middleware('can:employee-only')->name('orders.index');
     Route::patch('/orders/{order}/cancel', [OrderController::class, 'cancel'])->middleware('can:employee-only')->name('orders.cancel');
     Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->middleware('can:employee-only')->name('orders.status');
+    Route::patch('/orders/{order}/reply', [OrderController::class, 'updateReply'])->middleware('can:employee-only')->name('orders.reply');
 });
+
+Route::get('/orders', [OrderController::class, 'index'])
+    ->middleware(['auth', 'can:store-customer'])
+    ->name('orders.index');
 
 Route::post('/checkout', [OrderController::class, 'checkout'])
     ->middleware(['auth', 'can:store-customer'])

@@ -481,14 +481,14 @@ export default function Product() {
                         </form>
                         {currentUser ? (
                             <div className="flex shrink-0 items-center gap-2">
-                                {isEmployee && <Link
+                                <Link
                                     href={route('orders.index')}
-                                    aria-label="My orders"
-                                    title="My orders"
+                                    aria-label={isEmployee ? 'Orders' : 'My orders'}
+                                    title={isEmployee ? 'Orders' : 'My orders'}
                                     className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#EAE6DE] text-[#171717] transition hover:border-[#B89B72]/50 hover:bg-[#F8F6F2] hover:text-[#8F744F]"
                                 >
                                     <ClipboardList className="h-5 w-5" />
-                                </Link>}
+                                </Link>
                                 {isEmployee && <Link
                                     href={route('profile.edit')}
                                     aria-label="Account"

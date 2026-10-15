@@ -18,7 +18,7 @@ class Order extends Model
 
     public const STATUS_CANCELLED = 'cancelled';
 
-    protected $fillable = ['user_id', 'status', 'total'];
+    protected $fillable = ['user_id', 'status', 'total', 'employee_reply'];
 
     protected function casts(): array
     {

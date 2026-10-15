@@ -10,11 +10,12 @@ import {
     AlertDialogTitle,
 } from '@/Components/ui/alert-dialog';
 import { Button } from '@/Components/ui/button';
+import { Textarea } from '@/Components/ui/textarea';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { OrderPageProps, OrderRecord, PageProps } from '@/types';
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { ArrowLeft, ClipboardList } from 'lucide-react';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 
 const money = (amount: string | number) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(amount));
@@ -30,8 +31,43 @@ function statusLabel(status: OrderRecord['status']): string {
     return status.charAt(0).toUpperCase() + status.slice(1);
 }
 
+function EmployeeReplyForm({ order }: { order: OrderRecord }) {
+    const form = useForm({ employee_reply: order.employee_reply ?? '' });
+
+    function submit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        form.patch(route('orders.reply', order.id), {
+            preserveScroll: true,
+            onSuccess: (response) => {
+                const message = response.props.flash.success;
+                if (message) MakeToastSuccess(message);
+            },
+        });
+    }
+
+    return (
+        <form onSubmit={submit} className="border-t border-[#F1EEE8] px-4 py-4 sm:px-5">
+            <label htmlFor={`reply-${order.id}`} className="mb-2 block text-sm font-semibold">Reply to customer</label>
+            <Textarea
+                id={`reply-${order.id}`}
+                value={form.data.employee_reply}
+                onChange={(event) => form.setData('employee_reply', event.target.value)}
+                maxLength={5000}
+                placeholder="Write an update or answer for this customer..."
+                className="min-h-20 border-[#EAE6DE] bg-white"
+            />
+            {form.errors.employee_reply && <p className="mt-1 text-sm text-red-600">{form.errors.employee_reply}</p>}
+            <div className="mt-3 flex justify-end">
+                <Button type="submit" size="sm" disabled={form.processing} className="bg-[#171717] text-white hover:bg-[#333333]">
+                    {form.processing ? 'Saving…' : 'Save reply'}
+                </Button>
+            </div>
+        </form>
+    );
+}
+
 export default function Index() {
-    const { orders } = usePage<
+    const { orders, isEmployee } = usePage<
         PageProps<OrderPageProps & Record<string, unknown>>
     >().props;
     const [orderToCancel, setOrderToCancel] = useState<OrderRecord | null>(null);
@@ -71,7 +107,7 @@ export default function Index() {
                         <Link href={route('product.view')} className="flex items-center gap-2 font-semibold">
                             <ArrowLeft className="h-4 w-4" /> KIC Store
                         </Link>
-                        <span className="text-sm text-slate-500">Order management</span>
+                        <span className="text-sm text-slate-500">{isEmployee ? 'Order management' : 'My orders'}</span>
                     </div>
                 </header>
 
@@ -79,7 +115,7 @@ export default function Index() {
                     <div className="mb-7 flex items-end justify-between gap-4">
                         <div>
                             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8F744F]">KIC Store</p>
-                            <h1 className="mt-1 text-3xl font-semibold">Customer Orders</h1>
+                            <h1 className="mt-1 text-3xl font-semibold">{isEmployee ? 'Customer Orders' : 'My Orders'}</h1>
                         </div>
                         <Link href={route('product.view')} className="hidden text-sm font-medium text-slate-600 hover:text-[#8F744F] sm:block">Continue shopping</Link>
                     </div>
@@ -108,8 +144,8 @@ export default function Index() {
                                             </div>
                                             <div className="flex items-center justify-between gap-3 sm:justify-end">
                                                 <span className="text-lg font-semibold">{money(order.total)}</span>
-                                                {next && <Button size="sm" onClick={() => advanceOrder(order)} className="bg-[#171717] text-white hover:bg-[#333333]">Mark {statusLabel(next)}</Button>}
-                                                {order.status === 'pending' && <Button size="sm" variant="outline" onClick={() => setOrderToCancel(order)} className="border-red-200 text-red-700 hover:bg-red-50">Cancel order</Button>}
+                                                {isEmployee && next && <Button size="sm" onClick={() => advanceOrder(order)} className="bg-[#171717] text-white hover:bg-[#333333]">Mark {statusLabel(next)}</Button>}
+                                                {isEmployee && order.status === 'pending' && <Button size="sm" variant="outline" onClick={() => setOrderToCancel(order)} className="border-red-200 text-red-700 hover:bg-red-50">Cancel order</Button>}
                                             </div>
                                         </header>
                                         <div className="divide-y divide-[#F1EEE8] px-4 sm:px-5">
@@ -123,6 +159,16 @@ export default function Index() {
                                                 </div>
                                             ))}
                                         </div>
+                                        {isEmployee ? (
+                                            <EmployeeReplyForm order={order} />
+                                        ) : (
+                                            <section className="border-t border-[#F1EEE8] bg-[#FCFBF9] px-4 py-4 sm:px-5">
+                                                <h3 className="text-sm font-semibold">Message from the store</h3>
+                                                <p className="mt-1 whitespace-pre-wrap text-sm text-slate-600">
+                                                    {order.employee_reply || 'The store has not replied yet.'}
+                                                </p>
+                                            </section>
+                                        )}
                                     </article>
                                 );
                             })}
@@ -132,7 +178,7 @@ export default function Index() {
                     {orders.last_page > 1 && <nav aria-label="Order pagination" className="mt-6 flex flex-wrap justify-center gap-2">{orders.links.map((link, index) => link.url ? <Link key={`${link.label}-${index}`} href={link.url} preserveScroll className={`rounded-lg border px-3 py-2 text-sm ${link.active ? 'border-[#171717] bg-[#171717] text-white' : 'border-[#EAE6DE] bg-white text-slate-700 hover:bg-[#F8F6F2]'}`}>{link.label.replace(/&laquo;|&raquo;/g, '').trim()}</Link> : <span key={`${link.label}-${index}`} className="rounded-lg border border-[#EEEAE2] px-3 py-2 text-sm text-slate-300">{link.label.replace(/&laquo;|&raquo;/g, '').trim()}</span>)}</nav>}
                 </main>
 
-                <AlertDialog open={orderToCancel !== null} onOpenChange={(open) => { if (!open) setOrderToCancel(null); }}>
+                {isEmployee && <AlertDialog open={orderToCancel !== null} onOpenChange={(open) => { if (!open) setOrderToCancel(null); }}>
                     <AlertDialogContent className="w-[calc(100%-2rem)] rounded-xl">
                         <AlertDialogHeader>
                             <AlertDialogTitle>Cancel order #{orderToCancel?.id}?</AlertDialogTitle>
@@ -143,7 +189,7 @@ export default function Index() {
                             <AlertDialogAction onClick={cancelOrder} className="bg-red-600 text-white hover:bg-red-700">Cancel order</AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
-                </AlertDialog>
+                </AlertDialog>}
             </div>
         </AuthenticatedLayout>
     );

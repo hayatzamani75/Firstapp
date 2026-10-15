@@ -176,11 +176,13 @@ export interface OrderRecord {
     status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
     total: string;
     created_at: string;
+    employee_reply: string | null;
     user?: Pick<User, 'id' | 'name' | 'email'>;
     items: OrderItemRecord[];
 }
 
 export interface OrderPageProps {
+    isEmployee: boolean;
     orders: {
         data: OrderRecord[];
         current_page: number;
