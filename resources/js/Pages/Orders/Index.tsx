@@ -1,7 +1,6 @@
 import { MakeToastSuccess } from '@/Components/MakeToast';
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
@@ -16,7 +15,7 @@ import OrderInvoice from '@/Pages/Orders/OrderInvoice';
 import type { InvoiceContentSize } from '@/Pages/Orders/OrderInvoice';
 import { OrderPageProps, OrderRecord, PageProps } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
-import { ArrowLeft, Bell, ClipboardList, FileDown, Printer, Trash2 } from 'lucide-react';
+import { ArrowLeft, Bell, ClipboardList, Printer, Trash2 } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 
 const money = (amount: string | number) =>
@@ -72,18 +71,17 @@ export default function Index() {
     const { orders, isEmployee, orderNotifications } = usePage<
         PageProps<OrderPageProps & Record<string, unknown>>
     >().props;
-    const [orderToCancel, setOrderToCancel] = useState<OrderRecord | null>(null);
     const [orderToDelete, setOrderToDelete] = useState<OrderRecord | null>(null);
     const [orderToPrint, setOrderToPrint] = useState<OrderRecord | null>(null);
     const [printScale, setPrintScale] = useState(85);
     const [printMargin, setPrintMargin] = useState(8);
     const [contentSize, setContentSize] = useState<InvoiceContentSize>('compact');
 
-    function printOrder(order: OrderRecord, output: 'pdf' | 'printer') {
+    function printOrder(order: OrderRecord) {
         setOrderToPrint(order);
         window.setTimeout(() => {
             const previousTitle = document.title;
-            document.title = output === 'pdf' ? `KIC-Invoice-${order.id}` : `KIC-Order-${order.id}`;
+            document.title = `KIC-Order-${order.id}`;
             window.print();
             document.title = previousTitle;
             setOrderToPrint(null);
@@ -99,19 +97,6 @@ export default function Index() {
             onSuccess: (response) => {
                 const message = response.props.flash.success;
                 if (message) MakeToastSuccess(message);
-            },
-        });
-    }
-
-    function cancelOrder() {
-        if (!orderToCancel) return;
-
-        router.patch(route('orders.cancel', orderToCancel.id), {}, {
-            preserveScroll: true,
-            onSuccess: (response) => {
-                const message = response.props.flash.success;
-                if (message) MakeToastSuccess(message);
-                setOrderToCancel(null);
             },
         });
     }
@@ -180,7 +165,7 @@ export default function Index() {
                         <section className="no-print mb-6 rounded-xl border border-[#EAE6DE] bg-white p-4 shadow-sm sm:p-5">
                             <div className="mb-4">
                                 <h2 className="text-sm font-semibold text-slate-900">Invoice print settings</h2>
-                                <p className="mt-1 text-xs text-slate-500">A4 page · Adjust scale, margins, and content size to fit the invoice. Save as PDF opens the print dialog; select its PDF destination to save a file.</p>
+                                <p className="mt-1 text-xs text-slate-500">A4 page · Adjust scale, margins, and content size to fit the invoice.</p>
                             </div>
                             <div className="grid gap-4 sm:grid-cols-3">
                                 <label className="text-xs font-medium text-slate-600">
@@ -232,15 +217,11 @@ export default function Index() {
                                             <div className="flex flex-wrap items-center justify-between gap-2 sm:justify-end">
                                                 <span className="text-lg font-semibold">{money(order.total)}</span>
                                                 {isEmployee && <div className="flex flex-wrap gap-2">
-                                                    <Button size="sm" variant="outline" onClick={() => printOrder(order, 'pdf')} className="border-slate-300">
-                                                        <FileDown className="mr-2 h-4 w-4" /> Save as PDF
-                                                    </Button>
-                                                    <Button size="sm" variant="outline" onClick={() => printOrder(order, 'printer')} className="border-slate-300">
+                                                    <Button size="sm" variant="outline" onClick={() => printOrder(order)} className="border-slate-300">
                                                         <Printer className="mr-2 h-4 w-4" /> Print Directly
                                                     </Button>
                                                 </div>}
                                                 {isEmployee && next && <Button size="sm" onClick={() => advanceOrder(order)} className="bg-[#171717] text-white hover:bg-[#333333]">Mark {statusLabel(next)}</Button>}
-                                                {isEmployee && order.status === 'pending' && <Button size="sm" variant="outline" onClick={() => setOrderToCancel(order)} className="border-red-200 text-red-700 hover:bg-red-50">Cancel order</Button>}
                                                 {isEmployee && <Button size="sm" variant="outline" onClick={() => setOrderToDelete(order)} className="border-red-200 bg-white text-red-700 hover:border-red-300 hover:bg-red-50">
                                                     <Trash2 className="mr-2 h-4 w-4" /> Delete
                                                 </Button>}
@@ -276,18 +257,6 @@ export default function Index() {
                     {orders.last_page > 1 && <nav aria-label="Order pagination" className="mt-6 flex flex-wrap justify-center gap-2">{orders.links.map((link, index) => link.url ? <Link key={`${link.label}-${index}`} href={link.url} preserveScroll className={`rounded-lg border px-3 py-2 text-sm ${link.active ? 'border-[#171717] bg-[#171717] text-white' : 'border-[#EAE6DE] bg-white text-slate-700 hover:bg-[#F8F6F2]'}`}>{link.label.replace(/&laquo;|&raquo;/g, '').trim()}</Link> : <span key={`${link.label}-${index}`} className="rounded-lg border border-[#EEEAE2] px-3 py-2 text-sm text-slate-300">{link.label.replace(/&laquo;|&raquo;/g, '').trim()}</span>)}</nav>}
                 </main>
 
-                {isEmployee && <AlertDialog open={orderToCancel !== null} onOpenChange={(open) => { if (!open) setOrderToCancel(null); }}>
-                    <AlertDialogContent className="w-[calc(100%-2rem)] rounded-xl">
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>Cancel order #{orderToCancel?.id}?</AlertDialogTitle>
-                            <AlertDialogDescription>Only pending orders can be cancelled. Available inventory will be restored.</AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>Keep order</AlertDialogCancel>
-                            <AlertDialogAction onClick={cancelOrder} className="bg-red-600 text-white hover:bg-red-700">Cancel order</AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>}
                 {isEmployee && <AlertDialog open={orderToDelete !== null} onOpenChange={(open) => { if (!open) setOrderToDelete(null); }}>
                     <AlertDialogContent className="w-[calc(100%-2rem)] rounded-xl border-red-100">
                         <AlertDialogHeader>
