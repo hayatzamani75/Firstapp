@@ -1063,7 +1063,7 @@ export default function Product() {
                                 </label>
                             </div>
                             {products.data.length > 0 ? (
-                                <div className="grid grid-cols-1 items-stretch gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3 2xl:grid-cols-4">
+                                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3">
                                     {products.data.map((product) => {
                                         const onSale =
                                             product.discount_price !== null &&
@@ -1072,20 +1072,20 @@ export default function Product() {
                                         return (
                                             <article
                                                 key={product.id}
-                                                className="group flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-[#EAE6DE] bg-white shadow-[0_6px_18px_rgba(23,23,23,0.04)] transition duration-300 hover:-translate-y-0.5 hover:border-[#D8C6AA] hover:shadow-[0_14px_28px_rgba(83,64,42,0.10)]"
+                                                className="group flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-[#EAE6DE] bg-white shadow-[0_8px_24px_rgba(23,23,23,0.045)] transition duration-300 hover:-translate-y-1 hover:border-[#D8C6AA] hover:shadow-[0_18px_38px_rgba(83,64,42,0.12)]"
                                             >
                                                 <button
                                                     type="button"
                                                     onClick={() =>
                                                         openDetails(product)
                                                     }
-                                                    className="relative block aspect-[5/4] w-full overflow-hidden bg-gradient-to-br from-[#F8F6F2] to-[#F0E9DF] text-left"
+                                                    className="relative block aspect-[6/5] w-full overflow-hidden bg-gradient-to-br from-[#F8F6F2] to-[#F0E9DF] text-left"
                                                 >
                                                     <StoreImage
                                                         src={product.image_url}
                                                         alt={product.name}
                                                         fit="contain"
-                                                        className="p-5 transition duration-300 group-hover:scale-[1.03] sm:p-7"
+                                                        className="p-4 transition duration-300 group-hover:scale-[1.03] sm:p-6"
                                                     />
                                                     {onSale && (
                                                         <span className="absolute left-3 top-3 rounded-full bg-[#8F744F] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow-sm">
@@ -1099,7 +1099,7 @@ export default function Product() {
                                                         </span>
                                                     )}
                                                 </button>
-                                                <div className="flex flex-1 flex-col p-3 sm:p-4">
+                                                <div className="flex flex-1 flex-col p-4 sm:p-5">
                                                     <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#8F744F]">
                                                         {product.category}
                                                     </p>
@@ -1108,7 +1108,7 @@ export default function Product() {
                                                         onClick={() =>
                                                             openDetails(product)
                                                         }
-                                                        className="mt-1 line-clamp-2 min-h-10 text-left text-sm font-semibold leading-snug text-[#171717] transition hover:text-[#8F744F] sm:text-base"
+                                                        className="mt-1 line-clamp-2 min-h-10 text-left text-base font-semibold leading-snug text-[#171717] transition hover:text-[#8F744F] sm:text-lg"
                                                     >
                                                         {product.name}
                                                     </button>
@@ -1117,8 +1117,8 @@ export default function Product() {
                                                             {product.brand}
                                                         </p>
                                                     )}
-                                                    <div className="mt-3 flex min-h-12 flex-col items-start justify-center gap-1 border-t border-[#F1EEE8] pt-2.5">
-                                                        <span className="text-xs font-bold leading-tight text-slate-900 sm:text-sm">
+                                                    <div className="mt-4 flex min-h-12 flex-col items-start justify-center gap-1 border-t border-[#F1EEE8] pt-3">
+                                                        <span className="text-sm font-bold leading-tight text-slate-900 sm:text-base">
                                                             {formatDualPrice(
                                                                 product.effective_price,
                                                             )}
@@ -1131,7 +1131,7 @@ export default function Product() {
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <div className={`mt-auto grid gap-1.5 pt-3 ${isEmployee ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                                                    <div className={`mt-auto grid gap-2 pt-4 ${isEmployee ? 'grid-cols-1' : 'grid-cols-2'}`}>
                                                         <Button
                                                             type="button"
                                                             variant="outline"
@@ -1140,7 +1140,7 @@ export default function Product() {
                                                                     product,
                                                                 )
                                                             }
-                                                            className="h-9 min-w-0 rounded-lg border-[#E3D5C1] bg-white px-1.5 text-[11px] font-semibold text-[#5B4529] hover:bg-[#F8F6F2] sm:px-2 sm:text-xs"
+                                                            className="h-10 min-w-0 rounded-lg border-[#E3D5C1] bg-white px-2 text-xs font-semibold text-[#5B4529] hover:bg-[#F8F6F2]"
                                                         >
                                                             View Details
                                                         </Button>
@@ -1155,7 +1155,7 @@ export default function Product() {
                                                                     product,
                                                                 )
                                                             }
-                                                            className="h-9 min-w-0 rounded-lg bg-[#171717] px-1.5 text-[11px] font-semibold text-white hover:bg-[#333333] sm:px-2 sm:text-xs"
+                                                            className="h-10 min-w-0 rounded-lg bg-[#171717] px-2 text-xs font-semibold text-white hover:bg-[#333333]"
                                                         >
                                                             <ShoppingBag className="mr-1 h-3.5 w-3.5" />
                                                             Add
