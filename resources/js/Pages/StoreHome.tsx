@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
-import { ArrowRight, BadgeCheck, Headphones, PackageCheck, ShoppingBag, Sparkles } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Headphones, Menu, PackageCheck, ShoppingBag, Sparkles, X } from 'lucide-react';
+import { useState } from 'react';
 
 const collections = [
     {
@@ -26,6 +27,8 @@ const collections = [
 ];
 
 export default function StoreHome() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
     return (
         <>
             <Head title="KIC Store | Everyday style" />
@@ -50,13 +53,51 @@ export default function StoreHome() {
                     </div>
                 </header>
 
-                <main>
-                    <section className="relative isolate overflow-hidden border-b border-[#EAE6DE] bg-[#f0e9df]">
+                <main className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+                    <div className="mb-4 flex items-center justify-between lg:hidden">
+                        <button
+                            type="button"
+                            aria-expanded={isSidebarOpen}
+                            aria-controls="store-home-sidebar"
+                            onClick={() => setIsSidebarOpen((open) => !open)}
+                            className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#E3D5C1] bg-white px-3 text-sm font-medium text-[#5B4529] shadow-sm transition hover:bg-[#F3EBDD]"
+                        >
+                            {isSidebarOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+                            {isSidebarOpen ? 'Close menu' : 'Browse store'}
+                        </button>
+                        <span className="text-xs font-medium text-slate-500">Discover KIC Store</span>
+                    </div>
+                    <div className="grid items-start gap-5 lg:grid-cols-[230px_minmax(0,1fr)] lg:gap-6">
+                    <aside id="store-home-sidebar" className={`${isSidebarOpen ? 'block' : 'hidden'} rounded-2xl border border-[#E3D5C1] bg-gradient-to-br from-[#F1E8DB] via-[#FAF7F1] to-[#F3EBDD] p-4 shadow-[0_12px_32px_rgba(95,72,43,0.10)] lg:sticky lg:top-24 lg:block`}>
+                        <p className="mb-4 px-3 text-xs font-bold uppercase tracking-[0.16em] text-[#8F744F]">Discover</p>
+                        <nav aria-label="Store sections" className="space-y-1">
+                            <a href="#home" className="flex items-center justify-between rounded-lg border-l-2 border-[#8F744F] bg-white/80 px-3 py-2.5 text-sm font-semibold text-[#5B4529] shadow-sm">Home <span className="text-xs text-[#8F744F]">01</span></a>
+                            <Link href={route('product.view')} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">All products</Link>
+                            <a href="#collections" className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">Collections</a>
+                            <Link href={route('product.view', { collection: 'new' })} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">New arrivals</Link>
+                            <Link href={route('product.view', { collection: 'sale' })} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">On sale</Link>
+                        </nav>
+                        <div className="my-5 border-t border-[#E3D5C1]" />
+                        <p className="mb-3 px-3 text-xs font-bold uppercase tracking-[0.16em] text-[#8F744F]">Shop by category</p>
+                        <nav aria-label="Product categories" className="space-y-1">
+                            {['Clothing', 'Shoes', 'Bags', 'Accessories'].map((category) => (
+                                <Link key={category} href={route('product.view', { category })} className="block rounded-lg border-l-2 border-transparent px-3 py-2 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">{category}</Link>
+                            ))}
+                        </nav>
+                        <div className="mt-6 rounded-xl bg-[#171717] p-4 text-white">
+                            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#D8BD98]">The KIC edit</p>
+                            <p className="mt-2 text-sm font-medium leading-5">Thoughtful pieces for everyday life.</p>
+                            <Link href={route('product.view')} className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#E6D1B4] hover:text-white">Explore the store <ArrowRight className="h-3.5 w-3.5" /></Link>
+                        </div>
+                    </aside>
+
+                    <div className="min-w-0">
+                    <section id="home" className="relative isolate overflow-hidden rounded-2xl border border-[#E3D5C1] bg-[#f0e9df] shadow-sm sm:rounded-3xl">
                         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_75%_35%,rgba(184,155,114,0.32),transparent_42%),linear-gradient(110deg,#f7f3ed_0%,#eee5d9_55%,#e4d6c5_100%)]" />
-                        <div className="mx-auto grid min-h-[540px] max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-24">
+                        <div className="grid min-h-[420px] items-center gap-8 px-5 py-10 sm:min-h-[500px] sm:gap-10 sm:px-10 sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:px-12 lg:py-20">
                             <div className="max-w-xl">
                                 <p className="inline-flex items-center gap-2 rounded-full border border-[#B89B72]/35 bg-white/70 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-[#8F744F]"><Sparkles className="h-3.5 w-3.5" /> A fresh point of view</p>
-                                <h1 className="mt-6 text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">Good things,<br /><span className="font-normal italic text-[#8F744F]">beautifully chosen.</span></h1>
+                                <h1 className="mt-6 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">Good things,<br /><span className="font-normal italic text-[#8F744F]">beautifully chosen.</span></h1>
                                 <p className="mt-6 max-w-lg text-base leading-7 text-slate-600">Discover clothing, shoes, and accessories selected for everyday comfort and effortless style. Find pieces you’ll reach for again and again.</p>
                                 <div className="mt-8 flex flex-wrap gap-3">
                                     <Link href={route('product.view')} className="inline-flex h-12 items-center gap-2 rounded-lg bg-[#171717] px-6 text-sm font-semibold text-white transition hover:bg-[#333333]">Explore all products <ArrowRight className="h-4 w-4" /></Link>
@@ -82,7 +123,7 @@ export default function StoreHome() {
                         </div>
                     </section>
 
-                    <section id="collections" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+                    <section id="collections" className="py-12 sm:py-16">
                         <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                             <div>
                                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8F744F]">Find your next favorite</p>
@@ -107,8 +148,8 @@ export default function StoreHome() {
                         </div>
                     </section>
 
-                    <section id="about" className="border-y border-[#EAE6DE] bg-white">
-                        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-center lg:px-8">
+                    <section id="about" className="rounded-2xl border border-[#EAE6DE] bg-white">
+                        <div className="grid gap-8 px-5 py-10 sm:px-8 lg:grid-cols-[1fr_auto] lg:items-center">
                             <div className="max-w-2xl">
                                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8F744F]">A little more personal</p>
                                 <h2 className="mt-2 text-2xl font-semibold">A store made for finding things you love.</h2>
@@ -117,6 +158,8 @@ export default function StoreHome() {
                             <div className="flex items-center gap-3 text-sm text-slate-600"><Headphones className="h-5 w-5 text-[#8F744F]" /><span>Here to help with your order</span></div>
                         </div>
                     </section>
+                    </div>
+                    </div>
                 </main>
 
                 <footer className="bg-[#171717] text-white">
