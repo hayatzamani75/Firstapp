@@ -1,6 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
-import { RegisterEmployeeAccountForm } from './Employee/Partials/RegisterEmployeeAccountForm';
 
 const modules = [
     { name: 'Books', href: route('book.view'), accent: 'from-blue-600 to-blue-500' },
@@ -16,7 +15,7 @@ export default function Dashboard() {
         <AuthenticatedLayout
             headerClassName="bg-[#172554] dark:bg-[#172554]"
             header={
-                <div className="flex w-full items-center justify-between gap-4"><h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Dashboard</h2><RegisterEmployeeAccountForm /></div>
+                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Dashboard</h2>
             }
         >
             <Head title="Dashboard" />

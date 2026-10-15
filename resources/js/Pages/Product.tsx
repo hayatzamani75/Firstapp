@@ -21,7 +21,6 @@ import {
 import { Input } from '@/Components/ui/input';
 import { Textarea } from '@/Components/ui/textarea';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { RegisterEmployeeAccountForm } from '@/Pages/Employee/Partials/RegisterEmployeeAccountForm';
 import {
     PageProps,
     ProductPageProps,
@@ -141,6 +140,7 @@ export default function Product() {
     const currentUser = auth.user as User | null;
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isRegisterOpen, setIsRegisterOpen] = useState(false);
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [productBeingEdited, setProductBeingEdited] =
@@ -172,6 +172,26 @@ export default function Product() {
         stock_quantity: '1',
         sku: '',
     });
+    const registrationForm = useForm({
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: '',
+    });
+
+    function submitRegistration(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        registrationForm.post(route('register'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                setIsRegisterOpen(false);
+                registrationForm.reset();
+            },
+            onFinish: () =>
+                registrationForm.reset('password', 'password_confirmation'),
+        });
+    }
 
     useEffect(() => {
         return () => {
@@ -493,12 +513,14 @@ export default function Product() {
                                 >
                                     Log in
                                 </Link>
-                                <Link
-                                    href={route('register')}
-                                    className="rounded-lg bg-[#171717] px-3 py-2 text-sm font-medium text-white transition hover:bg-[#333333]"
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setIsRegisterOpen(true)}
+                                    className="h-10 rounded-lg border border-[#EAE6DE] bg-white px-3 text-sm font-medium text-[#171717] shadow-none transition hover:bg-[#F8F6F2]"
                                 >
                                     Register
-                                </Link>
+                                </Button>
                             </div>
                         )}
                         <button
@@ -529,6 +551,48 @@ export default function Product() {
                             )}
                         </button>
                     </div>
+                    <Dialog
+                        open={isRegisterOpen}
+                        onOpenChange={(open) => {
+                            setIsRegisterOpen(open);
+                            if (!open) registrationForm.reset();
+                        }}
+                    >
+                        <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] overflow-y-auto rounded-xl border-[#EAE6DE] bg-white p-0 sm:max-w-md">
+                            <DialogHeader className="border-b border-[#EAE6DE] px-6 py-5 text-left">
+                                <DialogTitle className="text-[#171717]">Create a customer account</DialogTitle>
+                                <DialogDescription>
+                                    Register to shop and place orders. You will be signed in after registration.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <form onSubmit={submitRegistration} className="space-y-4 px-6 py-5">
+                                <div>
+                                    <label htmlFor="customer-register-name" className="mb-1.5 block text-sm font-medium text-slate-700">Name</label>
+                                    <Input id="customer-register-name" value={registrationForm.data.name} onChange={(event) => registrationForm.setData('name', event.target.value)} autoComplete="name" maxLength={255} required className="border-[#EAE6DE] focus-visible:ring-[#B89B72]" />
+                                    {registrationForm.errors.name && <p className="mt-1 text-sm text-red-600">{registrationForm.errors.name}</p>}
+                                </div>
+                                <div>
+                                    <label htmlFor="customer-register-email" className="mb-1.5 block text-sm font-medium text-slate-700">Email</label>
+                                    <Input id="customer-register-email" type="email" value={registrationForm.data.email} onChange={(event) => registrationForm.setData('email', event.target.value)} autoComplete="email" maxLength={255} required className="border-[#EAE6DE] focus-visible:ring-[#B89B72]" />
+                                    {registrationForm.errors.email && <p className="mt-1 text-sm text-red-600">{registrationForm.errors.email}</p>}
+                                </div>
+                                <div>
+                                    <label htmlFor="customer-register-password" className="mb-1.5 block text-sm font-medium text-slate-700">Password</label>
+                                    <Input id="customer-register-password" type="password" value={registrationForm.data.password} onChange={(event) => registrationForm.setData('password', event.target.value)} autoComplete="new-password" required className="border-[#EAE6DE] focus-visible:ring-[#B89B72]" />
+                                    {registrationForm.errors.password && <p className="mt-1 text-sm text-red-600">{registrationForm.errors.password}</p>}
+                                </div>
+                                <div>
+                                    <label htmlFor="customer-register-password-confirmation" className="mb-1.5 block text-sm font-medium text-slate-700">Confirm password</label>
+                                    <Input id="customer-register-password-confirmation" type="password" value={registrationForm.data.password_confirmation} onChange={(event) => registrationForm.setData('password_confirmation', event.target.value)} autoComplete="new-password" required className="border-[#EAE6DE] focus-visible:ring-[#B89B72]" />
+                                    {registrationForm.errors.password_confirmation && <p className="mt-1 text-sm text-red-600">{registrationForm.errors.password_confirmation}</p>}
+                                </div>
+                                <DialogFooter className="gap-2 border-t border-[#EAE6DE] pt-4 sm:flex-row">
+                                    <Button type="button" variant="outline" onClick={() => setIsRegisterOpen(false)} className="border-[#EAE6DE] text-[#171717] hover:bg-[#F8F6F2]">Cancel</Button>
+                                    <Button type="submit" disabled={registrationForm.processing} className="bg-[#171717] text-white hover:bg-[#333333]">{registrationForm.processing ? 'Creating account...' : 'Create account'}</Button>
+                                </DialogFooter>
+                            </form>
+                        </DialogContent>
+                    </Dialog>
                     {isMenuOpen && (
                         <div className="border-t border-[#EAE6DE] bg-white px-4 py-4 xl:hidden">
                             <form
@@ -577,7 +641,6 @@ export default function Product() {
                         </div>
                         {currentUser && (
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                                <RegisterEmployeeAccountForm />
                                 <Button
                                     onClick={openCreateProduct}
                                     className="h-11 bg-[#171717] text-white hover:bg-[#333333]"
