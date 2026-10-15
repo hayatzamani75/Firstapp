@@ -758,10 +758,10 @@ export default function Product() {
 
                     <div className="grid items-start gap-6 lg:grid-cols-[250px_minmax(0,1fr)]">
                         <aside
-                            className={`${isSidebarOpen ? 'block' : 'hidden'} space-y-6 rounded-xl border border-[#EAE6DE] bg-white p-4 shadow-[0_8px_24px_rgba(23,23,23,0.035)] lg:sticky lg:top-24 lg:block`}
+                            className={`${isSidebarOpen ? 'block' : 'hidden'} space-y-6 rounded-2xl border border-[#E3D5C1] bg-gradient-to-br from-[#F1E8DB] via-[#FAF7F1] to-[#F3EBDD] p-4 shadow-[0_12px_32px_rgba(95,72,43,0.10)] lg:sticky lg:top-24 lg:block`}
                         >
                             <div>
-                                <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.15em] text-slate-500">
+                                <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.15em] text-[#8F744F]">
                                     Shop
                                 </h2>
                                 <nav
@@ -798,7 +798,7 @@ export default function Product() {
                                                         category: '',
                                                     })
                                                 }
-                                                className={`flex w-full items-center justify-between rounded-lg border-l-2 px-3 py-2 text-left text-sm transition ${active ? 'border-[#B89B72] bg-[#F8F6F2] font-semibold text-[#171717]' : 'border-transparent text-slate-600 hover:bg-[#F8F6F2] hover:text-[#171717]'}`}
+                                                    className={`flex w-full items-center justify-between rounded-lg border-l-2 px-3 py-2 text-left text-sm transition ${active ? 'border-[#8F744F] bg-white/80 font-semibold text-[#5B4529] shadow-sm' : 'border-transparent text-slate-600 hover:bg-white/60 hover:text-[#5B4529]'}`}
                                             >
                                                 {collection.label}
                                                 {active && (
@@ -810,7 +810,7 @@ export default function Product() {
                                 </nav>
                             </div>
                             <div>
-                                <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.15em] text-slate-500">
+                                <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.15em] text-[#8F744F]">
                                     Categories
                                 </h2>
                                 <div className="space-y-1">
@@ -819,7 +819,7 @@ export default function Product() {
                                         onClick={() =>
                                             applyFilters({ category: '' })
                                         }
-                                        className={`block w-full rounded-lg border-l-2 px-3 py-2 text-left text-sm ${filters.category === '' ? 'border-[#B89B72] bg-[#F8F6F2] font-semibold text-[#171717]' : 'border-transparent text-slate-600 hover:bg-[#F8F6F2]'}`}
+                                        className={`block w-full rounded-lg border-l-2 px-3 py-2 text-left text-sm transition ${filters.category === '' ? 'border-[#8F744F] bg-white/80 font-semibold text-[#5B4529] shadow-sm' : 'border-transparent text-slate-600 hover:bg-white/60 hover:text-[#5B4529]'}`}
                                     >
                                         All categories
                                     </button>
@@ -833,7 +833,7 @@ export default function Product() {
                                                     collection: 'all',
                                                 })
                                             }
-                                            className={`block w-full rounded-lg border-l-2 px-3 py-2 text-left text-sm ${filters.category === category ? 'border-[#B89B72] bg-[#F8F6F2] font-semibold text-[#171717]' : 'border-transparent text-slate-600 hover:bg-[#F8F6F2]'}`}
+                                            className={`block w-full rounded-lg border-l-2 px-3 py-2 text-left text-sm transition ${filters.category === category ? 'border-[#8F744F] bg-white/80 font-semibold text-[#5B4529] shadow-sm' : 'border-transparent text-slate-600 hover:bg-white/60 hover:text-[#5B4529]'}`}
                                         >
                                             {category}
                                         </button>
@@ -847,7 +847,7 @@ export default function Product() {
                                 </div>
                             </div>
                             <div>
-                                <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.15em] text-slate-500">
+                                <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.15em] text-[#8F744F]">
                                     Quick Filters
                                 </h2>
                                 <form
@@ -855,7 +855,7 @@ export default function Product() {
                                     className="space-y-4"
                                 >
                                     <fieldset>
-                                        <legend className="mb-2 text-sm font-medium text-slate-700">
+                                        <legend className="mb-2 text-sm font-semibold text-[#5B4529]">
                                             Price Range
                                         </legend>
                                         <div className="grid grid-cols-2 gap-2">
@@ -871,7 +871,7 @@ export default function Product() {
                                                         event.target.value,
                                                     )
                                                 }
-                                                className="h-9"
+                                                className="h-9 border-[#E3D5C1] bg-white/80 placeholder:text-slate-400 focus-visible:ring-[#B89B72]"
                                             />
                                             <Input
                                                 aria-label="Maximum price"
@@ -885,7 +885,7 @@ export default function Product() {
                                                         event.target.value,
                                                     )
                                                 }
-                                                className="h-9"
+                                                className="h-9 border-[#E3D5C1] bg-white/80 placeholder:text-slate-400 focus-visible:ring-[#B89B72]"
                                             />
                                         </div>
                                     </fieldset>
@@ -901,7 +901,7 @@ export default function Product() {
                                                     size: event.target.value,
                                                 })
                                             }
-                                            className="mt-2 h-9 w-full rounded-md border border-[#EAE6DE] bg-white px-2 text-sm focus:border-[#B89B72] focus:outline-none disabled:bg-[#F8F6F2] disabled:text-slate-400"
+                                            className="mt-2 h-9 w-full rounded-md border border-[#E3D5C1] bg-white/80 px-2 text-sm focus:border-[#B89B72] focus:outline-none disabled:bg-[#F8F6F2] disabled:text-slate-400"
                                         >
                                             <option value="">All sizes</option>
                                             {filterOptions.sizes.map((size) => (
@@ -924,7 +924,7 @@ export default function Product() {
                                                     color: event.target.value,
                                                 })
                                             }
-                                            className="mt-2 h-9 w-full rounded-md border border-[#EAE6DE] bg-white px-2 text-sm focus:border-[#B89B72] focus:outline-none disabled:bg-[#F8F6F2] disabled:text-slate-400"
+                                            className="mt-2 h-9 w-full rounded-md border border-[#E3D5C1] bg-white/80 px-2 text-sm focus:border-[#B89B72] focus:outline-none disabled:bg-[#F8F6F2] disabled:text-slate-400"
                                         >
                                             <option value="">All colors</option>
                                             {filterOptions.colors.map(
@@ -952,7 +952,7 @@ export default function Product() {
                                                     brand: event.target.value,
                                                 })
                                             }
-                                            className="mt-2 h-9 w-full rounded-md border border-[#EAE6DE] bg-white px-2 text-sm focus:border-[#B89B72] focus:outline-none disabled:bg-[#F8F6F2] disabled:text-slate-400"
+                                            className="mt-2 h-9 w-full rounded-md border border-[#E3D5C1] bg-white/80 px-2 text-sm focus:border-[#B89B72] focus:outline-none disabled:bg-[#F8F6F2] disabled:text-slate-400"
                                         >
                                             <option value="">All brands</option>
                                             {filterOptions.brands.map(
@@ -977,7 +977,7 @@ export default function Product() {
                                                         .value as ProductPageProps['filters']['availability'],
                                                 })
                                             }
-                                            className="mt-2 h-9 w-full rounded-md border border-[#EAE6DE] bg-white px-2 text-sm focus:border-[#B89B72] focus:outline-none"
+                                            className="mt-2 h-9 w-full rounded-md border border-[#E3D5C1] bg-white/80 px-2 text-sm focus:border-[#B89B72] focus:outline-none"
                                         >
                                             <option value="">
                                                 Any availability
@@ -993,7 +993,7 @@ export default function Product() {
                                     <Button
                                         type="submit"
                                         variant="outline"
-                                        className="w-full border-[#EAE6DE] text-[#171717] hover:bg-[#F8F6F2]"
+                                        className="w-full border-[#CBB393] bg-white/70 text-[#5B4529] hover:bg-white"
                                     >
                                         Apply price
                                     </Button>
