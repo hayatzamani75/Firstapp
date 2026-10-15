@@ -88,6 +88,22 @@ export function CreateEmployeeForm() {
                         </div>
 
                         <div>
+                            <label htmlFor="employee-email" className="mb-2 block text-sm font-medium text-slate-800">
+                                Email
+                            </label>
+                            <Input id="employee-email" value={form.data.email} onChange={(event) => form.setData('email', event.target.value)} autoComplete="email" type="email" maxLength={255} required className="border-blue-200 bg-white focus-visible:ring-blue-500" />
+                            <span className="text-sm text-red-600">{form.errors.email}</span>
+                        </div>
+
+                        <div>
+                            <label htmlFor="employee-phone" className="mb-2 block text-sm font-medium text-slate-800">
+                                Phone
+                            </label>
+                            <Input id="employee-phone" value={form.data.phone} onChange={(event) => form.setData('phone', event.target.value)} autoComplete="tel" type="tel" inputMode="numeric" pattern="[0-9]{10,14}" maxLength={14} placeholder="10-14 digits" required className="border-blue-200 bg-white focus-visible:ring-blue-500" />
+                            <span className="text-sm text-red-600">{form.errors.phone}</span>
+                        </div>
+
+                        <div>
                             <label htmlFor="employee-password" className="mb-2 block text-sm font-medium text-slate-800">
                                 Password
                             </label>
@@ -101,22 +117,6 @@ export function CreateEmployeeForm() {
                             </label>
                             <Input id="employee-password-confirmation" type="password" value={form.data.password_confirmation} onChange={(event) => form.setData('password_confirmation', event.target.value)} autoComplete="new-password" required className="border-blue-200 bg-white focus-visible:ring-blue-500" />
                             <span className="text-sm text-red-600">{form.errors.password_confirmation}</span>
-                        </div>
-
-                        <div>
-                            <label htmlFor="employee-phone" className="mb-2 block text-sm font-medium text-slate-800">
-                                Phone number
-                            </label>
-                            <Input id="employee-phone" value={form.data.phone} onChange={(event) => form.setData('phone', event.target.value)} autoComplete="tel" type="tel" inputMode="numeric" pattern="[0-9]{10,14}" maxLength={14} placeholder="10-14 digits" required className="border-blue-200 bg-white focus-visible:ring-blue-500" />
-                            <span className="text-sm text-red-600">{form.errors.phone}</span>
-                        </div>
-
-                        <div>
-                            <label htmlFor="employee-email" className="mb-2 block text-sm font-medium text-slate-800">
-                                Email address
-                            </label>
-                            <Input id="employee-email" value={form.data.email} onChange={(event) => form.setData('email', event.target.value)} autoComplete="email" type="email" maxLength={255} required className="border-blue-200 bg-white focus-visible:ring-blue-500" />
-                            <span className="text-sm text-red-600">{form.errors.email}</span>
                         </div>
 
                         <div>

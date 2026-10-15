@@ -600,11 +600,6 @@ export default function Product() {
                                     {registrationForm.errors.phone && <p className="mt-1 text-sm text-red-600">{registrationForm.errors.phone}</p>}
                                 </div>
                                 <div>
-                                    <label htmlFor="customer-register-address" className="mb-1.5 block text-sm font-medium text-slate-700">Address (optional)</label>
-                                    <Textarea id="customer-register-address" value={registrationForm.data.address} onChange={(event) => registrationForm.setData('address', event.target.value)} autoComplete="street-address" maxLength={255} className="border-[#EAE6DE] focus-visible:ring-[#B89B72]" />
-                                    {registrationForm.errors.address && <p className="mt-1 text-sm text-red-600">{registrationForm.errors.address}</p>}
-                                </div>
-                                <div>
                                     <label htmlFor="customer-register-password" className="mb-1.5 block text-sm font-medium text-slate-700">Password</label>
                                     <Input id="customer-register-password" type="password" value={registrationForm.data.password} onChange={(event) => registrationForm.setData('password', event.target.value)} autoComplete="new-password" required className="border-[#EAE6DE] focus-visible:ring-[#B89B72]" />
                                     {registrationForm.errors.password && <p className="mt-1 text-sm text-red-600">{registrationForm.errors.password}</p>}
@@ -613,6 +608,11 @@ export default function Product() {
                                     <label htmlFor="customer-register-password-confirmation" className="mb-1.5 block text-sm font-medium text-slate-700">Confirm password</label>
                                     <Input id="customer-register-password-confirmation" type="password" value={registrationForm.data.password_confirmation} onChange={(event) => registrationForm.setData('password_confirmation', event.target.value)} autoComplete="new-password" required className="border-[#EAE6DE] focus-visible:ring-[#B89B72]" />
                                     {registrationForm.errors.password_confirmation && <p className="mt-1 text-sm text-red-600">{registrationForm.errors.password_confirmation}</p>}
+                                </div>
+                                <div>
+                                    <label htmlFor="customer-register-address" className="mb-1.5 block text-sm font-medium text-slate-700">Address (optional)</label>
+                                    <Textarea id="customer-register-address" value={registrationForm.data.address} onChange={(event) => registrationForm.setData('address', event.target.value)} autoComplete="street-address" maxLength={255} className="border-[#EAE6DE] focus-visible:ring-[#B89B72]" />
+                                    {registrationForm.errors.address && <p className="mt-1 text-sm text-red-600">{registrationForm.errors.address}</p>}
                                 </div>
                                 <DialogFooter className="gap-2 border-t border-[#EAE6DE] pt-4 sm:flex-row">
                                     <Button type="button" variant="outline" onClick={() => setIsRegisterOpen(false)} className="border-[#EAE6DE] text-[#171717] hover:bg-[#F8F6F2]">Cancel</Button>
