@@ -17,31 +17,28 @@ import * as React from 'react';
 export function CreateCustomerForm() {
     const [isOpen, setIsOpen] = React.useState(false);
     const form = useForm<{
-        full_name: string;
+        name: string;
+        lastname: string;
         email: string;
         phone: string;
+        password: string;
+        password_confirmation: string;
         address: string;
     }>({
-        full_name: '',
+        name: '',
+        lastname: '',
         email: '',
         phone: '',
+        password: '',
+        password_confirmation: '',
         address: '',
     });
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        const nameParts = form.data.full_name.trim().split(/\s+/).filter(Boolean);
-        form.clearErrors();
-        if (nameParts.length < 2) {
-            form.setError('full_name', 'Enter a first and last name.');
-            return;
-        }
-
         form.transform((data) => ({
-            name: nameParts[0],
-            lastname: nameParts.slice(1).join(' '),
-            email: data.email,
-            phone: data.phone,
+            ...data,
+            phone: data.phone || null,
             address: data.address || null,
         }));
         form.post(route('customer.store'), {
@@ -70,31 +67,37 @@ export function CreateCustomerForm() {
                             Register Customer
                         </DialogTitle>
                         <DialogDescription className="text-blue-100">
-                            Enter the customer details below.
+                            Enter the customer details and login credentials.
                         </DialogDescription>
                     </DialogHeader>
 
                     <form onSubmit={handleSubmit} method="POST" className="space-y-4 px-6 py-5">
                         <div>
-                            <label htmlFor="create-customer-full-name" className="mb-2 block text-sm font-medium text-slate-800">
-                                Full Name
+                            <label htmlFor="create-customer-name" className="mb-2 block text-sm font-medium text-slate-800">
+                                First name
                             </label>
                             <Input
-                                onChange={(e) => {
-                                    form.setData('full_name', e.target.value);
-                                    form.clearErrors('full_name');
-                                }}
-                                placeholder="Jane Smith"
-                                name="full_name"
-                                id="create-customer-full-name"
-                                autoComplete="name"
-                                value={form.data.full_name}
+                                onChange={(e) => form.setData('name', e.target.value)}
+                                placeholder="Jane"
+                                name="name"
+                                id="create-customer-name"
+                                autoComplete="given-name"
+                                value={form.data.name}
                                 type="text"
+                                required
                                 className="border-blue-200 bg-white focus-visible:ring-blue-500"
                             />
                             <span className="text-sm text-red-600 dark:text-red-400">
-                                {form.errors.full_name}
+                                {form.errors.name}
                             </span>
+                        </div>
+
+                        <div>
+                            <label htmlFor="create-customer-lastname" className="mb-2 block text-sm font-medium text-slate-800">
+                                Last name
+                            </label>
+                            <Input id="create-customer-lastname" name="lastname" value={form.data.lastname} onChange={(e) => form.setData('lastname', e.target.value)} autoComplete="family-name" required className="border-blue-200 bg-white focus-visible:ring-blue-500" />
+                            <span className="text-sm text-red-600 dark:text-red-400">{form.errors.lastname}</span>
                         </div>
 
                         <div>
@@ -109,6 +112,7 @@ export function CreateCustomerForm() {
                                 autoComplete="email"
                                 value={form.data.email}
                                 type="email"
+                                required
                                 className="border-blue-200 bg-white focus-visible:ring-blue-500"
                             />
                             <span className="text-sm text-red-600 dark:text-red-400">
@@ -118,7 +122,7 @@ export function CreateCustomerForm() {
 
                         <div>
                             <label htmlFor="create-customer-phone" className="mb-2 block text-sm font-medium text-slate-800">
-                                Phone Number
+                                Phone (optional)
                             </label>
                             <Input
                                 onChange={(e) => form.setData('phone', e.target.value)}
@@ -136,8 +140,24 @@ export function CreateCustomerForm() {
                         </div>
 
                         <div>
+                            <label htmlFor="create-customer-password" className="mb-2 block text-sm font-medium text-slate-800">
+                                Password
+                            </label>
+                            <Input id="create-customer-password" type="password" name="password" value={form.data.password} onChange={(e) => form.setData('password', e.target.value)} autoComplete="new-password" required className="border-blue-200 bg-white focus-visible:ring-blue-500" />
+                            <span className="text-sm text-red-600 dark:text-red-400">{form.errors.password}</span>
+                        </div>
+
+                        <div>
+                            <label htmlFor="create-customer-password-confirmation" className="mb-2 block text-sm font-medium text-slate-800">
+                                Confirm password
+                            </label>
+                            <Input id="create-customer-password-confirmation" type="password" name="password_confirmation" value={form.data.password_confirmation} onChange={(e) => form.setData('password_confirmation', e.target.value)} autoComplete="new-password" required className="border-blue-200 bg-white focus-visible:ring-blue-500" />
+                            <span className="text-sm text-red-600 dark:text-red-400">{form.errors.password_confirmation}</span>
+                        </div>
+
+                        <div>
                             <label htmlFor="create-customer-address" className="mb-2 block text-sm font-medium text-slate-800">
-                                Address
+                                Address (optional)
                             </label>
                             <Textarea
                                 onChange={(e) => form.setData('address', e.target.value)}
