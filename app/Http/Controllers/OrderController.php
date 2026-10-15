@@ -153,6 +153,25 @@ class OrderController extends Controller
         return back()->with('success', "Order #{$order->id} was cancelled and its stock was restored.");
     }
 
+    public function destroy(Order $order): RedirectResponse
+    {
+        DB::transaction(function () use ($order): void {
+            $lockedOrder = Order::query()->lockForUpdate()->with('items')->findOrFail($order->id);
+
+            if ($lockedOrder->status === Order::STATUS_PENDING) {
+                foreach ($lockedOrder->items as $item) {
+                    if ($item->product_id) {
+                        Product::query()->whereKey($item->product_id)->lockForUpdate()->increment('stock_quantity', $item->quantity);
+                    }
+                }
+            }
+
+            $lockedOrder->delete();
+        });
+
+        return back()->with('success', "Order #{$order->id} was deleted.");
+    }
+
     public function updateStatus(Request $request, Order $order): RedirectResponse
     {
         $data = $request->validate([

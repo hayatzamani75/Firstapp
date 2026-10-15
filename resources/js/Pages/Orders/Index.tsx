@@ -15,7 +15,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import OrderInvoice from '@/Pages/Orders/OrderInvoice';
 import { OrderPageProps, OrderRecord, PageProps } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
-import { ArrowLeft, Bell, ClipboardList, Printer } from 'lucide-react';
+import { ArrowLeft, Bell, ClipboardList, Printer, Trash2 } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 
 const money = (amount: string | number) =>
@@ -72,6 +72,7 @@ export default function Index() {
         PageProps<OrderPageProps & Record<string, unknown>>
     >().props;
     const [orderToCancel, setOrderToCancel] = useState<OrderRecord | null>(null);
+    const [orderToDelete, setOrderToDelete] = useState<OrderRecord | null>(null);
     const [orderToPrint, setOrderToPrint] = useState<OrderRecord | null>(null);
 
     function printOrder(order: OrderRecord) {
@@ -101,6 +102,19 @@ export default function Index() {
                 const message = response.props.flash.success;
                 if (message) MakeToastSuccess(message);
                 setOrderToCancel(null);
+            },
+        });
+    }
+
+    function deleteOrder() {
+        if (!orderToDelete) return;
+
+        router.delete(route('orders.destroy', orderToDelete.id), {
+            preserveScroll: true,
+            onSuccess: (response) => {
+                const message = response.props.flash.success;
+                if (message) MakeToastSuccess(message);
+                setOrderToDelete(null);
             },
         });
     }
@@ -181,6 +195,9 @@ export default function Index() {
                                                 </Button>}
                                                 {isEmployee && next && <Button size="sm" onClick={() => advanceOrder(order)} className="bg-[#171717] text-white hover:bg-[#333333]">Mark {statusLabel(next)}</Button>}
                                                 {isEmployee && order.status === 'pending' && <Button size="sm" variant="outline" onClick={() => setOrderToCancel(order)} className="border-red-200 text-red-700 hover:bg-red-50">Cancel order</Button>}
+                                                {isEmployee && <Button size="sm" variant="outline" onClick={() => setOrderToDelete(order)} className="border-red-200 bg-white text-red-700 hover:border-red-300 hover:bg-red-50">
+                                                    <Trash2 className="mr-2 h-4 w-4" /> Delete
+                                                </Button>}
                                             </div>
                                         </header>
                                         <div className="divide-y divide-[#F1EEE8] px-4 sm:px-5">
@@ -222,6 +239,24 @@ export default function Index() {
                         <AlertDialogFooter>
                             <AlertDialogCancel>Keep order</AlertDialogCancel>
                             <AlertDialogAction onClick={cancelOrder} className="bg-red-600 text-white hover:bg-red-700">Cancel order</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>}
+                {isEmployee && <AlertDialog open={orderToDelete !== null} onOpenChange={(open) => { if (!open) setOrderToDelete(null); }}>
+                    <AlertDialogContent className="w-[calc(100%-2rem)] rounded-xl border-red-100">
+                        <AlertDialogHeader>
+                            <AlertDialogTitle className="flex items-center gap-2 text-red-700">
+                                <Trash2 className="h-5 w-5" /> Delete order #{orderToDelete?.id}?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This permanently removes the order and its items. If it is still pending, the reserved stock will be restored. This action cannot be undone.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Keep order</AlertDialogCancel>
+                            <AlertDialogAction onClick={deleteOrder} className="bg-red-600 text-white hover:bg-red-700">
+                                Delete order
+                            </AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>}
