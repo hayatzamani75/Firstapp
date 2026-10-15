@@ -13,9 +13,10 @@ import { Button } from '@/Components/ui/button';
 import { Textarea } from '@/Components/ui/textarea';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import OrderInvoice from '@/Pages/Orders/OrderInvoice';
+import type { InvoiceContentSize } from '@/Pages/Orders/OrderInvoice';
 import { OrderPageProps, OrderRecord, PageProps } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
-import { ArrowLeft, Bell, ClipboardList, Printer, Trash2 } from 'lucide-react';
+import { ArrowLeft, Bell, ClipboardList, FileDown, Printer, Trash2 } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 
 const money = (amount: string | number) =>
@@ -74,10 +75,19 @@ export default function Index() {
     const [orderToCancel, setOrderToCancel] = useState<OrderRecord | null>(null);
     const [orderToDelete, setOrderToDelete] = useState<OrderRecord | null>(null);
     const [orderToPrint, setOrderToPrint] = useState<OrderRecord | null>(null);
+    const [printScale, setPrintScale] = useState(85);
+    const [printMargin, setPrintMargin] = useState(8);
+    const [contentSize, setContentSize] = useState<InvoiceContentSize>('compact');
 
-    function printOrder(order: OrderRecord) {
+    function printOrder(order: OrderRecord, output: 'pdf' | 'printer') {
         setOrderToPrint(order);
-        window.setTimeout(() => window.print(), 150);
+        window.setTimeout(() => {
+            const previousTitle = document.title;
+            document.title = output === 'pdf' ? `KIC-Invoice-${order.id}` : `KIC-Order-${order.id}`;
+            window.print();
+            document.title = previousTitle;
+            setOrderToPrint(null);
+        }, 150);
     }
 
     function advanceOrder(order: OrderRecord) {
@@ -122,7 +132,7 @@ export default function Index() {
     return (
         <AuthenticatedLayout hideNavigation hideAccountMenu>
             <Head title="Orders" />
-            <div className="min-h-screen bg-[#F8F6F2] text-[#171717]">
+            <div className="no-print min-h-screen bg-[#F8F6F2] text-[#171717]">
                 <header className="border-b border-[#EAE6DE] bg-white">
                     <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                         <Link href={route('product.view')} className="flex items-center gap-2 font-semibold">
@@ -166,6 +176,37 @@ export default function Index() {
                         <Link href={route('product.view')} className="hidden text-sm font-medium text-slate-600 hover:text-[#8F744F] sm:block">Continue shopping</Link>
                     </div>
 
+                    {isEmployee && (
+                        <section className="no-print mb-6 rounded-xl border border-[#EAE6DE] bg-white p-4 shadow-sm sm:p-5">
+                            <div className="mb-4">
+                                <h2 className="text-sm font-semibold text-slate-900">Invoice print settings</h2>
+                                <p className="mt-1 text-xs text-slate-500">A4 page · Adjust scale, margins, and content size to fit the invoice. Save as PDF opens the print dialog; select its PDF destination to save a file.</p>
+                            </div>
+                            <div className="grid gap-4 sm:grid-cols-3">
+                                <label className="text-xs font-medium text-slate-600">
+                                    Scale
+                                    <select value={printScale} onChange={(event) => setPrintScale(Number(event.target.value))} className="mt-1.5 h-10 w-full rounded-lg border border-[#EAE6DE] bg-white px-3 text-sm text-slate-900 focus:border-[#B89B72] focus:outline-none">
+                                        {[70, 75, 80, 85, 90, 95, 100].map((scale) => <option key={scale} value={scale}>{scale}%</option>)}
+                                    </select>
+                                </label>
+                                <label className="text-xs font-medium text-slate-600">
+                                    Page margins
+                                    <select value={printMargin} onChange={(event) => setPrintMargin(Number(event.target.value))} className="mt-1.5 h-10 w-full rounded-lg border border-[#EAE6DE] bg-white px-3 text-sm text-slate-900 focus:border-[#B89B72] focus:outline-none">
+                                        {[5, 8, 10, 12, 16].map((margin) => <option key={margin} value={margin}>{margin} mm</option>)}
+                                    </select>
+                                </label>
+                                <label className="text-xs font-medium text-slate-600">
+                                    Content size
+                                    <select value={contentSize} onChange={(event) => setContentSize(event.target.value as InvoiceContentSize)} className="mt-1.5 h-10 w-full rounded-lg border border-[#EAE6DE] bg-white px-3 text-sm text-slate-900 focus:border-[#B89B72] focus:outline-none">
+                                        <option value="compact">Compact · best fit</option>
+                                        <option value="standard">Standard</option>
+                                        <option value="large">Large</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </section>
+                    )}
+
                     {orders.data.length === 0 ? (
                         <section className="flex min-h-64 flex-col items-center justify-center rounded-xl border border-[#EAE6DE] bg-white p-8 text-center shadow-sm">
                             <ClipboardList className="h-8 w-8 text-[#B89B72]" />
@@ -190,9 +231,14 @@ export default function Index() {
                                             </div>
                                             <div className="flex flex-wrap items-center justify-between gap-2 sm:justify-end">
                                                 <span className="text-lg font-semibold">{money(order.total)}</span>
-                                                {isEmployee && <Button size="sm" variant="outline" onClick={() => printOrder(order)} className="border-slate-300">
-                                                    <Printer className="mr-2 h-4 w-4" /> Print Order
-                                                </Button>}
+                                                {isEmployee && <div className="flex flex-wrap gap-2">
+                                                    <Button size="sm" variant="outline" onClick={() => printOrder(order, 'pdf')} className="border-slate-300">
+                                                        <FileDown className="mr-2 h-4 w-4" /> Save as PDF
+                                                    </Button>
+                                                    <Button size="sm" variant="outline" onClick={() => printOrder(order, 'printer')} className="border-slate-300">
+                                                        <Printer className="mr-2 h-4 w-4" /> Print Directly
+                                                    </Button>
+                                                </div>}
                                                 {isEmployee && next && <Button size="sm" onClick={() => advanceOrder(order)} className="bg-[#171717] text-white hover:bg-[#333333]">Mark {statusLabel(next)}</Button>}
                                                 {isEmployee && order.status === 'pending' && <Button size="sm" variant="outline" onClick={() => setOrderToCancel(order)} className="border-red-200 text-red-700 hover:bg-red-50">Cancel order</Button>}
                                                 {isEmployee && <Button size="sm" variant="outline" onClick={() => setOrderToDelete(order)} className="border-red-200 bg-white text-red-700 hover:border-red-300 hover:bg-red-50">
@@ -261,14 +307,49 @@ export default function Index() {
                     </AlertDialogContent>
                 </AlertDialog>}
             </div>
-            {orderToPrint && <OrderInvoice order={orderToPrint} />}
+            {orderToPrint && <OrderInvoice order={orderToPrint} contentSize={contentSize} />}
             <style>{`
-                @page { size: A4; margin: 14mm; }
+                @page { size: A4; margin: ${printMargin}mm; }
                 @media print {
                     html, body { width: 100%; min-height: 0; margin: 0 !important; background: #fff !important; }
+                    .no-print { display: none !important; }
                     body * { visibility: hidden !important; }
                     .invoice-print-root, .invoice-print-root * { visibility: visible !important; }
-                    .invoice-print-root { display: block !important; position: absolute !important; inset: 0 auto auto 0 !important; width: 100% !important; max-width: none !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; color: #0f172a !important; }
+                    .invoice-print-root { display: block !important; position: absolute !important; inset: 0 auto auto 0 !important; width: 100% !important; max-width: none !important; margin: 0 !important; padding: 0 !important; zoom: ${printScale / 100}; box-shadow: none !important; color: #0f172a !important; }
+                    .invoice-print-root[data-content-size="compact"] { font-size: 9pt !important; }
+                    .invoice-print-root[data-content-size="standard"] { font-size: 10pt !important; }
+                    .invoice-print-root[data-content-size="large"] { font-size: 11pt !important; }
+                    .invoice-print-root[data-content-size="compact"] [class~="text-xs"] { font-size: 7pt !important; }
+                    .invoice-print-root[data-content-size="compact"] [class~="text-sm"] { font-size: 9pt !important; }
+                    .invoice-print-root[data-content-size="compact"] [class~="text-base"] { font-size: 10pt !important; }
+                    .invoice-print-root[data-content-size="compact"] [class~="text-xl"] { font-size: 14pt !important; }
+                    .invoice-print-root[data-content-size="compact"] [class~="text-3xl"] { font-size: 23pt !important; }
+                    .invoice-print-root[data-content-size="standard"] [class~="text-xs"] { font-size: 8pt !important; }
+                    .invoice-print-root[data-content-size="standard"] [class~="text-sm"] { font-size: 10pt !important; }
+                    .invoice-print-root[data-content-size="standard"] [class~="text-base"] { font-size: 11pt !important; }
+                    .invoice-print-root[data-content-size="standard"] [class~="text-xl"] { font-size: 16pt !important; }
+                    .invoice-print-root[data-content-size="standard"] [class~="text-3xl"] { font-size: 28pt !important; }
+                    .invoice-print-root[data-content-size="large"] [class~="text-xs"] { font-size: 9pt !important; }
+                    .invoice-print-root[data-content-size="large"] [class~="text-sm"] { font-size: 11pt !important; }
+                    .invoice-print-root[data-content-size="large"] [class~="text-base"] { font-size: 12pt !important; }
+                    .invoice-print-root[data-content-size="large"] [class~="text-xl"] { font-size: 18pt !important; }
+                    .invoice-print-root[data-content-size="large"] [class~="text-3xl"] { font-size: 33pt !important; }
+                    .invoice-print-root[data-content-size="compact"] * { line-height: 1.2 !important; }
+                    .invoice-print-root[data-content-size="standard"] * { line-height: 1.35 !important; }
+                    .invoice-print-root[data-content-size="large"] * { line-height: 1.5 !important; }
+                    .invoice-print-root[data-content-size="compact"] .invoice-header { padding-bottom: 10px !important; }
+                    .invoice-print-root[data-content-size="compact"] .invoice-customer { padding-top: 10px !important; padding-bottom: 10px !important; }
+                    .invoice-print-root[data-content-size="compact"] .invoice-items th,
+                    .invoice-print-root[data-content-size="compact"] .invoice-items td { padding-top: 4px !important; padding-bottom: 4px !important; }
+                    .invoice-print-root[data-content-size="compact"] .invoice-totals { margin-top: 12px !important; }
+                    .invoice-print-root[data-content-size="compact"] .invoice-footer { margin-top: 18px !important; }
+                    .invoice-print-root[data-content-size="large"] .invoice-items th,
+                    .invoice-print-root[data-content-size="large"] .invoice-items td { padding-top: 12px !important; padding-bottom: 12px !important; }
+                    .invoice-print-root .invoice-customer,
+                    .invoice-print-root .invoice-totals,
+                    .invoice-print-root .invoice-footer,
+                    .invoice-print-root tr { break-inside: avoid; page-break-inside: avoid; }
+                    .invoice-print-root thead { display: table-header-group; }
                 }
             `}</style>
         </AuthenticatedLayout>

@@ -3,7 +3,9 @@ import { OrderRecord } from '@/types';
 const money = (amount: number | string) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(amount));
 
-export default function OrderInvoice({ order }: { order: OrderRecord }) {
+export type InvoiceContentSize = 'compact' | 'standard' | 'large';
+
+export default function OrderInvoice({ order, contentSize }: { order: OrderRecord; contentSize: InvoiceContentSize }) {
     const customer = order.user?.customer_profile;
     const customerName = [customer?.name ?? order.user?.name, customer?.lastname ?? order.user?.lastname]
         .filter(Boolean)
@@ -16,8 +18,8 @@ export default function OrderInvoice({ order }: { order: OrderRecord }) {
     const discountCents = Math.max(0, subtotalCents - lineTotalCents);
 
     return (
-        <article id="order-invoice" className="invoice-print-root hidden bg-white text-slate-900">
-            <header className="flex items-start justify-between gap-8 border-b-2 border-slate-900 pb-6">
+        <article id="order-invoice" data-content-size={contentSize} className="invoice-print-root hidden bg-white text-slate-900">
+            <header className="invoice-header flex items-start justify-between gap-8 border-b-2 border-slate-900 pb-6">
                 <div>
                     <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-500">KIC Store</p>
                     <h1 className="mt-2 text-3xl font-bold tracking-tight">Invoice</h1>
@@ -31,7 +33,7 @@ export default function OrderInvoice({ order }: { order: OrderRecord }) {
                 </div>
             </header>
 
-            <section className="grid grid-cols-2 gap-8 border-b border-slate-200 py-6">
+            <section className="invoice-customer grid grid-cols-2 gap-8 border-b border-slate-200 py-6">
                 <div>
                     <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">Customer</h2>
                     <p className="mt-2 font-semibold">{customerName || 'Customer'}</p>
@@ -43,7 +45,7 @@ export default function OrderInvoice({ order }: { order: OrderRecord }) {
                 </div>
             </section>
 
-            <table className="w-full border-collapse text-sm">
+            <table className="invoice-items w-full border-collapse text-sm">
                 <thead>
                     <tr className="border-b border-slate-300 text-left text-xs uppercase tracking-wider text-slate-500">
                         <th className="py-3 pr-3 font-semibold">Product</th>
@@ -67,7 +69,7 @@ export default function OrderInvoice({ order }: { order: OrderRecord }) {
                 </tbody>
             </table>
 
-            <section className="ml-auto mt-6 w-full max-w-xs space-y-3 text-sm">
+            <section className="invoice-totals ml-auto mt-6 w-full max-w-xs space-y-3 text-sm">
                 <div className="flex justify-between gap-6 text-slate-600">
                     <span>Subtotal</span><span className="tabular-nums">{money(subtotalCents / 100)}</span>
                 </div>
@@ -79,7 +81,7 @@ export default function OrderInvoice({ order }: { order: OrderRecord }) {
                 </div>
             </section>
 
-            <footer className="mt-12 border-t border-slate-200 pt-4 text-center text-xs text-slate-500">
+            <footer className="invoice-footer mt-12 border-t border-slate-200 pt-4 text-center text-xs text-slate-500">
                 Thank you for your order.
             </footer>
         </article>
