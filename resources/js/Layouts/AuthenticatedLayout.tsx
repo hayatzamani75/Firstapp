@@ -55,57 +55,60 @@ export default function Authenticated({
         <div className="min-h-screen bg-slate-100">
             <div className="flex min-h-screen">
                 {!hideNavigation && (
-                <aside className="hidden w-72 shrink-0 border-r border-slate-700 bg-[#172554] shadow-2xl shadow-slate-900/20 lg:flex lg:flex-col">
-                    <div className="flex h-20 items-center border-b border-slate-700 px-5">
-                        <Link href="/" className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 shadow-lg shadow-indigo-500/30">
-                                <ApplicationLogo className="block h-6 w-auto fill-current text-white" />
-                            </div>
-                            <div className="text-left">
-                                <div className="text-sm font-semibold tracking-wide text-white">
-                                    CRM
+                    <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 overflow-hidden border-r border-slate-700 bg-[#172554] shadow-2xl shadow-slate-900/20 lg:flex lg:flex-col">
+                        <div className="flex h-20 shrink-0 items-center border-b border-slate-700 px-5">
+                            <Link href="/" className="flex items-center gap-3">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 shadow-lg shadow-indigo-500/30">
+                                    <ApplicationLogo className="block h-6 w-auto fill-current text-white" />
                                 </div>
-                                <div className="text-[10px] uppercase tracking-[0.22em] text-slate-400">
-                                    Workspace
+                                <div className="text-left">
+                                    <div className="text-sm font-semibold tracking-wide text-white">
+                                        CRM
+                                    </div>
+                                    <div className="text-[10px] uppercase tracking-[0.22em] text-slate-400">
+                                        Workspace
+                                    </div>
                                 </div>
-                            </div>
-                        </Link>
-                    </div>
+                            </Link>
+                        </div>
 
-                    <nav className="flex-1 space-y-2 p-4">
-                        {sidebarItems.map(({ label, href, icon: Icon }) => {
-                            const isActive = route().current(href);
+                        <nav
+                            aria-label="Sidebar navigation"
+                            className="min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain p-4"
+                        >
+                            {sidebarItems.map(({ label, href, icon: Icon }) => {
+                                const isActive = route().current(href);
 
-                            return (
-                                <Link
-                                    key={href}
-                                    href={route(href)}
-                                    className={cn(
-                                        'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
-                                        isActive
-                                            ? 'bg-[#2563EB] text-[#FFFFFF] shadow-lg shadow-blue-500/25'
-                                            : 'text-[#FFFFFF] hover:bg-slate-800/80 hover:text-white',
-                                    )}
-                                >
-                                    <span
+                                return (
+                                    <Link
+                                        key={href}
+                                        href={route(href)}
                                         className={cn(
-                                            'flex h-8 w-8 items-center justify-center rounded-lg border',
+                                            'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
                                             isActive
-                                                ? 'border-white/20 bg-white/10 text-white'
-                                                : 'border-slate-700 bg-slate-800 text-[#FFFFFF] group-hover:border-slate-600 group-hover:bg-slate-700',
+                                                ? 'bg-[#2563EB] text-[#FFFFFF] shadow-lg shadow-blue-500/25'
+                                                : 'text-[#FFFFFF] hover:bg-slate-800/80 hover:text-white',
                                         )}
                                     >
-                                        <Icon className="h-4 w-4" />
-                                    </span>
-                                    <span>{label}</span>
-                                </Link>
-                            );
-                        })}
-                    </nav>
-                </aside>
+                                        <span
+                                            className={cn(
+                                                'flex h-8 w-8 items-center justify-center rounded-lg border',
+                                                isActive
+                                                    ? 'border-white/20 bg-white/10 text-white'
+                                                    : 'border-slate-700 bg-slate-800 text-[#FFFFFF] group-hover:border-slate-600 group-hover:bg-slate-700',
+                                            )}
+                                        >
+                                            <Icon className="h-4 w-4" />
+                                        </span>
+                                        <span>{label}</span>
+                                    </Link>
+                                );
+                            })}
+                        </nav>
+                    </aside>
                 )}
 
-                <div className="flex min-w-0 flex-1 flex-col">
+                <div className={cn('flex min-w-0 flex-1 flex-col', !hideNavigation && 'lg:pl-72')}>
                     {!hideNavigation && (
                     <nav className="border-b border-slate-200 bg-white/90 backdrop-blur lg:hidden">
                         <div className="flex h-16 items-center justify-between px-4">
@@ -134,7 +137,7 @@ export default function Authenticated({
                         <div
                             className={
                                 (showingNavigationDropdown ? 'block' : 'hidden') +
-                                ' border-t border-slate-200 bg-slate-50 px-2 pb-3 pt-2'
+                                ' max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-slate-200 bg-slate-50 px-2 pb-3 pt-2'
                             }
                         >
                             <div className="space-y-1">
