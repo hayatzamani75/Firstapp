@@ -31,7 +31,7 @@ function statusLabel(status: OrderRecord['status']): string {
 }
 
 export default function Index() {
-    const { orders, isEmployee } = usePage<
+    const { orders } = usePage<
         PageProps<OrderPageProps & Record<string, unknown>>
     >().props;
     const [orderToCancel, setOrderToCancel] = useState<OrderRecord | null>(null);
@@ -71,7 +71,7 @@ export default function Index() {
                         <Link href={route('product.view')} className="flex items-center gap-2 font-semibold">
                             <ArrowLeft className="h-4 w-4" /> KIC Store
                         </Link>
-                        <span className="text-sm text-slate-500">{isEmployee ? 'Order management' : 'Your account'}</span>
+                        <span className="text-sm text-slate-500">Your orders</span>
                     </div>
                 </header>
 
@@ -79,7 +79,7 @@ export default function Index() {
                     <div className="mb-7 flex items-end justify-between gap-4">
                         <div>
                             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8F744F]">KIC Store</p>
-                            <h1 className="mt-1 text-3xl font-semibold">{isEmployee ? 'Customer Orders' : 'My Orders'}</h1>
+                            <h1 className="mt-1 text-3xl font-semibold">My Orders</h1>
                         </div>
                         <Link href={route('product.view')} className="hidden text-sm font-medium text-slate-600 hover:text-[#8F744F] sm:block">Continue shopping</Link>
                     </div>
@@ -104,12 +104,11 @@ export default function Index() {
                                                     <span className="rounded-full bg-[#F8F6F2] px-2.5 py-1 text-xs font-medium text-[#8F744F]">{statusLabel(order.status)}</span>
                                                 </div>
                                                 <p className="mt-1 text-xs text-slate-500">{new Date(order.created_at).toLocaleString()}</p>
-                                                {isEmployee && order.user && <p className="mt-1 text-xs text-slate-500">{order.user.name} · {order.user.email}</p>}
                                             </div>
                                             <div className="flex items-center justify-between gap-3 sm:justify-end">
                                                 <span className="text-lg font-semibold">{money(order.total)}</span>
-                                                {isEmployee && next && <Button size="sm" onClick={() => advanceOrder(order)} className="bg-[#171717] text-white hover:bg-[#333333]">Mark {statusLabel(next)}</Button>}
-                                                {!isEmployee && order.status === 'pending' && <Button size="sm" variant="outline" onClick={() => setOrderToCancel(order)} className="border-red-200 text-red-700 hover:bg-red-50">Cancel order</Button>}
+                                                {next && <Button size="sm" onClick={() => advanceOrder(order)} className="bg-[#171717] text-white hover:bg-[#333333]">Mark {statusLabel(next)}</Button>}
+                                                {order.status === 'pending' && <Button size="sm" variant="outline" onClick={() => setOrderToCancel(order)} className="border-red-200 text-red-700 hover:bg-red-50">Cancel order</Button>}
                                             </div>
                                         </header>
                                         <div className="divide-y divide-[#F1EEE8] px-4 sm:px-5">

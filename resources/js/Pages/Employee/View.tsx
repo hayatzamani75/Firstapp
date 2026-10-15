@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Input } from '@/Components/ui/input';
-import { Employee, PageProps, User } from '@/types';
+import { Employee, PageProps } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -27,8 +27,6 @@ type ViewPageProps = PageProps<{
 
 export default function View() {
     const { employees, auth } = usePage<ViewPageProps>().props;
-    const currentUser = auth.user as User | null;
-    const isEmployee = currentUser?.role === 'employee';
     const [query, setQuery] = useState('');
 
     const filteredEmployees = useMemo(() => {
@@ -59,7 +57,7 @@ export default function View() {
                         <CreateEmployeeForm />
                     </div>
 
-                    {isEmployee && (
+                    {auth.user && (
                         <section className="mb-6 overflow-hidden rounded-xl border border-blue-200 bg-white shadow-sm">
                             <header className="flex flex-col gap-3 border-b border-blue-100 bg-blue-700 px-5 py-4 text-white sm:flex-row sm:items-center sm:justify-between">
                                 <div>

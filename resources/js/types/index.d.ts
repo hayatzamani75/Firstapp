@@ -188,5 +188,4 @@ export interface OrderPageProps {
         total: number;
         links: { url: string | null; label: string; active: boolean }[];
     };
-    isEmployee: boolean;
 }

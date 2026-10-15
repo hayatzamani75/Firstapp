@@ -17,15 +17,10 @@ class OrderController extends Controller
     public function index(Request $request): Response
     {
         $user = $request->user();
-        $query = Order::query()->with('items')->latest();
-
-        if (!$user->isEmployee()) {
-            $query->where('user_id', $user->id);
-        }
+        $query = Order::query()->with('items')->where('user_id', $user->id)->latest();
 
         return Inertia::render('Orders/Index', [
             'orders' => $query->paginate(12)->withQueryString(),
-            'isEmployee' => $user->isEmployee(),
         ]);
     }
 
@@ -112,6 +107,8 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request, Order $order): RedirectResponse
     {
+        abort_unless($order->user_id === $request->user()->id, 404);
+
         $data = $request->validate([
             'status' => ['required', 'string', Rule::in([
                 Order::STATUS_PROCESSING,

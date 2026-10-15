@@ -28,13 +28,13 @@ Route::patch('/product/cart/items', [ProductController::class, 'updateCart'])->n
 Route::delete('/product/cart/items', [ProductController::class, 'removeFromCart'])->name('product.cart.remove');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::post('/product', [ProductController::class, 'store'])->middleware('can:manage-products')->name('product.store');
-    Route::put('/product/{product}', [ProductController::class, 'update'])->middleware('can:manage-products')->name('product.update');
-    Route::delete('/product/{product}', [ProductController::class, 'destroy'])->middleware('can:manage-products')->name('product.destroy');
-    Route::post('/checkout', [OrderController::class, 'checkout'])->middleware('can:place-orders')->name('checkout.store');
+    Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+    Route::put('/product/{product}', [ProductController::class, 'update'])->name('product.update');
+    Route::delete('/product/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
+    Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout.store');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-    Route::patch('/orders/{order}/cancel', [OrderController::class, 'cancel'])->middleware('can:place-orders')->name('orders.cancel');
-    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->middleware('can:manage-orders')->name('orders.status');
+    Route::patch('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
 });
 
 Route::get('/education', function () {

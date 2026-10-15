@@ -10,7 +10,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/employee/{employee}', [EmployeeController::class, 'update'])->name('employee.update');
     Route::delete('/employee/{employee}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
 
-    Route::post('/employee/accounts', [EmployeeAccountController::class, 'store'])
-        ->middleware('can:manage-employees')
-        ->name('employee.account.store');
+    Route::post('/employee/accounts', [EmployeeAccountController::class, 'store'])->name('employee.account.store');
 });

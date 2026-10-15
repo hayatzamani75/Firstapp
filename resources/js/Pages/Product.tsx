@@ -139,8 +139,6 @@ export default function Product() {
         cartTotal,
     } = usePage<ProductInertiaProps>().props;
     const currentUser = auth.user as User | null;
-    const isEmployee = currentUser?.role === 'employee';
-    const isCustomer = currentUser?.role === 'customer';
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -338,8 +336,6 @@ export default function Product() {
             router.visit(route('login'));
             return;
         }
-
-        if (!isCustomer) return;
 
         setCartErrors({});
         router.post(route('checkout.store'), {}, {
@@ -579,7 +575,7 @@ export default function Product() {
                                 favorite.
                             </p>
                         </div>
-                        {isEmployee && (
+                        {currentUser && (
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                                 <RegisterEmployeeAccountForm />
                                 <Button
@@ -1037,7 +1033,7 @@ export default function Product() {
                                                             Add
                                                         </Button>
                                                     </div>
-                                                    {isEmployee && (
+                                                    {currentUser && (
                                                         <div className="mt-2 grid grid-cols-2 gap-2">
                                                             <Button
                                                                 type="button"
@@ -1089,7 +1085,7 @@ export default function Product() {
                                         catalog, or adjust your search and
                                         filters.
                                     </p>
-                                    {isEmployee && (
+                                    {currentUser && (
                                         <Button
                                             onClick={openCreateProduct}
                                             className="mt-5 bg-[#171717] hover:bg-[#333333]"
@@ -1795,7 +1791,7 @@ export default function Product() {
                                         <span className="font-semibold text-slate-700">Total</span>
                                         <span className="text-lg font-bold text-slate-900">{money(cartTotal)}</span>
                                     </div>
-                                    {isCustomer ? (
+                                    {currentUser ? (
                                         <Button
                                             type="button"
                                             onClick={placeOrder}
@@ -1803,17 +1799,13 @@ export default function Product() {
                                         >
                                             Place Order
                                         </Button>
-                                    ) : !currentUser ? (
+                                    ) : (
                                         <Link
                                             href={route('login')}
                                             className="flex h-11 w-full items-center justify-center rounded-lg bg-[#171717] text-sm font-semibold text-white transition hover:bg-[#333333]"
                                         >
                                             Log in to place order
                                         </Link>
-                                    ) : (
-                                        <p className="text-center text-xs text-slate-500">
-                                            Employee accounts cannot place customer orders.
-                                        </p>
                                     )}
                                 </div>
                             )}

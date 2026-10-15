@@ -10,7 +10,7 @@ class StoreEmployeeRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->isEmployee() ?? false;
+        return $this->user() !== null;
     }
 
     public function rules(): array
