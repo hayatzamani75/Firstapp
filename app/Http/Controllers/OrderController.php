@@ -19,7 +19,7 @@ class OrderController extends Controller
     public function index(Request $request): Response
     {
         $isEmployee = $request->user()->isEmployee();
-        $query = Order::query()->with(['items', 'user'])->latest();
+        $query = Order::query()->with(['items', 'user.customerProfile'])->latest();
 
         if (!$isEmployee) {
             $query->where('user_id', $request->user()->id);
@@ -86,7 +86,8 @@ class OrderController extends Controller
 
                 $this->validateOptions($product, $item);
                 $unitCents = (int) round($product->effective_price * 100);
-                $products[] = [$product, $item, $quantity, $unitCents];
+                $originalUnitCents = (int) round((float) $product->price * 100);
+                $products[] = [$product, $item, $quantity, $unitCents, $originalUnitCents];
                 $totalCents += $unitCents * $quantity;
             }
 
@@ -96,7 +97,7 @@ class OrderController extends Controller
                 'total' => $this->formatCents($totalCents),
             ]);
 
-            foreach ($products as [$product, $item, $quantity, $unitCents]) {
+            foreach ($products as [$product, $item, $quantity, $unitCents, $originalUnitCents]) {
                 $product->decrement('stock_quantity', $quantity);
                 $order->items()->create([
                     'product_id' => $product->id,
@@ -106,6 +107,7 @@ class OrderController extends Controller
                     'size' => $item['size'] ?? null,
                     'color' => $item['color'] ?? null,
                     'unit_price' => $this->formatCents($unitCents),
+                    'original_unit_price' => $this->formatCents($originalUnitCents),
                     'quantity' => $quantity,
                     'line_total' => $this->formatCents($unitCents * $quantity),
                 ]);

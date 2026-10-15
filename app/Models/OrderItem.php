@@ -16,6 +16,7 @@ class OrderItem extends Model
         'size',
         'color',
         'unit_price',
+        'original_unit_price',
         'quantity',
         'line_total',
     ];
@@ -24,6 +25,7 @@ class OrderItem extends Model
     {
         return [
             'unit_price' => 'decimal:2',
+            'original_unit_price' => 'decimal:2',
             'line_total' => 'decimal:2',
             'quantity' => 'integer',
         ];

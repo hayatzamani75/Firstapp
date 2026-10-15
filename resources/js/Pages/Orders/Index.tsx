@@ -12,9 +12,10 @@ import {
 import { Button } from '@/Components/ui/button';
 import { Textarea } from '@/Components/ui/textarea';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import OrderInvoice from '@/Pages/Orders/OrderInvoice';
 import { OrderPageProps, OrderRecord, PageProps } from '@/types';
 import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
-import { ArrowLeft, Bell, ClipboardList } from 'lucide-react';
+import { ArrowLeft, Bell, ClipboardList, Printer } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 
 const money = (amount: string | number) =>
@@ -71,6 +72,12 @@ export default function Index() {
         PageProps<OrderPageProps & Record<string, unknown>>
     >().props;
     const [orderToCancel, setOrderToCancel] = useState<OrderRecord | null>(null);
+    const [orderToPrint, setOrderToPrint] = useState<OrderRecord | null>(null);
+
+    function printOrder(order: OrderRecord) {
+        setOrderToPrint(order);
+        window.setTimeout(() => window.print(), 150);
+    }
 
     function advanceOrder(order: OrderRecord) {
         const status = nextStatus(order.status);
@@ -167,8 +174,11 @@ export default function Index() {
                                                 <p className="mt-1 text-xs text-slate-500">{new Date(order.created_at).toLocaleString()}</p>
                                                 {order.user && <p className="mt-1 text-xs text-slate-500">{order.user.name} · {order.user.email}</p>}
                                             </div>
-                                            <div className="flex items-center justify-between gap-3 sm:justify-end">
+                                            <div className="flex flex-wrap items-center justify-between gap-2 sm:justify-end">
                                                 <span className="text-lg font-semibold">{money(order.total)}</span>
+                                                {isEmployee && <Button size="sm" variant="outline" onClick={() => printOrder(order)} className="border-slate-300">
+                                                    <Printer className="mr-2 h-4 w-4" /> Print Order
+                                                </Button>}
                                                 {isEmployee && next && <Button size="sm" onClick={() => advanceOrder(order)} className="bg-[#171717] text-white hover:bg-[#333333]">Mark {statusLabel(next)}</Button>}
                                                 {isEmployee && order.status === 'pending' && <Button size="sm" variant="outline" onClick={() => setOrderToCancel(order)} className="border-red-200 text-red-700 hover:bg-red-50">Cancel order</Button>}
                                             </div>
@@ -216,6 +226,16 @@ export default function Index() {
                     </AlertDialogContent>
                 </AlertDialog>}
             </div>
+            {orderToPrint && <OrderInvoice order={orderToPrint} />}
+            <style>{`
+                @page { size: A4; margin: 14mm; }
+                @media print {
+                    html, body { width: 100%; min-height: 0; margin: 0 !important; background: #fff !important; }
+                    body * { visibility: hidden !important; }
+                    .invoice-print-root, .invoice-print-root * { visibility: visible !important; }
+                    .invoice-print-root { display: block !important; position: absolute !important; inset: 0 auto auto 0 !important; width: 100% !important; max-width: none !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; color: #0f172a !important; }
+                }
+            `}</style>
         </AuthenticatedLayout>
     );
 }

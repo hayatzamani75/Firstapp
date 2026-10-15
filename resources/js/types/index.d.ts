@@ -6,6 +6,7 @@ export interface User {
     lastname: string | null;
     username: string | null;
     email: string;
+    phone?: string | null;
     role: 'employee' | 'manager' | 'customer';
     email_verified_at?: string;
 }
@@ -167,6 +168,7 @@ export interface OrderItemRecord {
     size: string | null;
     color: string | null;
     unit_price: string;
+    original_unit_price: string | null;
     quantity: number;
     line_total: string;
 }
@@ -178,7 +180,16 @@ export interface OrderRecord {
     total: string;
     created_at: string;
     employee_reply: string | null;
-    user?: Pick<User, 'id' | 'name' | 'email'>;
+    user?: Pick<User, 'id' | 'name' | 'email'> & {
+        lastname: string | null;
+        customer_profile?: {
+            name: string;
+            lastname: string | null;
+            email: string;
+            phone: string | null;
+            address: string | null;
+        } | null;
+    };
     items: OrderItemRecord[];
 }
 
