@@ -16,8 +16,7 @@ class OrderController extends Controller
 {
     public function index(Request $request): Response
     {
-        $user = $request->user();
-        $query = Order::query()->with('items')->where('user_id', $user->id)->latest();
+        $query = Order::query()->with(['items', 'user'])->latest();
 
         return Inertia::render('Orders/Index', [
             'orders' => $query->paginate(12)->withQueryString(),
@@ -79,13 +78,11 @@ class OrderController extends Controller
 
         $request->session()->forget('product_cart');
 
-        return to_route('orders.index')->with('success', "Order #{$order->id} was placed. Payment is not configured for this store.");
+        return to_route('product.view')->with('success', "Order #{$order->id} was placed. Payment is not configured for this store.");
     }
 
     public function cancel(Request $request, Order $order): RedirectResponse
     {
-        abort_unless($order->user_id === $request->user()->id, 404);
-
         DB::transaction(function () use ($order): void {
             $lockedOrder = Order::query()->lockForUpdate()->with('items')->findOrFail($order->id);
 
@@ -107,8 +104,6 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request, Order $order): RedirectResponse
     {
-        abort_unless($order->user_id === $request->user()->id, 404);
-
         $data = $request->validate([
             'status' => ['required', 'string', Rule::in([
                 Order::STATUS_PROCESSING,

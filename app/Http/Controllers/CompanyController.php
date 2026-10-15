@@ -13,7 +13,7 @@ class CompanyController extends Controller
 {
     public function view(): Response
     {
-        $companies = Company::where('user_id', Auth::id())->latest()->paginate(12);
+        $companies = Company::query()->latest()->paginate(12);
 
         return Inertia::render('Company/View', [
             'companies' => $companies,
@@ -34,10 +34,6 @@ class CompanyController extends Controller
 
     public function update(UpdateCompanyRequest $request, Company $company)
     {
-        if ($company->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $company->update($request->validated());
 
         return to_route('company.view')->with('success', 'Company updated successfully!');
@@ -45,10 +41,6 @@ class CompanyController extends Controller
 
     public function destroy(Company $company)
     {
-        if ($company->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $company->delete();
 
         return to_route('company.view')->with('success', 'Company deleted successfully!');

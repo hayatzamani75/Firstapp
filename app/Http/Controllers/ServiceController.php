@@ -13,7 +13,7 @@ class ServiceController extends Controller
 {
     public function view(): Response
     {
-        $services = Service::where('user_id', Auth::id())->latest()->paginate(12);
+        $services = Service::query()->latest()->paginate(12);
 
         return Inertia::render('Service/View', [
             'services' => $services,
@@ -32,10 +32,6 @@ class ServiceController extends Controller
 
     public function update(UpdateServiceRequest $request, Service $service)
     {
-        if ($service->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $service->update($request->validated());
 
         return to_route('service.view')->with('success', 'Service updated successfully!');
@@ -43,10 +39,6 @@ class ServiceController extends Controller
 
     public function destroy(Service $service)
     {
-        if ($service->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $service->delete();
 
         return to_route('service.view')->with('success', 'Service deleted successfully!');

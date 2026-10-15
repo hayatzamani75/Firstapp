@@ -3,7 +3,7 @@
 use App\Http\Controllers\CompanyController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'can:employee-only'])->group(function () {
     Route::get('/company', [CompanyController::class, 'view'])->name('company.view');
     Route::post('/company', [CompanyController::class, 'store'])->name('company.store');
     Route::put('/company/{company}', [CompanyController::class, 'update'])->name('company.update');

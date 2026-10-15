@@ -138,6 +138,7 @@ export default function Product() {
         cartTotal,
     } = usePage<ProductInertiaProps>().props;
     const currentUser = auth.user as User | null;
+    const isEmployee = currentUser?.role === 'employee';
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
@@ -480,30 +481,30 @@ export default function Product() {
                         </form>
                         {currentUser ? (
                             <div className="flex shrink-0 items-center gap-2">
-                                <Link
+                                {isEmployee && <Link
                                     href={route('orders.index')}
                                     aria-label="My orders"
                                     title="My orders"
                                     className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#EAE6DE] text-[#171717] transition hover:border-[#B89B72]/50 hover:bg-[#F8F6F2] hover:text-[#8F744F]"
                                 >
                                     <ClipboardList className="h-5 w-5" />
-                                </Link>
-                                <Link
+                                </Link>}
+                                {isEmployee && <Link
                                     href={route('profile.edit')}
                                     aria-label="Account"
                                     title={currentUser.name}
                                     className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#EAE6DE] text-[#171717] transition hover:border-[#B89B72]/50 hover:bg-[#F8F6F2] hover:text-[#8F744F]"
                                 >
                                     <UserRound className="h-5 w-5" />
-                                </Link>
-                                <Button
+                                </Link>}
+                                {isEmployee && <Button
                                     type="button"
                                     variant="outline"
                                     onClick={() => setIsRegisterOpen(true)}
                                     className="hidden h-10 rounded-lg border border-[#EAE6DE] bg-white px-3 text-sm font-medium text-[#171717] shadow-none transition hover:bg-[#F8F6F2] sm:flex"
                                 >
                                     Register
-                                </Button>
+                                </Button>}
                                 <Link
                                     href={route('logout')}
                                     method="post"
@@ -649,6 +650,16 @@ export default function Product() {
                             >
                                 {renderNavigation(true)}
                                 {currentUser && (
+                                    <Link
+                                        href={route('logout')}
+                                        method="post"
+                                        as="button"
+                                        className="block rounded-md px-3 py-2 text-left text-sm font-medium text-slate-700 transition hover:text-[#8F744F]"
+                                    >
+                                        Log out
+                                    </Link>
+                                )}
+                                {isEmployee && (
                                     <button
                                         type="button"
                                         onClick={() => {
@@ -679,7 +690,7 @@ export default function Product() {
                                 favorite.
                             </p>
                         </div>
-                        {currentUser && (
+                        {isEmployee && (
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                                 <Button
                                     onClick={openCreateProduct}
@@ -1136,7 +1147,7 @@ export default function Product() {
                                                             Add
                                                         </Button>
                                                     </div>
-                                                    {currentUser && (
+                                                    {isEmployee && (
                                                         <div className="mt-2 grid grid-cols-2 gap-2">
                                                             <Button
                                                                 type="button"
@@ -1188,7 +1199,7 @@ export default function Product() {
                                         catalog, or adjust your search and
                                         filters.
                                     </p>
-                                    {currentUser && (
+                                    {isEmployee && (
                                         <Button
                                             onClick={openCreateProduct}
                                             className="mt-5 bg-[#171717] hover:bg-[#333333]"

@@ -16,7 +16,7 @@ class EmployeeController extends Controller
     public function view(): Response
     {
         return Inertia::render('Employee/View', [
-            'employees' => Employee::where('user_id', Auth::id())
+            'employees' => Employee::query()
                 ->orderByDesc('id')
                 ->paginate(2),
         ]);
@@ -53,7 +53,6 @@ class EmployeeController extends Controller
 
     public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
-        $this->authorizeEmployee($employee);
         $employee->update($request->validated());
 
         return to_route('employee.view')->with('success', 'Employee updated successfully!');
@@ -61,14 +60,9 @@ class EmployeeController extends Controller
 
     public function destroy(Employee $employee)
     {
-        $this->authorizeEmployee($employee);
         $employee->delete();
 
         return to_route('employee.view')->with('success', 'Employee deleted successfully!');
     }
 
-    private function authorizeEmployee(Employee $employee): void
-    {
-        abort_unless($employee->user_id === Auth::id(), 403, 'Unauthorized action.');
-    }
 }

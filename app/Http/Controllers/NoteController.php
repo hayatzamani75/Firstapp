@@ -19,7 +19,7 @@ class NoteController extends Controller
      */
     public function view(): Response
     {
-        $notes = Note::where('user_id', Auth::id())->latest()->paginate(12);
+        $notes = Note::query()->latest()->paginate(12);
         return Inertia::render('Note/View', [
             'notes' => $notes,
         ]);
@@ -57,8 +57,6 @@ class NoteController extends Controller
      */
     public function update(UpdateNoteRequest $request, Note $note)
     {
-        if ($note->user_id !== Auth::id()) abort(403, 'Unauthorized action.');
-
         $note->update($request->validated());
         return to_route('note.view')->with('success', 'Note updated successfully!');
     }
@@ -74,8 +72,6 @@ class NoteController extends Controller
     public function destroy(Note $note)
     {
         Log::info('User registered', ['note' => $note]);
-        if ($note->user_id !== Auth::id()) abort(403, 'Unauthorized action.');
-
         $note->delete();
         return to_route('note.view')->with('success', 'Note deleted successfully!');
     }

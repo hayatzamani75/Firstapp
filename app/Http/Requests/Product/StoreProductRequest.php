@@ -9,7 +9,7 @@ class StoreProductRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user() !== null;
+        return $this->user()?->isEmployee() ?? false;
     }
 
     public function rules(): array

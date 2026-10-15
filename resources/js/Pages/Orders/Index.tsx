@@ -71,7 +71,7 @@ export default function Index() {
                         <Link href={route('product.view')} className="flex items-center gap-2 font-semibold">
                             <ArrowLeft className="h-4 w-4" /> KIC Store
                         </Link>
-                        <span className="text-sm text-slate-500">Your orders</span>
+                        <span className="text-sm text-slate-500">Order management</span>
                     </div>
                 </header>
 
@@ -79,7 +79,7 @@ export default function Index() {
                     <div className="mb-7 flex items-end justify-between gap-4">
                         <div>
                             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8F744F]">KIC Store</p>
-                            <h1 className="mt-1 text-3xl font-semibold">My Orders</h1>
+                            <h1 className="mt-1 text-3xl font-semibold">Customer Orders</h1>
                         </div>
                         <Link href={route('product.view')} className="hidden text-sm font-medium text-slate-600 hover:text-[#8F744F] sm:block">Continue shopping</Link>
                     </div>
@@ -104,6 +104,7 @@ export default function Index() {
                                                     <span className="rounded-full bg-[#F8F6F2] px-2.5 py-1 text-xs font-medium text-[#8F744F]">{statusLabel(order.status)}</span>
                                                 </div>
                                                 <p className="mt-1 text-xs text-slate-500">{new Date(order.created_at).toLocaleString()}</p>
+                                                {order.user && <p className="mt-1 text-xs text-slate-500">{order.user.name} · {order.user.email}</p>}
                                             </div>
                                             <div className="flex items-center justify-between gap-3 sm:justify-end">
                                                 <span className="text-lg font-semibold">{money(order.total)}</span>

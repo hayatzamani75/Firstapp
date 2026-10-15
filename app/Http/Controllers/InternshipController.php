@@ -23,7 +23,7 @@ class InternshipController extends Controller
         $sort = $validated['sort'] ?? 'id';
         $direction = $validated['direction'] ?? 'desc';
 
-        $internships = Internship::where('user_id', Auth::id())
+        $internships = Internship::query()
             ->orderBy($sort, $direction)
             ->paginate(12)
             ->appends(['sort' => $sort, 'direction' => $direction]);
@@ -47,7 +47,6 @@ class InternshipController extends Controller
 
     public function update(UpdateInternshipRequest $request, Internship $internship)
     {
-        $this->authorizeInternship($internship);
         $internship->update($request->validated());
 
         return to_route('internship.view')->with('success', 'Internship updated successfully!');
@@ -55,14 +54,9 @@ class InternshipController extends Controller
 
     public function destroy(Internship $internship)
     {
-        $this->authorizeInternship($internship);
         $internship->delete();
 
         return to_route('internship.view')->with('success', 'Internship deleted successfully!');
     }
 
-    private function authorizeInternship(Internship $internship): void
-    {
-        abort_unless($internship->user_id === Auth::id(), 403, 'Unauthorized action.');
-    }
 }

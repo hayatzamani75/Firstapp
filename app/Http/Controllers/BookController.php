@@ -13,7 +13,7 @@ class BookController extends Controller
 {
     public function view(): Response
     {
-        $books = Book::where('user_id', Auth::id())->latest()->paginate(12);
+        $books = Book::query()->latest()->paginate(12);
 
         return Inertia::render('Book/View', [
             'books' => $books,
@@ -34,10 +34,6 @@ class BookController extends Controller
 
     public function update(UpdateBookRequest $request, Book $book)
     {
-        if ($book->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $book->update($request->validated());
 
         return to_route('book.view')->with('success', 'Book updated successfully!');
@@ -45,10 +41,6 @@ class BookController extends Controller
 
     public function destroy(Book $book)
     {
-        if ($book->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $book->delete();
 
         return to_route('book.view')->with('success', 'Book deleted successfully!');

@@ -15,7 +15,7 @@ use Inertia\Inertia;
 // Route::get('store', [NoteController::class, 'store']);
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'can:employee-only'])->group(function () {
     Route::get('/note', [NoteController::class, 'view'])->name('note.view');
     Route::post('/note', [NoteController::class, 'store'])->name('note.store');
     Route::put('/note/{note}', [NoteController::class, 'update'])->name('note.update');

@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'can:employee-only'])->name('dashboard');
 
 Route::get('/product', [ProductController::class, 'index'])->name('product.view');
 Route::get('/product/{product}/image', [ProductController::class, 'image'])->name('product.image');
@@ -28,24 +28,27 @@ Route::patch('/product/cart/items', [ProductController::class, 'updateCart'])->n
 Route::delete('/product/cart/items', [ProductController::class, 'removeFromCart'])->name('product.cart.remove');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::post('/product', [ProductController::class, 'store'])->name('product.store');
-    Route::put('/product/{product}', [ProductController::class, 'update'])->name('product.update');
-    Route::delete('/product/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
-    Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout.store');
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-    Route::patch('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
-    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+    Route::post('/product', [ProductController::class, 'store'])->middleware('can:employee-only')->name('product.store');
+    Route::put('/product/{product}', [ProductController::class, 'update'])->middleware('can:employee-only')->name('product.update');
+    Route::delete('/product/{product}', [ProductController::class, 'destroy'])->middleware('can:employee-only')->name('product.destroy');
+    Route::get('/orders', [OrderController::class, 'index'])->middleware('can:employee-only')->name('orders.index');
+    Route::patch('/orders/{order}/cancel', [OrderController::class, 'cancel'])->middleware('can:employee-only')->name('orders.cancel');
+    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->middleware('can:employee-only')->name('orders.status');
 });
+
+Route::post('/checkout', [OrderController::class, 'checkout'])
+    ->middleware(['auth', 'can:store-customer'])
+    ->name('checkout.store');
 
 Route::get('/education', function () {
     return Inertia::render('Education');
-})->middleware(['auth', 'verified'])->name('education.view');
+})->middleware(['auth', 'verified', 'can:employee-only'])->name('education.view');
 
 // Route::get('/note', function () {
 //     return Inertia::render('Note/Note');
 // })->middleware(['auth', 'verified'])->name('note');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'can:employee-only'])->group(function () {
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

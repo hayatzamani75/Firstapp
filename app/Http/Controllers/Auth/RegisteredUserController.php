@@ -32,6 +32,8 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        abort_if($request->user() && !$request->user()->isEmployee(), 403);
+
         $alreadyAuthenticated = Auth::check();
         $ownerId = Auth::id();
 

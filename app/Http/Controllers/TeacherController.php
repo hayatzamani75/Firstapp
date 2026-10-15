@@ -13,7 +13,7 @@ class TeacherController extends Controller
 {
     public function view(): Response
     {
-        $teachers = Teacher::where('user_id', Auth::id())
+        $teachers = Teacher::query()
             ->orderBy('id', 'asc')
             ->paginate(12);
 
@@ -40,10 +40,6 @@ class TeacherController extends Controller
 
     public function update(UpdateTeacherRequest $request, Teacher $teacher)
     {
-        if ($teacher->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $teacher->update($request->validated());
 
         return to_route('teacher.view')->with('success', 'Teacher updated successfully!');
@@ -51,10 +47,6 @@ class TeacherController extends Controller
 
     public function destroy(Teacher $teacher)
     {
-        if ($teacher->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $teacher->delete();
 
         return to_route('teacher.view')->with('success', 'Teacher deleted successfully!');

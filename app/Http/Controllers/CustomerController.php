@@ -26,7 +26,7 @@ class CustomerController extends Controller
         $sort = $validated['sort'] ?? 'id';
         $direction = $validated['direction'] ?? 'asc';
 
-        $customers = Customer::where('user_id', Auth::id())
+        $customers = Customer::query()
             ->orderBy($sort, $direction)
             ->paginate(8)
             ->appends(['sort' => $sort, 'direction' => $direction]);
@@ -71,10 +71,6 @@ class CustomerController extends Controller
 
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-        if ($customer->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $customer->update($request->validated());
 
         return to_route('customer.view')->with('success', 'Customer updated successfully!');
@@ -82,10 +78,6 @@ class CustomerController extends Controller
 
     public function destroy(Customer $customer)
     {
-        if ($customer->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $customer->delete();
 
         return to_route('customer.view')->with('success', 'Customer deleted successfully!');
