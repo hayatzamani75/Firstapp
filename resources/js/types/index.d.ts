@@ -6,7 +6,7 @@ export interface User {
     lastname: string | null;
     username: string | null;
     email: string;
-    role: 'employee' | 'customer';
+    role: 'employee' | 'manager' | 'customer';
     email_verified_at?: string;
 }
 

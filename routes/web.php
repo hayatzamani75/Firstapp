@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ManagerAccountController;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->middleware('can:employee-only')->name('orders.status');
     Route::patch('/orders/{order}/reply', [OrderController::class, 'updateReply'])->middleware('can:employee-only')->name('orders.reply');
     Route::patch('/notifications/{notification}/read', [OrderController::class, 'markNotificationRead'])->middleware('can:employee-only')->name('notifications.read');
+    Route::post('/manager/accounts', [ManagerAccountController::class, 'store'])->middleware('can:employee-only')->name('manager.account.store');
 });
 
 Route::get('/orders', [OrderController::class, 'index'])

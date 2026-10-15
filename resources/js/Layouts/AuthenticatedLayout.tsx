@@ -2,6 +2,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { cn } from '@/lib/utils';
+import RegisterManagerAccountForm from '@/Components/RegisterManagerAccountForm';
 import { Link, usePage } from '@inertiajs/react';
 import {
     BookOpenText,
@@ -48,6 +49,7 @@ export default function Authenticated({
     hideNavigation?: boolean;
 }>) {
     const user = usePage().props.auth.user;
+    const canManage = user?.role === 'employee' || user?.role === 'manager';
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -105,6 +107,12 @@ export default function Authenticated({
                                 );
                             })}
                         </nav>
+                        {canManage && (
+                            <div className="shrink-0 border-t border-slate-700 p-4">
+                                <p className="mb-3 px-1 text-xs font-semibold uppercase tracking-wider text-slate-400">Management</p>
+                                <RegisterManagerAccountForm />
+                            </div>
+                        )}
                     </aside>
                 )}
 
@@ -159,6 +167,11 @@ export default function Authenticated({
                                     );
                                 })}
                             </div>
+                            {canManage && (
+                                <div className="mt-3 border-t border-slate-200 px-2 pt-3">
+                                    <RegisterManagerAccountForm />
+                                </div>
+                            )}
                         </div>
                     </nav>
                     )}

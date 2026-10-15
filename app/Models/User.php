@@ -11,6 +11,8 @@ class User extends Authenticatable
 {
     public const ROLE_EMPLOYEE = 'employee';
 
+    public const ROLE_MANAGER = 'manager';
+
     public const ROLE_CUSTOMER = 'customer';
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -54,7 +56,7 @@ class User extends Authenticatable
 
     public function isEmployee(): bool
     {
-        return $this->role === self::ROLE_EMPLOYEE;
+        return in_array($this->role, [self::ROLE_EMPLOYEE, self::ROLE_MANAGER], true);
     }
 
     public function isCustomer(): bool

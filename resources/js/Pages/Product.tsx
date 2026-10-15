@@ -138,7 +138,7 @@ export default function Product() {
         cartTotal,
     } = usePage<ProductInertiaProps>().props;
     const currentUser = auth.user as User | null;
-    const isEmployee = currentUser?.role === 'employee';
+    const isEmployee = currentUser?.role === 'employee' || currentUser?.role === 'manager';
     const unreadOrderNotifications = Number(auth.unreadOrderNotifications ?? 0);
     useEffect(() => {
         if (!isEmployee) return;

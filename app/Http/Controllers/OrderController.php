@@ -116,7 +116,7 @@ class OrderController extends Controller
 
         if ($request->user()->isCustomer()) {
             User::query()
-                ->where('role', User::ROLE_EMPLOYEE)
+                ->whereIn('role', [User::ROLE_EMPLOYEE, User::ROLE_MANAGER])
                 ->get()
                 ->each(fn (User $employee) => $employee->notify(new NewOrderPlaced(
                     $order->id,
