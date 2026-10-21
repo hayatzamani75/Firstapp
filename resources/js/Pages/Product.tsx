@@ -409,7 +409,7 @@ export default function Product() {
                 label: 'New Arrivals',
                 href: route(productRoute, { collection: 'new' }),
             },
-            { label: 'Contact Us', href: null },
+            { label: 'Contact Us', href: '/#contact' },
         ];
 
         return links.map((item) => {

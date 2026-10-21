@@ -1,6 +1,6 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import { PageProps } from '@/types';
-import { ArrowRight, BadgeCheck, Headphones, Menu, PackageCheck, ShoppingBag, Sparkles, Tags, Warehouse as WarehouseIcon, X } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Headphones, Mail, Menu, PackageCheck, Phone, ShoppingBag, Sparkles, Tags, Warehouse as WarehouseIcon, X } from 'lucide-react';
 import { useState } from 'react';
 
 const collections = [
@@ -55,6 +55,7 @@ export default function StoreHome() {
                             {canManageWarehouse && <Link href={route('procurement.view')} className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Procurement</Link>}
                             <a href="#collections" className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Collections</a>
                             <a href="#about" className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Our story</a>
+                            <a href="#contact" className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Contact us</a>
                         </nav>
                         <div className="flex shrink-0 items-center gap-2">
                             {canManageWarehouse && <Link href={route('warehouse.view')} aria-label="Open warehouse" title="Warehouse" className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-sky-200 bg-sky-50 text-sky-800 transition hover:bg-sky-100 md:hidden"><WarehouseIcon className="h-4 w-4" /></Link>}
@@ -206,6 +207,24 @@ export default function StoreHome() {
                             <div className="flex items-center gap-3 text-sm text-slate-600"><Headphones className="h-5 w-5 text-[#8F744F]" /><span>Here to help with your order</span></div>
                         </div>
                     </section>
+
+                    <section id="contact" className="mt-6 rounded-3xl border border-[#E3D5C1] bg-gradient-to-br from-[#F7F3ED] via-white to-[#F3EBDD] p-6 shadow-sm sm:p-9">
+                        <div className="max-w-2xl">
+                            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8F744F]">We are here to help</p>
+                            <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Contact us</h2>
+                            <p className="mt-3 text-sm leading-6 text-slate-600">Questions about a product or an order? Get in touch with the KIC Store team.</p>
+                        </div>
+                        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                            <a href="mailto:hello@kicstore.com" className="group flex min-w-0 items-center gap-4 rounded-2xl border border-[#EAE6DE] bg-white p-4 transition hover:-translate-y-0.5 hover:border-[#D8C6AA] hover:shadow-md">
+                                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#F1E8DB] text-[#8F744F]"><Mail className="h-5 w-5" /></span>
+                                <span className="min-w-0"><span className="block text-xs font-semibold uppercase tracking-wide text-slate-500">Email</span><span className="mt-1 block truncate font-semibold text-slate-900">hello@kicstore.com</span></span>
+                            </a>
+                            <a href="tel:0778899654" className="group flex min-w-0 items-center gap-4 rounded-2xl border border-[#EAE6DE] bg-white p-4 transition hover:-translate-y-0.5 hover:border-[#D8C6AA] hover:shadow-md">
+                                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#F1E8DB] text-[#8F744F]"><Phone className="h-5 w-5" /></span>
+                                <span className="min-w-0"><span className="block text-xs font-semibold uppercase tracking-wide text-slate-500">Phone</span><span className="mt-1 block font-semibold text-slate-900">077 889 9654</span></span>
+                            </a>
+                        </div>
+                    </section>
                     </div>
                     </div>
                 </main>
@@ -214,7 +233,7 @@ export default function StoreHome() {
                     <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-9 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
                         <Link href="/" className="flex items-center gap-2.5 font-semibold"><span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10"><ShoppingBag className="h-4 w-4" /></span>KIC Store</Link>
                         <p className="text-sm text-white/55">Thoughtfully chosen pieces for everyday life.</p>
-                        <div className="flex gap-5 text-sm text-white/70"><Link href={route('product.view')} className="transition hover:text-white">Shop</Link><Link href={route('product.list')} className="transition hover:text-white">Product List</Link><Link href={route('categories.view')} className="transition hover:text-white">Categories</Link><a href="#about" className="transition hover:text-white">About</a><a href="mailto:hello@kicstore.com" className="transition hover:text-white">Contact</a></div>
+                        <div className="flex flex-wrap gap-5 text-sm text-white/70"><Link href={route('product.view')} className="transition hover:text-white">Shop</Link><Link href={route('product.list')} className="transition hover:text-white">Product List</Link><Link href={route('categories.view')} className="transition hover:text-white">Categories</Link><a href="#about" className="transition hover:text-white">About</a><a href="#contact" className="transition hover:text-white">Contact</a><a href="tel:0778899654" className="transition hover:text-white">077 889 9654</a></div>
                     </div>
                     <div className="border-t border-white/10 py-4 text-center text-xs text-white/40">© {new Date().getFullYear()} KIC Store. All rights reserved.</div>
                 </footer>
