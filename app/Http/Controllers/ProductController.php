@@ -17,6 +17,34 @@ use Throwable;
 
 class ProductController extends Controller
 {
+    public function categories(): Response
+    {
+        $categoryStats = Product::query()
+            ->select('category')
+            ->selectRaw('COUNT(*) as products_count')
+            ->groupBy('category')
+            ->orderBy('category')
+            ->get();
+
+        $representativeIds = Product::query()
+            ->selectRaw('MIN(id) as id')
+            ->groupBy('category')
+            ->pluck('id');
+
+        $representativeProducts = Product::query()
+            ->whereIn('id', $representativeIds)
+            ->get()
+            ->keyBy('category');
+
+        return Inertia::render('Categories', [
+            'categories' => $categoryStats->map(fn ($category) => [
+                'name' => $category->category,
+                'products_count' => (int) $category->products_count,
+                'image_url' => $representativeProducts->get($category->category)?->image_url,
+            ])->values(),
+        ]);
+    }
+
     public function image(Product $product): StreamedResponse
     {
         abort_unless(Storage::disk('public')->exists($product->image_path), 404);
@@ -112,6 +140,7 @@ class ProductController extends Controller
         $cartItems = $this->cartItems();
 
         return Inertia::render('Product', [
+            'pageTitle' => $request->routeIs('product.list') ? 'Product List' : 'Products',
             'products' => $products,
             'categories' => Product::query()->distinct()->orderBy('category')->pluck('category'),
             'filterOptions' => [

@@ -1,5 +1,6 @@
-import { Head, Link } from '@inertiajs/react';
-import { ArrowRight, BadgeCheck, Headphones, Menu, PackageCheck, ShoppingBag, Sparkles, X } from 'lucide-react';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { PageProps } from '@/types';
+import { ArrowRight, BadgeCheck, Headphones, Menu, PackageCheck, ShoppingBag, Sparkles, Tags, Warehouse as WarehouseIcon, X } from 'lucide-react';
 import { useState } from 'react';
 
 const collections = [
@@ -28,13 +29,17 @@ const collections = [
 
 export default function StoreHome() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const { categories, auth } = usePage<PageProps<{
+        categories: { name: string; products_count: number }[];
+    }>>().props;
+    const canManageWarehouse = auth.user?.role === 'employee' || auth.user?.role === 'manager';
 
     return (
         <>
             <Head title="KIC Store | Everyday style" />
             <div className="min-h-screen bg-[#F8F6F2] text-[#171717]">
                 <header className="sticky top-0 z-40 border-b border-[#EAE6DE] bg-white/95 shadow-[0_2px_18px_rgba(23,23,23,0.04)] backdrop-blur">
-                    <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+                    <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-3 px-3 sm:gap-6 sm:px-6 lg:px-8">
                         <Link href="/" className="flex shrink-0 items-center gap-2.5" aria-label="KIC Store home">
                             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#171717] text-white shadow-sm">
                                 <ShoppingBag className="h-5 w-5" />
@@ -44,12 +49,22 @@ export default function StoreHome() {
                         <nav aria-label="Main navigation" className="hidden items-center gap-7 md:flex">
                             <Link href="/" className="text-sm font-medium text-[#8F744F]">Home</Link>
                             <Link href={route('product.view')} className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">All Products</Link>
+                            <Link href={route('product.list')} className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Product List</Link>
+                            <Link href={route('categories.view')} className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Categories</Link>
+                            {canManageWarehouse && <Link href={route('warehouse.view')} className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Warehouse</Link>}
                             <a href="#collections" className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Collections</a>
                             <a href="#about" className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Our story</a>
                         </nav>
-                        <Link href={route('product.view')} className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#171717] px-4 text-sm font-semibold text-white transition hover:bg-[#333333]">
-                            Shop now <ArrowRight className="h-4 w-4" />
-                        </Link>
+                        <div className="flex shrink-0 items-center gap-2">
+                            {canManageWarehouse && <Link href={route('warehouse.view')} aria-label="Open warehouse" title="Warehouse" className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-sky-200 bg-sky-50 text-sky-800 transition hover:bg-sky-100 md:hidden"><WarehouseIcon className="h-4 w-4" /></Link>}
+                            <Link href={route('dashboard')} aria-label="Open admin panel" className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg border border-[#D8E1F0] bg-blue-50 px-2.5 text-xs font-bold text-blue-800 transition hover:border-blue-300 hover:bg-blue-100 sm:px-4 sm:text-sm">
+                                <span className="sm:hidden">Admin</span>
+                                <span className="hidden sm:inline">Admin panel</span>
+                            </Link>
+                            <Link href={route('product.view')} aria-label="Shop now" className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-lg bg-[#171717] px-2.5 text-sm font-semibold text-white transition hover:bg-[#333333] sm:gap-2 sm:px-4">
+                                <span className="hidden sm:inline">Shop now</span><ArrowRight className="h-4 w-4" />
+                            </Link>
+                        </div>
                     </div>
                 </header>
 
@@ -73,6 +88,9 @@ export default function StoreHome() {
                         <nav aria-label="Store sections" className="space-y-1">
                             <a href="#home" className="flex items-center justify-between rounded-lg border-l-2 border-[#8F744F] bg-white/80 px-3 py-2.5 text-sm font-semibold text-[#5B4529] shadow-sm">Home <span className="text-xs text-[#8F744F]">01</span></a>
                             <Link href={route('product.view')} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">All products</Link>
+                            <Link href={route('product.list')} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">Product List</Link>
+                            <Link href={route('categories.view')} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">Categories</Link>
+                            {canManageWarehouse && <Link href={route('warehouse.view')} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">Warehouse</Link>}
                             <a href="#collections" className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">Collections</a>
                             <Link href={route('product.view', { collection: 'new' })} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">New arrivals</Link>
                             <Link href={route('product.view', { collection: 'sale' })} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">On sale</Link>
@@ -80,9 +98,11 @@ export default function StoreHome() {
                         <div className="my-5 border-t border-[#E3D5C1]" />
                         <p className="mb-3 px-3 text-xs font-bold uppercase tracking-[0.16em] text-[#8F744F]">Shop by category</p>
                         <nav aria-label="Product categories" className="space-y-1">
-                            {['Clothing', 'Shoes', 'Bags', 'Accessories'].map((category) => (
-                                <Link key={category} href={route('product.view', { category })} className="block rounded-lg border-l-2 border-transparent px-3 py-2 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">{category}</Link>
+                            {categories.slice(0, 8).map((category) => (
+                                <Link key={category.name} href={route('product.view', { category: category.name })} className="block rounded-lg border-l-2 border-transparent px-3 py-2 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">{category.name}</Link>
                             ))}
+                            {categories.length === 0 && <p className="px-3 py-2 text-sm text-slate-500">Categories will appear as products are added.</p>}
+                            <Link href={route('categories.view')} className="mt-2 flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-[#8F744F] transition hover:bg-white/60"><Tags className="h-4 w-4" /> Browse all categories</Link>
                         </nav>
                         <div className="mt-6 rounded-xl bg-[#171717] p-4 text-white">
                             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#D8BD98]">The KIC edit</p>
@@ -121,6 +141,32 @@ export default function StoreHome() {
                                 </div>
                             </div>
                         </div>
+                    </section>
+
+                    <section id="categories" className="py-10 sm:py-12">
+                        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                            <div>
+                                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8F744F]">Browse your way</p>
+                                <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Shop by category</h2>
+                            </div>
+                            <Link href={route('categories.view')} className="inline-flex items-center gap-2 text-sm font-semibold text-[#8F744F] transition hover:text-[#6f593a]">View all categories <ArrowRight className="h-4 w-4" /></Link>
+                        </div>
+                        {categories.length > 0 ? (
+                            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                                {categories.slice(0, 8).map((category, index) => (
+                                    <Link key={category.name} href={route('product.view', { category: category.name })} className="group flex items-center gap-4 rounded-2xl border border-[#EAE6DE] bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-[#D8C6AA] hover:shadow-md">
+                                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#F1E8DB] to-[#E4D6C5] text-sm font-bold text-[#8F744F]">{String(index + 1).padStart(2, '0')}</span>
+                                        <span className="min-w-0 flex-1">
+                                            <span className="block truncate font-semibold text-[#171717]">{category.name}</span>
+                                            <span className="mt-1 block text-xs text-slate-500">{category.products_count} {category.products_count === 1 ? 'product' : 'products'}</span>
+                                        </span>
+                                        <ArrowRight className="h-4 w-4 shrink-0 text-[#B89B72] transition group-hover:translate-x-1" />
+                                    </Link>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="rounded-2xl border border-dashed border-[#D8C6AA] bg-white px-6 py-10 text-center text-sm text-slate-500">Categories will appear here as products are added.</div>
+                        )}
                     </section>
 
                     <section id="collections" className="py-12 sm:py-16">
@@ -166,7 +212,7 @@ export default function StoreHome() {
                     <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-9 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
                         <Link href="/" className="flex items-center gap-2.5 font-semibold"><span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10"><ShoppingBag className="h-4 w-4" /></span>KIC Store</Link>
                         <p className="text-sm text-white/55">Thoughtfully chosen pieces for everyday life.</p>
-                        <div className="flex gap-5 text-sm text-white/70"><Link href={route('product.view')} className="transition hover:text-white">Shop</Link><a href="#about" className="transition hover:text-white">About</a><a href="mailto:hello@kicstore.com" className="transition hover:text-white">Contact</a></div>
+                        <div className="flex gap-5 text-sm text-white/70"><Link href={route('product.view')} className="transition hover:text-white">Shop</Link><Link href={route('product.list')} className="transition hover:text-white">Product List</Link><Link href={route('categories.view')} className="transition hover:text-white">Categories</Link><a href="#about" className="transition hover:text-white">About</a><a href="mailto:hello@kicstore.com" className="transition hover:text-white">Contact</a></div>
                     </div>
                     <div className="border-t border-white/10 py-4 text-center text-xs text-white/40">© {new Date().getFullYear()} KIC Store. All rights reserved.</div>
                 </footer>

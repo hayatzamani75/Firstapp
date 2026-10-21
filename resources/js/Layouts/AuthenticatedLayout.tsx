@@ -15,9 +15,11 @@ import {
     Menu,
     NotebookText,
     Package,
+    Tags,
     UserCircle2,
     Users,
     Wrench,
+    Warehouse,
     X,
 } from 'lucide-react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
@@ -26,7 +28,9 @@ const sidebarItems = [
     { label: 'Dashboard', href: 'dashboard', icon: LayoutDashboard },
     { label: 'My Notes', href: 'note.view', icon: NotebookText },
     { label: 'Books', href: 'book.view', icon: BookOpenText },
-    { label: 'Product', href: 'product.view', icon: Package },
+    { label: 'Product List', href: 'product.list', icon: Package },
+    { label: 'Warehouse', href: 'warehouse.view', icon: Warehouse },
+    { label: 'Categories', href: 'categories.view', icon: Tags },
     { label: 'Education', href: 'education.view', icon: GraduationCap },
     { label: 'Companies', href: 'company.view', icon: Building2 },
     { label: 'Teachers', href: 'teacher.view', icon: GraduationCap },
@@ -65,10 +69,10 @@ export default function Authenticated({
                                 </div>
                                 <div className="text-left">
                                     <div className="text-sm font-semibold tracking-wide text-white">
-                                        CRM
+                                        KIC Admin
                                     </div>
                                     <div className="text-[10px] uppercase tracking-[0.22em] text-slate-400">
-                                        Workspace
+                                        CONTROL CENTER
                                     </div>
                                 </div>
                             </Link>
@@ -88,8 +92,8 @@ export default function Authenticated({
                                         className={cn(
                                             'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
                                             isActive
-                                                ? 'bg-[#2563EB] text-[#FFFFFF] shadow-lg shadow-blue-500/25'
-                                                : 'text-[#FFFFFF] hover:bg-slate-800/80 hover:text-white',
+                                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-950/25'
+                                                : 'text-slate-300 hover:bg-white/10 hover:text-white',
                                         )}
                                     >
                                         <span
@@ -97,7 +101,7 @@ export default function Authenticated({
                                                 'flex h-8 w-8 items-center justify-center rounded-lg border',
                                                 isActive
                                                     ? 'border-white/20 bg-white/10 text-white'
-                                                    : 'border-slate-700 bg-slate-800 text-[#FFFFFF] group-hover:border-slate-600 group-hover:bg-slate-700',
+                                                    : 'border-white/10 bg-white/5 text-slate-300 group-hover:border-white/15 group-hover:bg-white/10 group-hover:text-white',
                                             )}
                                         >
                                             <Icon className="h-4 w-4" />
@@ -186,7 +190,7 @@ export default function Authenticated({
                                         </div>
                                         <div>
                                             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-blue-100/80">
-                                                Main Dashboard
+                                                Workspace
                                             </p>
                                             <div className="text-xl font-bold text-white">{header}</div>
                                         </div>
@@ -228,7 +232,7 @@ export default function Authenticated({
                         </header>
                     )}
 
-                    <main className="min-h-screen bg-[linear-gradient(180deg,#f0fdf4_0%,#dcfce7_100%)] dark:bg-slate-950">
+                    <main className="min-h-screen bg-slate-50 dark:bg-slate-950">
                         {children}
                     </main>
                 </div>

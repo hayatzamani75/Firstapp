@@ -124,6 +124,7 @@ function StoreImage({
 export default function Product() {
     const {
         auth,
+        pageTitle = 'Products',
         products,
         categories,
         filterOptions,
@@ -134,12 +135,13 @@ export default function Product() {
     } = usePage<ProductInertiaProps>().props;
     const currentUser = auth.user as User | null;
     const isEmployee = currentUser?.role === 'employee' || currentUser?.role === 'manager';
+    const productRoute = route().current('product.list') ? 'product.list' : 'product.view';
     const unreadOrderNotifications = Number(auth.unreadOrderNotifications ?? 0);
     useEffect(() => {
         if (!isEmployee) return;
 
         const timer = window.setInterval(() => {
-            router.reload({ only: ['auth'], preserveState: true, preserveScroll: true });
+            router.reload({ only: ['auth'] });
         }, 30000);
 
         return () => window.clearInterval(timer);
@@ -215,7 +217,7 @@ export default function Product() {
                 query[key] = value;
         });
         query.page = 1;
-        router.get(route('product.view'), query, {
+        router.get(route(productRoute), query, {
             preserveScroll: true,
             preserveState: true,
             replace: true,
@@ -398,11 +400,13 @@ export default function Product() {
     function renderNavigation(mobile = false) {
         const links = [
             { label: 'Home', href: '/' },
-            { label: 'All Products', href: route('product.view') },
-            { label: 'Categories', href: '#categories' },
+            { label: 'All Products', href: route(productRoute) },
+            { label: 'Product List', href: route('product.list') },
+            { label: 'Categories', href: route('categories.view') },
+            ...(isEmployee ? [{ label: 'Warehouse', href: route('warehouse.view') }] : []),
             {
                 label: 'New Arrivals',
-                href: route('product.view', { collection: 'new' }),
+                href: route(productRoute, { collection: 'new' }),
             },
             { label: 'Contact Us', href: null },
         ];
@@ -448,7 +452,7 @@ export default function Product() {
 
     return (
         <AuthenticatedLayout hideNavigation hideAccountMenu>
-            <Head title="Products" />
+            <Head title={pageTitle} />
             <div className="min-h-screen bg-[#F8F6F2] text-[#171717]">
                 <header className="sticky top-0 z-40 border-b border-[#EAE6DE] bg-white shadow-[0_2px_18px_rgba(23,23,23,0.04)]">
                     <div className="mx-auto flex min-h-20 max-w-7xl items-center gap-3 px-4 py-3 sm:gap-4 sm:px-6 lg:px-8">
@@ -697,7 +701,7 @@ export default function Product() {
                                 KIC Store
                             </p>
                             <h1 className="mt-1 text-3xl font-semibold text-[#171717]">
-                                Clothing, shoes & accessories
+                                {pageTitle === 'Product List' ? 'Product List' : 'Clothing, shoes & accessories'}
                             </h1>
                             <p className="mt-2 text-sm text-slate-500">
                                 Browse the collection and find your next
@@ -1063,7 +1067,7 @@ export default function Product() {
                                 </label>
                             </div>
                             {products.data.length > 0 ? (
-                                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3">
+                                <div className={`grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 ${pageTitle === 'Product List' ? 'xl:grid-cols-4' : 'xl:grid-cols-3'}`}>
                                     {products.data.map((product) => {
                                         const onSale =
                                             product.discount_price !== null &&

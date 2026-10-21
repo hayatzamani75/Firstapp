@@ -5,11 +5,24 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ManagerAccountController;
 use App\Http\Controllers\NoteController;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('StoreHome');
+    return Inertia::render('StoreHome', [
+        'categories' => Product::query()
+            ->select('category')
+            ->selectRaw('COUNT(*) as products_count')
+            ->groupBy('category')
+            ->orderBy('category')
+            ->get()
+            ->map(fn (Product $product) => [
+                'name' => $product->category,
+                'products_count' => (int) $product->products_count,
+            ])
+            ->values(),
+    ]);
 });
 
 Route::get('/dashboard', function () {
@@ -17,6 +30,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified', 'can:employee-only'])->name('dashboard');
 
 Route::get('/product', [ProductController::class, 'index'])->name('product.view');
+Route::get('/product-list', [ProductController::class, 'index'])->name('product.list');
+Route::get('/categories', [ProductController::class, 'categories'])->name('categories.view');
 Route::get('/product/{product}/image', [ProductController::class, 'image'])->name('product.image');
 Route::post('/product/cart/items', [ProductController::class, 'addToCart'])->name('product.cart.add');
 Route::patch('/product/cart/items', [ProductController::class, 'updateCart'])->name('product.cart.update');
@@ -67,3 +82,4 @@ require __DIR__.'/customer.php';
 require __DIR__.'/internship.php';
 require __DIR__.'/employee.php';
 require __DIR__.'/service.php';
+require __DIR__.'/warehouse.php';

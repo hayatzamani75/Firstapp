@@ -1,15 +1,36 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import RegisterManagerAccountForm from '@/Components/RegisterManagerAccountForm';
-import { Head, Link, usePage } from '@inertiajs/react';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { PageProps } from '@/types';
+import { Head, Link, usePage } from '@inertiajs/react';
+import {
+    ArrowUpRight,
+    BookOpenText,
+    BriefcaseBusiness,
+    Building2,
+    GraduationCap,
+    LayoutDashboard,
+    NotebookText,
+    Package,
+    Tags,
+    Users,
+    UserRoundCog,
+    Warehouse,
+    Wrench,
+} from 'lucide-react';
 
 const modules = [
-    { name: 'Books', href: route('book.view'), accent: 'from-blue-600 to-blue-500' },
-    { name: 'Customers', href: route('customer.view'), accent: 'from-emerald-600 to-emerald-500' },
-    { name: 'Internships', href: route('internship.view'), accent: 'from-violet-600 to-indigo-500' },
-    { name: 'Employees', href: route('employee.view'), accent: 'from-fuchsia-600 to-violet-500' },
-    { name: 'Companies', href: route('company.view'), accent: 'from-amber-500 to-orange-500' },
-    { name: 'Notes', href: route('note.view'), accent: 'from-pink-600 to-rose-500' },
+    { name: 'Product List', description: 'Catalog, pricing and inventory', href: 'product.list', icon: Package, color: 'bg-blue-50 text-blue-700' },
+    { name: 'Warehouse', description: 'Inventory, stock levels and movements', href: 'warehouse.view', icon: Warehouse, color: 'bg-sky-50 text-sky-700' },
+    { name: 'Categories', description: 'Browse the product catalog by category', href: 'categories.view', icon: Tags, color: 'bg-amber-50 text-amber-700' },
+    { name: 'Customers', description: 'Customer records and profiles', href: 'customer.view', icon: Users, color: 'bg-emerald-50 text-emerald-700' },
+    { name: 'Employees', description: 'Team members and access', href: 'employee.view', icon: UserRoundCog, color: 'bg-violet-50 text-violet-700' },
+    { name: 'Companies', description: 'Organizations and partners', href: 'company.view', icon: Building2, color: 'bg-amber-50 text-amber-700' },
+    { name: 'Books', description: 'Manage your library', href: 'book.view', icon: BookOpenText, color: 'bg-rose-50 text-rose-700' },
+    { name: 'Notes', description: 'Workspace notes and updates', href: 'note.view', icon: NotebookText, color: 'bg-cyan-50 text-cyan-700' },
+    { name: 'Internships', description: 'Programs and opportunities', href: 'internship.view', icon: BriefcaseBusiness, color: 'bg-indigo-50 text-indigo-700' },
+    { name: 'Teachers', description: 'Teacher directory', href: 'teacher.view', icon: GraduationCap, color: 'bg-orange-50 text-orange-700' },
+    { name: 'Services', description: 'Services and offerings', href: 'service.view', icon: Wrench, color: 'bg-teal-50 text-teal-700' },
+    { name: 'Education', description: 'Education resources', href: 'education.view', icon: GraduationCap, color: 'bg-fuchsia-50 text-fuchsia-700' },
 ];
 
 export default function Dashboard() {
@@ -17,88 +38,66 @@ export default function Dashboard() {
     const isManager = auth.user.role === 'manager';
 
     return (
-        <AuthenticatedLayout
-            headerClassName="bg-[#172554] dark:bg-[#172554]"
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Dashboard</h2>
-            }
-        >
-            <Head title="Dashboard" />
+        <AuthenticatedLayout header="Admin workspace">
+            <Head title="Admin workspace" />
 
-            <div className="min-h-[calc(100vh-4rem)] bg-[#f8fafc] py-12 dark:bg-slate-950">
-                <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    {isManager ? (
-                        <section className="overflow-hidden rounded-2xl border border-blue-200 bg-[#EFF6FF] shadow-sm">
-                            <header className="border-b border-blue-200 bg-blue-700 px-6 py-5 text-white">
-                                <h1 className="text-xl font-semibold">Manager registration</h1>
-                                <p className="mt-1 text-sm text-blue-100">Create a manager account with the same registration form style used for employees.</p>
-                            </header>
-                            <div className="flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
-                                <div>
-                                    <h2 className="font-semibold text-slate-900">Register a manager</h2>
-                                    <p className="mt-1 text-sm text-slate-600">Enter the manager’s name, contact details, and sign-in password.</p>
-                                </div>
-                                <div className="flex w-full justify-end sm:w-auto">
-                                    <RegisterManagerAccountForm buttonClassName="w-full sm:w-auto" />
-                                </div>
-                            </div>
-                        </section>
-                    ) : (
-                    <>
-                    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-[#0f172a] via-[#172554] to-[#1d4ed8] shadow-xl shadow-blue-900/20">
-                        <div className="relative p-8 sm:p-10 lg:p-12">
-                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(96,165,250,0.35),transparent_30%),radial-gradient(circle_at_bottom_left,_rgba(14,165,233,0.25),transparent_35%)]" />
-
-                            <div className="relative max-w-4xl">
-                                <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-blue-100">
-                                    Welcome
+            <div className="min-h-[calc(100vh-5rem)] bg-slate-50 px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
+                <div className="mx-auto max-w-7xl space-y-8">
+                    <section className="relative isolate overflow-hidden rounded-3xl bg-slate-950 px-6 py-8 shadow-xl shadow-slate-900/10 sm:px-9 sm:py-10">
+                        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.38),transparent_42%),radial-gradient(ellipse_at_bottom_left,rgba(14,165,233,0.18),transparent_45%)]" />
+                        <div className="flex flex-col justify-between gap-7 sm:flex-row sm:items-end">
+                            <div className="max-w-2xl">
+                                <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold tracking-wide text-blue-100">
+                                    <LayoutDashboard className="h-3.5 w-3.5" />
+                                    ADMINISTRATION
                                 </span>
-                                <h1 className="mt-6 animate-[slideInUp_0.9s_ease-out] text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-7xl">
-                                    Welcome to Kabul Innovation Center
-                                </h1>
-                                <p className="mt-5 max-w-2xl text-lg font-medium text-blue-100 sm:text-xl">
-                                    KIC delivers modern services, digital solutions, and impactful programs that empower individuals, teams, and communities.
-                                </p>
-                                <p className="mt-3 max-w-2xl text-sm text-blue-50/90 sm:text-base">
-                                    We connect technology, creativity, and opportunity to build a brighter future through smart services and innovative development.
+                                <h1 className="mt-5 text-3xl font-bold tracking-tight text-white sm:text-4xl">Welcome back, {auth.user.name}</h1>
+                                <p className="mt-3 max-w-xl text-sm leading-6 text-slate-300 sm:text-base">
+                                    Manage the people, content, and operations that power your workspace from one place.
                                 </p>
                             </div>
+                            <Link href={route('product.view')} className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-white px-4 text-sm font-semibold text-slate-950 shadow-sm transition hover:-translate-y-0.5 hover:bg-blue-50">
+                                Open storefront <ArrowUpRight className="h-4 w-4" />
+                            </Link>
                         </div>
-                    </div>
-                    <section className="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
-                        <div className="border-b border-slate-200 px-5 py-4 dark:border-slate-700">
-                            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">
-                                Quick access
-                            </h3>
-                        </div>
+                    </section>
 
-                        <div className="grid gap-4 p-5 sm:grid-cols-2 xl:grid-cols-5">
-                            {modules.map((module) => (
-                                <Link
-                                    key={module.name}
-                                    href={module.href}
-                                    className="group rounded-xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-4 text-left transition duration-200 hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-700 dark:from-slate-800 dark:to-slate-900"
-                                >
-                                    <div className={`mb-3 inline-flex rounded-lg bg-gradient-to-r px-2.5 py-2 text-sm font-semibold text-white ${module.accent}`}>
-                                        {module.name.slice(0, 1)}
-                                    </div>
-                                    <div className="text-base font-semibold text-slate-800 dark:text-slate-100">
-                                        {module.name}
-                                    </div>
-                                    <div className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                                        Open {module.name}
-                                    </div>
+                    {isManager && (
+                        <section className="flex flex-col gap-4 rounded-2xl border border-blue-100 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
+                            <div>
+                                <h2 className="font-semibold text-slate-900">Manager accounts</h2>
+                                <p className="mt-1 text-sm text-slate-500">Invite a manager to help administer this workspace.</p>
+                            </div>
+                            <RegisterManagerAccountForm buttonClassName="w-full sm:w-auto" />
+                        </section>
+                    )}
+
+                    <section>
+                        <div className="mb-4 flex items-end justify-between gap-4">
+                            <div>
+                                <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-700">Workspace</p>
+                                <h2 className="mt-1 text-xl font-bold tracking-tight text-slate-950">Manage your project</h2>
+                            </div>
+                            <span className="hidden text-sm text-slate-500 sm:block">{modules.length} management areas</span>
+                        </div>
+                        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                            {modules.map(({ name, description, href, icon: Icon, color }) => (
+                                <Link key={name} href={route(href)} className="group flex min-h-32 items-start gap-4 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm shadow-slate-900/[0.02] transition duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-lg hover:shadow-slate-900/[0.06]">
+                                    <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${color}`}>
+                                        <Icon className="h-5 w-5" />
+                                    </span>
+                                    <span className="min-w-0 flex-1">
+                                        <span className="flex items-center justify-between gap-2 font-semibold text-slate-900">
+                                            {name}<ArrowUpRight className="h-4 w-4 text-slate-300 transition group-hover:text-blue-600" />
+                                        </span>
+                                        <span className="mt-1 block text-sm leading-5 text-slate-500">{description}</span>
+                                    </span>
                                 </Link>
                             ))}
                         </div>
                     </section>
-                    </>
-                    )}
                 </div>
             </div>
         </AuthenticatedLayout>
     );
 }
-
-
-

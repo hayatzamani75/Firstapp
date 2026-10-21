@@ -138,6 +138,7 @@ export interface ProductCartItem {
 }
 
 export interface ProductPageProps {
+    pageTitle?: string;
     products: {
         data: Product[];
         current_page: number;
