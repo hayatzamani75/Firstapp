@@ -52,6 +52,7 @@ export default function StoreHome() {
                             <Link href={route('product.list')} className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Product List</Link>
                             <Link href={route('categories.view')} className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Categories</Link>
                             {canManageWarehouse && <Link href={route('warehouse.view')} className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Warehouse</Link>}
+                            {canManageWarehouse && <Link href={route('procurement.view')} className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Procurement</Link>}
                             <a href="#collections" className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Collections</a>
                             <a href="#about" className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Our story</a>
                         </nav>
@@ -91,6 +92,7 @@ export default function StoreHome() {
                             <Link href={route('product.list')} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">Product List</Link>
                             <Link href={route('categories.view')} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">Categories</Link>
                             {canManageWarehouse && <Link href={route('warehouse.view')} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">Warehouse</Link>}
+                            {canManageWarehouse && <Link href={route('procurement.view')} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">Procurement</Link>}
                             <a href="#collections" className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">Collections</a>
                             <Link href={route('product.view', { collection: 'new' })} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">New arrivals</Link>
                             <Link href={route('product.view', { collection: 'sale' })} className="block rounded-lg border-l-2 border-transparent px-3 py-2.5 text-sm text-slate-600 transition hover:bg-white/60 hover:text-[#5B4529]">On sale</Link>

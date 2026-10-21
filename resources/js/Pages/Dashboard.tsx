@@ -11,6 +11,7 @@ import {
     LayoutDashboard,
     NotebookText,
     Package,
+    ShoppingCart,
     Tags,
     Users,
     UserRoundCog,
@@ -21,6 +22,7 @@ import {
 const modules = [
     { name: 'Product List', description: 'Catalog, pricing and inventory', href: 'product.list', icon: Package, color: 'bg-blue-50 text-blue-700' },
     { name: 'Warehouse', description: 'Inventory, stock levels and movements', href: 'warehouse.view', icon: Warehouse, color: 'bg-sky-50 text-sky-700' },
+    { name: 'Procurement', description: 'Purchase orders, suppliers and receiving', href: 'procurement.view', icon: ShoppingCart, color: 'bg-indigo-50 text-indigo-700' },
     { name: 'Categories', description: 'Browse the product catalog by category', href: 'categories.view', icon: Tags, color: 'bg-amber-50 text-amber-700' },
     { name: 'Customers', description: 'Customer records and profiles', href: 'customer.view', icon: Users, color: 'bg-emerald-50 text-emerald-700' },
     { name: 'Employees', description: 'Team members and access', href: 'employee.view', icon: UserRoundCog, color: 'bg-violet-50 text-violet-700' },

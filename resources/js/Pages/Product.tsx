@@ -404,6 +404,7 @@ export default function Product() {
             { label: 'Product List', href: route('product.list') },
             { label: 'Categories', href: route('categories.view') },
             ...(isEmployee ? [{ label: 'Warehouse', href: route('warehouse.view') }] : []),
+            ...(isEmployee ? [{ label: 'Procurement', href: route('procurement.view') }] : []),
             {
                 label: 'New Arrivals',
                 href: route(productRoute, { collection: 'new' }),

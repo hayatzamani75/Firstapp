@@ -83,3 +83,4 @@ require __DIR__.'/internship.php';
 require __DIR__.'/employee.php';
 require __DIR__.'/service.php';
 require __DIR__.'/warehouse.php';
+require __DIR__.'/procurement.php';

@@ -33,6 +33,7 @@ export default function Categories() {
                             <Link href={route('product.list')} className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Product List</Link>
                             <Link href={route('categories.view')} aria-current="page" className="text-sm font-semibold text-[#8F744F]">Categories</Link>
                             {canManageWarehouse && <Link href={route('warehouse.view')} className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Warehouse</Link>}
+                            {canManageWarehouse && <Link href={route('procurement.view')} className="text-sm font-medium text-slate-700 transition hover:text-[#8F744F]">Procurement</Link>}
                         </nav>
                         <div className="flex shrink-0 items-center gap-2">
                             {canManageWarehouse && <Link href={route('warehouse.view')} aria-label="Open warehouse" title="Warehouse" className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-sky-200 bg-sky-50 text-sky-800 transition hover:bg-sky-100 md:hidden"><WarehouseIcon className="h-4 w-4" /></Link>}
